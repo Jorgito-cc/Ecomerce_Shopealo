@@ -1,69 +1,59 @@
-# React + TypeScript + Vite
+# 🛒 Ecommerce Shopealo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📌 Descripción del Proyecto
+**Ecommerce Shopealo** es una plataforma de comercio electrónico enfocada en la venta de **electrodomésticos y productos electrónicos** (como artículos de cocina, computadoras y dispositivos tecnológicos).  
+El proyecto ha sido desarrollado como parte de la materia **Sistemas de Información II**, bajo la guía de la **Ing. Angélica**, por el **Grupo 1** conformado por 6 integrantes, cada uno con un rol específico en el desarrollo.  
 
-Currently, two official plugins are available:
+Nuestro objetivo es implementar una solución moderna, escalable y funcional que permita gestionar productos, usuarios y compras en línea, integrando tecnologías de frontend y backend de última generación.  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Tecnologías Utilizadas
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 🔹 Frontend
+- **React** con **TypeScript**  
+- **React Query** (gestión de estados asíncronos y fetching de datos)  
+- **TailwindCSS** (estilos rápidos, responsivos y consistentes)  
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 🔹 Backend
+- **NestJS** (framework modular para Node.js)  
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### 🔹 Base de Datos
+- **PostgreSQL** en Railway  
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 🔹 Infraestructura / Hosting
+- **Frontend:** Netlify  
+- **Backend:** Railway  
+- **Base de datos:** Railway (PostgreSQL)  
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 👥 Equipo de Trabajo (Grupo 1)
+El proyecto fue desarrollado por **6 integrantes**, cada uno con responsabilidades definidas en las áreas de:  
+- Desarrollo frontend  
+- Desarrollo backend  
+- Gestión de base de datos  
+- Diseño UI/UX  
+- Integración y despliegue  
+- Documentación y pruebas  
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+## 🌐 Demo
+Puedes acceder a la demo del proyecto desplegado en Netlify en el siguiente enlace:  
+👉 [Demo en Netlify](#) _(reemplazar con el enlace real)_  
+
+---
+
+## 🎯 Objetivos del Proyecto
+- Diseñar e implementar un sistema de ventas en línea.  
+- Integrar una interfaz de usuario responsiva, moderna y fácil de usar.  
+- Desarrollar una API escalable para la gestión de productos, usuarios y compras.  
+- Garantizar la persistencia y seguridad de los datos mediante PostgreSQL.  
+- Implementar un flujo de trabajo en equipo aplicando metodologías de desarrollo ágil.  
+
+---
+
+## 📚 Materia
+Proyecto realizado en la materia de **Sistemas de Información II**  
+Docente: **Ing. Angélica**  
