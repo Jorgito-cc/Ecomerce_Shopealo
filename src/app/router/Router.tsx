@@ -8,6 +8,7 @@ import { Contact } from "../../shared/components/Contact";
 import { About } from "../../shared/components/about/About";
 import { LoginPage } from "../../features/auth/ui/LoginPage";
 import { BitacoraPage } from "../../features/admin/pages/BitacoraPage";
+import { Soporte } from "../../features/admin/soporte/Soporte";
 
 export const Router = () => {
   return (
@@ -23,6 +24,8 @@ export const Router = () => {
         <Route path="/admin" element={<AdminLayout />}>
           {/* rutas de admin aquí */}
                   <Route path="bitacora" element={<BitacoraPage />} />
+                    <Route path="soporte" element={<Soporte/>} />
+                  
         </Route>
       </Routes>
     </BrowserRouter>
