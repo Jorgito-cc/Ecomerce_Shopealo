@@ -1,4 +1,3 @@
-import React from "react";
 import { FaShippingFast, FaHeadset, FaShieldAlt } from "react-icons/fa";
 
 interface Feature {

@@ -1,4 +1,3 @@
-import React from "react";
 import StatCard from "./StatCard";
 import { StoreIcon, DollarIcon, BoxIcon, BagIcon } from "./icons";
 

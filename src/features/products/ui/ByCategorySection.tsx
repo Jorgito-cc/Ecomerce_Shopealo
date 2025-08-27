@@ -1,4 +1,3 @@
-import React from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { staticCategories } from "../infrastructure/data/staticCategories";
 import { CategoryCard } from "../../../shared/components/CategoryCard";

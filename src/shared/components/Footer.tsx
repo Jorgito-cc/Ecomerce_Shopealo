@@ -1,4 +1,3 @@
-import React from 'react'
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 import Logo_google_play  from '../../assets/img/imagen1.png';
 import logo_OS from '../../assets/img/imagen3.png'

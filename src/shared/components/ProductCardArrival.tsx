@@ -1,4 +1,3 @@
-import React from 'react'
 import type { ProductNewArrival } from '../../core/entites/ProductNewArrival';
 
 type Props = ProductNewArrival;
