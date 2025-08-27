@@ -2,6 +2,7 @@ import { Navbar } from "../../shared/components/Navbar";
 import { TopHeader } from "../../shared/components/TopHeader";
 import { Outlet } from "react-router-dom";
 import { Footer } from "../../shared/components/Footer";
+import { ToastContainer } from "react-toastify";
 
 export const MainLayout = () => {
   return (
@@ -15,6 +16,7 @@ export const MainLayout = () => {
         </main>
         <Footer />
       </div>
+       <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
 };

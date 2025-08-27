@@ -1,8 +1,11 @@
 export interface User {
-    id : string ;
-    name:string ,
-    email:string ,
-    role : "admin" | "cliente" | "repartidor" ; 
-    token? : string ;
-    
+  id: number;
+  ci: string;
+  username: string;
+  nombre: string;
+  email: string;
+  password: string;
+  telefono: string;
+  direccion: string;
+  img_dir?: string; // opcional
 }

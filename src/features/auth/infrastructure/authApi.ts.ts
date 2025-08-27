@@ -1,5 +1,5 @@
 import { api } from "../../../shared/api/apiClient";
-import  {User}  from "../../../core/entites/User";
+import  {User}  from "../../../core/entites/Users.kts";
 
 export async function loginApi(email: string, password: string): Promise<User> {
   const res = await api.post("/auth/login", { email, password });

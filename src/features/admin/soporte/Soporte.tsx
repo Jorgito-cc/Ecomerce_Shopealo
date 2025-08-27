@@ -17,7 +17,7 @@ export const Soporte = () => {
           foto={jorge}
         />
         <SoporteCard
-          nombre="Beimar "
+          nombre="Beimar Meza Mamani "
           email="beimar@gmail.com"
           telefono="+591 75568384"
           whatsapp="59175568384"
@@ -26,6 +26,27 @@ export const Soporte = () => {
         <SoporteCard
           nombre="Cristian Gabriel Gedalge Cayhuara"
           email="cristian34@gmail.com"
+          telefono="+591 77074673"
+          whatsapp="59177074673"
+          foto={cristian}
+        />
+         <SoporteCard
+          nombre="Carlos Alberto Rodriguez Mansilla"
+          email="carlosalberto@gmail.com"
+          telefono="+591 77074673"
+          whatsapp="59177074673"
+          foto={cristian}
+        />
+         <SoporteCard
+          nombre="Andres Leonardo Callisaya Quispe "
+          email="andreleonardp@gmail.com"
+          telefono="+591 77074673"
+          whatsapp="59177074673"
+          foto={cristian}
+        />
+         <SoporteCard
+          nombre="jose victor ugarteche ancieta"
+          email="josevistor@gmail.com"
           telefono="+591 77074673"
           whatsapp="59177074673"
           foto={cristian}

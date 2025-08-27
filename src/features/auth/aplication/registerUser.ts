@@ -1,5 +1,5 @@
 import { registerApi } from "../infrastructure/authApi.ts";
-import { User } from "../../../core/entites/User";
+import { User } from "../../../core/entites/Users.kts";
 
 export async function registerUser(
   name: string,

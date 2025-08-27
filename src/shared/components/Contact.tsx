@@ -9,7 +9,7 @@ export const Contact = () => {
       {/* Breadcrumb de navegación */}
       <div className="container mx-auto px-4 py-8">
         <p className="text-gray-500 text-sm">
-          <a href="/" className="hover:underline">Home</a> / <span className="text-black font-semibold">Contact</span>
+          <a href="/" className="hover:underline">Inicio</a> / <span className="text-black font-semibold">Contactanos</span>
         </p>
       </div>
 
@@ -23,10 +23,10 @@ export const Contact = () => {
             <div className="bg-red-500 p-2 rounded-full">
               <PhoneIcon className="h-6 w-6 text-white" />
             </div>
-            <h3 className="text-lg font-semibold">Call To Us</h3>
+            <h3 className="text-lg font-semibold">Llamanos</h3>
           </div>
-          <p className="text-gray-600 mb-2">We are available 24/7, 7 days a week.</p>
-          <p className="text-gray-600 font-semibold mb-6">Phone: +880161112222</p>
+          <p className="text-gray-600 mb-2">Estamos disponibles las 24 horas , los 7 dias de la semana.</p>
+          <p className="text-gray-600 font-semibold mb-6">Telefono : 75568384</p>
           
           <hr className="border-gray-200 my-6" />
 
@@ -35,11 +35,11 @@ export const Contact = () => {
             <div className="bg-red-500 p-2 rounded-full">
               <EnvelopeIcon  className="h-6 w-6 text-white" />
             </div>
-            <h3 className="text-lg font-semibold">Write To Us</h3>
+            <h3 className="text-lg font-semibold">Escribenos</h3>
           </div>
-          <p className="text-gray-600 mb-2">Fill out our form and we will contact you within 24 hours.</p>
-          <p className="text-gray-600 font-semibold">Emails: customer@exclusive.com</p>
-          <p className="text-gray-600 font-semibold">Emails: support@exclusive.com</p>
+          <p className="text-gray-600 mb-2">Completa nuestro formulario y te contaremos dentro de las proximas 24 horas.</p>
+          <p className="text-gray-600 font-semibold">Correo Electronico : shopealo08@gmail.com</p>
+          <p className="text-gray-600 font-semibold">Correo Electronico : shopealo08@gmail.com</p>
         </div>
 
         {/* Columna de la derecha: Formulario */}
@@ -48,23 +48,23 @@ export const Contact = () => {
             <div className="flex flex-col md:flex-row gap-4">
               <input
                 type="text"
-                placeholder="Your Name *"
+                placeholder="Tu Nombre *"
                 className="w-full md:w-1/3 bg-gray-100 py-3 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
               />
               <input
                 type="email"
-                placeholder="Your Email *"
+                placeholder="Tu Correo Electronico  *"
                 className="w-full md:w-1/3 bg-gray-100 py-3 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
               />
               <input
                 type="tel"
-                placeholder="Your Phone *"
+                placeholder="Tu numero telefonoco*"
                 className="w-full md:w-1/3 bg-gray-100 py-3 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
               />
             </div>
             <div>
               <textarea
-                placeholder="Your Message"
+                placeholder="Tu Mensaje"
                 rows={8}
                 className="w-full bg-gray-100 py-3 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
               ></textarea>
@@ -74,7 +74,7 @@ export const Contact = () => {
                 type="submit"
                 className="bg-red-500 text-white font-semibold py-4 px-12 rounded-md hover:bg-red-600 transition-colors"
               >
-                Send Message
+                Envia tu Mensaje
               </button>
             </div>
           </form>

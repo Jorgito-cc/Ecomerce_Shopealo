@@ -48,7 +48,7 @@ export const Sidebar = () => {
           {openDropdown === "usuario" && (
             <div className="pl-6 mt-2 space-y-1">
               <Link to="/admin/bitacora" className={`${isActive("/admin/bitacora") ? "text-indigo-600 font-bold" : "hover:text-indigo-500"} block`}>Bitácora</Link>
-              <Link to="/admin/usuarios" className={`${isActive("/admin/usuarios") ? "text-indigo-600 font-bold" : "hover:text-indigo-500"} block`}>Lista de Usuarios</Link>
+              <Link to="/admin/listausuario" className={`${isActive("/admin/listausuario") ? "text-indigo-600 font-bold" : "hover:text-indigo-500"} block`}>Lista de Usuarios</Link>
               <Link to="/admin/registrar-empleado" className={`${isActive("/admin/registrar-empleado") ? "text-indigo-600 font-bold" : "hover:text-indigo-500"} block`}>Registrar Empleado</Link>
             </div>
           )}

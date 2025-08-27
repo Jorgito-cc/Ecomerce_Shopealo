@@ -1,5 +1,4 @@
-import React from 'react'
-
+import sobrenosotros from '../../../assets/img/imagen5.jpg'
 export const OurStory = () => {
   return (
     <>
@@ -28,7 +27,7 @@ export const OurStory = () => {
       {/* Columna de la imagen */}
       <div className="md:w-1/2">
         <img
-          src="https://placehold.co/600x400/9871db/ffffff?text=Our+Story"
+          src={sobrenosotros}
           alt="Two women smiling and shopping"
           className="rounded-lg shadow-lg object-cover w-full h-auto"
         />

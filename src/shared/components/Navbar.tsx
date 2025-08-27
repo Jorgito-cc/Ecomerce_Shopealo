@@ -1,139 +1,187 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   HeartIcon,
   ShoppingBagIcon,
+  Bars3Icon,
+  XMarkIcon,
   MagnifyingGlassIcon,
-} from '@heroicons/react/24/outline'; // Iconos de contorno
+} from '@heroicons/react/24/outline';
 
 import {
-  HeartIcon as HeartSolid,
-  ShoppingBagIcon as ShoppingBagSolid,
   UserIcon as UserSolid,
-  StarIcon as StarOutline,
+  ShoppingBagIcon as ShoppingBagSolid,
   XCircleIcon,
+  StarIcon,
   ArrowRightOnRectangleIcon,
-} from '@heroicons/react/24/solid'; // Iconos sólidos y del dropdown
+} from '@heroicons/react/24/solid';
+
 import { Link } from 'react-router-dom';
 
-// Definimos la paleta de colores del gradiente para el dropdown
-// Tailwind por defecto no tiene este tipo de gradiente,
-// así que creamos un estilo inline.
 const gradientStyle = {
   background: 'linear-gradient(180deg, #A040A6 0%, #D85698 100%)',
 };
 
-
 export const Navbar = () => {
-
-
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Función para cambiar el estado de autenticación
-  const handleToggleAuth = () => {
-    setIsAuthenticated(!isAuthenticated);
-    setIsDropdownOpen(false); // Cierra el dropdown al cambiar de estado
+  const toggleAuth = () => {
+    setIsAuthenticated((prev) => !prev);
+    setIsDropdownOpen(false);
   };
 
-  // Función para abrir/cerrar el dropdown del perfil
-  const handleToggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+  const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
+  const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
   return (
-    <>
-    <header className="bg-white border-b border-gray-200">
-      <div className="container mx-auto px-4 py-6 flex items-center justify-between">
+    <header className="bg-white shadow-md sticky top-0 z-50">
+      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
-        <div className="text-2xl font-bold">Shopealoo</div>
+        <div className="text-2xl font-bold text-black">
+          <Link to="/">Shopealoo</Link>
+        </div>
 
-        {/* Links de navegación */}
-        <nav className="hidden md:flex flex-grow justify-center space-x-12">
-          <Link to='/' className="hover:text-gray-500 transition-colors">Inicio</Link>
-          <Link to='/contactanos' className="hover:text-gray-500 transition-colors">Contacto</Link>
-          <Link to='/sobrenosotros' className="hover:text-gray-500 transition-colors">Sobre nosotros</Link>
-          < Link to='/login' className="hover:text-gray-500 transition-colors">Registrate</Link>
+        {/* Barra de búsqueda escritorio */}
+        <div className="hidden md:flex items-center relative">
+          <input
+            type="text"
+            placeholder="¿Qué estás buscando?"
+            className="bg-gray-100 py-2 px-4 pr-10 rounded-md w-64 focus:outline-none focus:ring-2 focus:ring-red-400"
+          />
+          <MagnifyingGlassIcon className="h-5 w-5 absolute right-3 top-1/2 -translate-y-1/2 text-gray-500" />
+        </div>
+
+        {/* Navegación escritorio */}
+        <nav className="hidden md:flex items-center space-x-8 text-sm text-gray-700">
+          <Link to="/">Inicio</Link>
+          <Link to="/contactanos">Contacto</Link>
+          <Link to="/sobrenosotros">Sobre nosotros</Link>
+          <Link to="/register">Regístrate</Link>
+          {!isAuthenticated && <Link to="/login">Login</Link>}
         </nav>
 
-        {/* Búsqueda e iconos */}
-        <div className="flex items-center space-x-4">
-          {/* Campo de búsqueda */}
-          <div className="relative hidden md:block">
+        {/* Iconos escritorio */}
+        <div className="hidden md:flex items-center space-x-4">
+          {isAuthenticated && (
+            <>
+              <HeartIcon className="h-6 w-6 text-gray-700 cursor-pointer" />
+              <div className="relative">
+                <ShoppingBagIcon className="h-6 w-6 text-gray-700 cursor-pointer" />
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">2</span>
+              </div>
+              {/* User Dropdown */}
+              <div className="relative">
+                <button onClick={toggleDropdown} className={`p-1 rounded-full ${isDropdownOpen ? 'bg-red-500 text-white' : ''}`}>
+                  <UserSolid className="h-6 w-6" />
+                </button>
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg z-50" style={gradientStyle}>
+                    <div className="py-1 text-white">
+                      <a href="#" className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <UserSolid className="mr-3 h-5 w-5 text-gray-200" /> Manage My Account
+                      </a>
+                      <a href="#" className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <ShoppingBagSolid className="mr-3 h-5 w-5 text-gray-200" /> My Order
+                      </a>
+                      <a href="#" className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <XCircleIcon className="mr-3 h-5 w-5 text-gray-200" /> My Cancellations
+                      </a>
+                      <a href="#" className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <StarIcon className="mr-3 h-5 w-5 text-gray-200" /> My Reviews
+                      </a>
+                      <a href="#" className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5 text-gray-200" /> Logout
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+
+          {/* Botón login/logout */}
+          <button
+            onClick={toggleAuth}
+            className="ml-4 text-sm text-red-500 font-semibold hover:underline"
+          >
+            {isAuthenticated ? 'Logout' : 'Login'}
+          </button>
+        </div>
+
+        {/* Botón hamburguesa (mobile) */}
+        <div className="md:hidden flex items-center">
+          <button onClick={toggleMobileMenu}>
+            {isMobileMenuOpen ? (
+              <XMarkIcon className="h-6 w-6 text-black" />
+            ) : (
+              <Bars3Icon className="h-6 w-6 text-black" />
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Menú móvil */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-white px-6 pb-6 pt-4 space-y-4 shadow-md border-t border-gray-200">
+          {/* Buscador móvil */}
+          <div className="relative">
             <input
               type="text"
-              placeholder="Que estas buscandooo?"
-              className="bg-gray-100 py-2 px-4 rounded-md w-60 pr-10 focus:outline-none"
+              placeholder="¿Qué estás buscando?"
+              className="bg-gray-100 py-2 px-4 pr-10 rounded-md w-full focus:outline-none"
             />
             <MagnifyingGlassIcon className="h-5 w-5 absolute right-3 top-1/2 -translate-y-1/2 text-gray-500" />
           </div>
 
-          {/* Iconos de acción */}
-          <div className="flex items-center space-x-4 relative">
-            {/* Botón de autenticación (Login/Logout) */}
-            <button
-              onClick={handleToggleAuth}
-              className="hidden md:block text-sm text-gray-500 hover:underline"
-            >
-              {isAuthenticated ? 'Logout' : 'Login'}
-            </button>
-            <div className="flex space-x-4">
-              
-              {/* Icono de corazón (Wishlist) */}
-              <button>
-                <HeartIcon className="h-6 w-6" />
-              </button>
+          {/* Navegación móvil */}
+          <nav className="flex flex-col gap-3 text-gray-700 text-base">
+            <Link to="/">Inicio</Link>
+            <Link to="/contactanos">Contacto</Link>
+            <Link to="/sobrenosotros">Sobre nosotros</Link>
+            <Link to="/register">Regístrate</Link>
+            {!isAuthenticated && <Link to="/login">Login</Link>}
+          </nav>
 
-              {/* Icono del carrito de compras */}
+          {/* Íconos móviles si logueado */}
+          {isAuthenticated && (
+            <div className="flex gap-6 pt-4 border-t border-gray-200 items-center">
+              <HeartIcon className="h-6 w-6 text-gray-700" />
               <div className="relative">
-                <button className="relative">
-                  <ShoppingBagIcon className="h-6 w-6" />
-                  <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full">
-                    2
-                  </span>
-                </button>
+                <ShoppingBagIcon className="h-6 w-6 text-gray-700" />
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">2</span>
               </div>
-              
-              {/* Contenedor del perfil y dropdown (solo visible si está autenticado) */}
-              {isAuthenticated && (
-                <div className="relative">
-                  <button onClick={handleToggleDropdown} className={`p-1 rounded-full ${isDropdownOpen ? 'bg-red-500 text-white' : ''}`}>
-                    <UserSolid className="h-6 w-6" />
-                  </button>
-
-                  {/* Dropdown del perfil */}
-                  {isDropdownOpen && (
-                    <div
-                      className="absolute right-0 mt-2 w-56 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50"
-                      style={gradientStyle}
-                    >
-                      <div className="py-1">
-                        <a href="#" className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700/50">
-                          <UserSolid className="mr-3 h-5 w-5 text-gray-200" /> Manage My Account
-                        </a>
-                        <a href="#" className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700/50">
-                          <ShoppingBagSolid className="mr-3 h-5 w-5 text-gray-200" /> My Order
-                        </a>
-                        <a href="#" className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700/50">
-                          <XCircleIcon className="mr-3 h-5 w-5 text-gray-200" /> My Cancellations
-                        </a>
-                        <a href="#" className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700/50">
-                          <StarOutline className="mr-3 h-5 w-5 text-gray-200" /> My Reviews
-                        </a>
-                        <a href="#" className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700/50">
-                          <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5 text-gray-200" /> Logout
-                        </a>
-                      </div>
+              {/* Ícono usuario con dropdown en mobile */}
+              <div className="relative">
+                <button onClick={toggleDropdown}>
+                  <UserSolid className="h-6 w-6 text-gray-700" />
+                </button>
+                {isDropdownOpen && (
+                  <div className="absolute mt-2 w-56 rounded-md shadow-lg z-50 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-0" style={gradientStyle}>
+                    <div className="py-1 text-white">
+                      <a href="#" className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <UserSolid className="mr-3 h-5 w-5 text-gray-200" /> Manage My Account
+                      </a>
+                      <a href="#" className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <ShoppingBagSolid className="mr-3 h-5 w-5 text-gray-200" /> My Order
+                      </a>
+                      <a href="#" className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <XCircleIcon className="mr-3 h-5 w-5 text-gray-200" /> My Cancellations
+                      </a>
+                      <a href="#" className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <StarIcon className="mr-3 h-5 w-5 text-gray-200" /> My Reviews
+                      </a>
+                      <a href="#" className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5 text-gray-200" /> Logout
+                      </a>
                     </div>
-                  )}
-                </div>
-              )}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
-      </div>
+      )}
     </header>
-
-    </>
-  )
-}
-
+  );
+};
