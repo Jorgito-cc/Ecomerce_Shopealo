@@ -50,7 +50,7 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
           onClick={handleAddToCart}
           className="absolute bottom-0 left-0 w-full py-2 bg-black text-white text-sm"
         >
-          Add To Cart
+          Añadir al carrito
         </button>
       )}
     </div>
