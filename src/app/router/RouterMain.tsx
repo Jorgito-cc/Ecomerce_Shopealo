@@ -13,6 +13,9 @@ import { ListaUsuarioPage } from "../../features/admin/pages/ListaUsuarioPage";
 import { RegistrarEmpleadoPage } from "../../features/admin/pages/RegistrarEmpleadoPage ";
 import { RegisterPage } from "../../features/auth/ui/RegisterPage";
 import { RecuperarPasswordPage } from "../../features/auth/ui/RecuperarPasswordPage";
+import { ProductGrid } from '../../shared/ProductGrid';
+import { CartPage } from "../../pages/CartPage";
+import { CheckoutPage } from "../../pages/CheckoutPage";
 
 export const Router = () => {
   return (
@@ -26,6 +29,10 @@ export const Router = () => {
                     <Route path="register" element={<RegisterPage />} />
 
                     <Route path="recuperar" element={<RecuperarPasswordPage />} />
+                     <Route path="all-products" element={<ProductGrid />} />
+
+                                  <Route path="cart" element={<CartPage />} />
+                                               <Route path="checkout" element={<CheckoutPage />} />
 
         </Route>
 
