@@ -4,11 +4,11 @@ import { Router } from "./router/RouterMain";
 function App() {
   return (
     <>
-{/*     <CartProvider> */}
+    <CartProvider> 
 
       <Router />
 
-   {/*  </CartProvider> */}
+    </CartProvider> 
     </>
   );
 }
