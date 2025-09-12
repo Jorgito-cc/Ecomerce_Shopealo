@@ -1,7 +1,7 @@
 // src/shared/components/CartItem.tsx
 import React from 'react';
-import { CartItem as CartItemType, useCart } from '../../context/CartContext';
-
+import type {   CartItem as CartItemType } from '../../context/CartContext';
+import {useCart}   from '../../context/CartContext';
 type Props = {
   item: CartItemType;
 };
