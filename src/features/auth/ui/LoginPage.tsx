@@ -39,7 +39,7 @@ const onSubmit = async (data: LoginForm) => {
   setApiError(null);
   try {
     await login({
-      email: data.email.trim().toLowerCase(), // 👈
+      email: data.email.trim(), // 👈
       password: data.password.trim(),         // 👈
     });
     navigate("/");
