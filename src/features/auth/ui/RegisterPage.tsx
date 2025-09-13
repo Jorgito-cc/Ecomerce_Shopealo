@@ -120,7 +120,7 @@ export const RegisterPage = () => {
                 placeholder="Contraseña"
                 {...register("password", {
                   required: "La contraseña es obligatoria",
-                  minLength: { value: 6, message: "Mínimo 6 caracteres" },
+                  minLength: { value: 8, message: "Mínimo 8 caracteres" },
                 })}
                 className="w-full border-b border-gray-300 py-3 px-1 focus:outline-none focus:border-black transition-colors"
               />

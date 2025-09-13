@@ -25,36 +25,41 @@ export const clearSession = () => {
   localStorage.removeItem("auth_user");
 };
 
-// ============ ENDPOINTS ============
+// -------- ENDPOINTS --------
 
-// POST /auth/login  -> ya devuelve { user, token }
+// Siempre con "/api/v1/..." para evitar problemas de concatenación.
+
 export const loginRequest = async (payload: LoginRequest): Promise<AuthResponse> => {
-  const { data } = await http.post<AuthResponse>("api/v1/auth/login", payload, {
+  const { data } = await http.post<AuthResponse>("/api/v1/auth/login", payload, {
     headers: { "Content-Type": "application/json" },
   });
   saveSession(data);
   return data;
 };
 
-// POST /auth/register  -> hoy NO devuelve { user, token }.
-// Solución: tras registrar, hacemos login para normalizar; si falla, normalizamos localmente.
+// IMPORTANTE: tu /auth/register NO devuelve { user, token }.
+// Solución: tras registrar, hacemos login automático.
+// Si falla el login, normalizamos localmente la respuesta para guardar sesión.
 export const registerRequest = async (payload: RegisterRequest): Promise<AuthResponse> => {
-  // 1) Registrar (devuelve algo como { id, email, nombre, token, ... })
-  const { data } = await http.post<any>("api/v1/auth/register", payload, {
+  // 1) Registro (devuelve algo tipo { id, email, nombre, token, role?... })
+  const { data } = await http.post<any>("/api/v1/auth/register", payload, {
     headers: { "Content-Type": "application/json" },
   });
 
-  // 2) Intentar login para obtener AuthResponse consistente
+  // 2) Intentar login para obtener { user, token } consistente
   try {
-    const normalized = await loginRequest({ email: payload.email, password: payload.password });
+    const normalized = await loginRequest({
+      email: payload.email,
+      password: payload.password,
+    });
     // loginRequest ya hace saveSession(normalized)
     return normalized;
   } catch {
-    // 3) Plan B: normalizar localmente la respuesta del register
+    // 3) Plan B: normalizamos lo que vino del register
     const user: UserDTO = {
       id: data.id ?? 0,
       email: data.email ?? payload.email,
-      nombre: data.nombre ?? "",
+      nombre: data.nombre ?? payload.nombre ?? "",
       rolId: data.rolId ?? data.role?.id ?? payload.roleId ?? 0,
       rolNombre: data.rolNombre ?? data.role?.nombre ?? "USER",
     };
@@ -67,13 +72,19 @@ export const registerRequest = async (payload: RegisterRequest): Promise<AuthRes
 export const forgotPasswordRequest = async (
   payload: ForgotPasswordRequest
 ): Promise<{ message: string }> => {
-  const { data } = await http.post<{ message: string }>("api/v1/auth/forgotpassword", payload);
+  const { data } = await http.post<{ message: string }>(
+    "/api/v1/auth/forgotpassword",
+    payload
+  );
   return data;
 };
 
 export const resetPasswordRequest = async (
   payload: ResetPasswordRequest
 ): Promise<{ message?: string }> => {
-  const { data } = await http.post<{ message?: string }>("api/v1/auth/resetPassword", payload);
+  const { data } = await http.post<{ message?: string }>(
+    "/api/v1/auth/resetPassword",
+    payload
+  );
   return data;
 };
