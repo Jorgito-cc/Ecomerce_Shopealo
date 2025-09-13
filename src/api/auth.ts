@@ -32,7 +32,7 @@ export const clearSession = () => {
 // src/api/auth.ts (rutas SIEMPRE con /api/v1/..)
 export const loginRequest = async (payload: LoginRequest): Promise<AuthResponse> => {
   const { data } = await http.post<AuthResponse>("/api/v1/auth/login", {
-    email: payload.email.trim().toLowerCase(),
+    email: payload.email.trim(),
     password: payload.password.trim(),
   }, { headers: { "Content-Type": "application/json" } });
 
