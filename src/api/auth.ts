@@ -31,7 +31,7 @@ export const clearSession = () => {
 
 // POST /auth/login
 export const loginRequest = async (payload: LoginRequest): Promise<AuthResponse> => {
-  const { data } = await http.post<AuthResponse>("/auth/login", payload, {
+  const { data } = await http.post<AuthResponse>("api/v1/auth/login", payload, {
     headers: { "Content-Type": "application/json" },
   });
   saveSession(data);
@@ -42,7 +42,7 @@ export const loginRequest = async (payload: LoginRequest): Promise<AuthResponse>
 export const registerRequest = async (
   payload: RegisterRequest
 ): Promise<AuthResponse> => {
-  const { data } = await http.post<AuthResponse>("/auth/register", payload, {
+  const { data } = await http.post<AuthResponse>("api/v1/auth/register", payload, {
     headers: { "Content-Type": "application/json" },
   });
   // si quieres auto-login tras registro:
@@ -55,7 +55,7 @@ export const forgotPasswordRequest = async (
   payload: ForgotPasswordRequest
 ): Promise<{ message: string }> => {
   const { data } = await http.post<{ message: string }>(
-    "/auth/forgotpassword",
+    "api/v1/auth/forgotpassword",
     payload
   );
   return data;
@@ -66,7 +66,7 @@ export const resetPasswordRequest = async (
   payload: ResetPasswordRequest
 ): Promise<{ message?: string }> => {
   const { data } = await http.post<{ message?: string }>(
-    "/auth/resetPassword",
+    "api/v1/auth/resetPassword",
     payload
   );
   return data;
