@@ -24,13 +24,13 @@ export const RegisterPage = () => {
   const onSubmit = async (data: RegisterForm) => {
     try {
       // Mapeo al DTO esperado por tu backend: RegisterRequest
-  await registerApi({
-  nombre: data.nombre,   // 👈 no "name"
-  email: data.email,
-  password: data.password,
-         // 👈 dale un rol por defecto si es necesario
-         roleId: Number(import.meta.env.VITE_DEFAULT_ROLE_ID ?? 2),
-});
+      await registerApi({
+        nombre: data.nombre, // 👈 no "name"
+        email: data.email,
+        password: data.password,
+        // 👈 dale un rol por defecto si es necesario
+        roleId: Number(import.meta.env.VITE_DEFAULT_ROLE_ID ?? 2),
+      });
 
       // Si registerRequest guarda token + user (según tu AuthContext),
       // te dejamos logueado y te llevamos al home / dashboard.
@@ -49,7 +49,8 @@ export const RegisterPage = () => {
       const fieldErrors = err?.response?.data?.errors;
       if (fieldErrors?.email) setError("email", { message: fieldErrors.email });
       if (fieldErrors?.name) setError("nombre", { message: fieldErrors.name });
-      if (fieldErrors?.password) setError("password", { message: fieldErrors.password });
+      if (fieldErrors?.password)
+        setError("password", { message: fieldErrors.password });
     }
   };
 
@@ -67,13 +68,17 @@ export const RegisterPage = () => {
 
         {/* Formulario */}
         <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
-          <h2 className="text-3xl md:text-4xl font-semibold mb-2">Crear una cuenta</h2>
+          <h2 className="text-3xl md:text-4xl font-semibold mb-2">
+            Crear una cuenta
+          </h2>
           <p className="text-gray-500 mb-6">Ingresa tus datos a continuación</p>
 
           {/* Error general del backend */}
-       
+
           {errors.root?.message && (
-            <div className="mb-4 text-sm text-red-600">{errors.root.message}</div>
+            <div className="mb-4 text-sm text-red-600">
+              {errors.root.message}
+            </div>
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -81,7 +86,9 @@ export const RegisterPage = () => {
               <input
                 type="text"
                 placeholder="Nombre completo"
-                {...register("nombre", { required: "El nombre es obligatorio" })}
+                {...register("nombre", {
+                  required: "El nombre es obligatorio",
+                })}
                 className="w-full border-b border-gray-300 py-3 px-1 focus:outline-none focus:border-black transition-colors"
               />
               {errors.nombre && (
@@ -118,7 +125,9 @@ export const RegisterPage = () => {
                 className="w-full border-b border-gray-300 py-3 px-1 focus:outline-none focus:border-black transition-colors"
               />
               {errors.password && (
-                <p className="text-sm text-red-500">{errors.password.message}</p>
+                <p className="text-sm text-red-500">
+                  {errors.password.message}
+                </p>
               )}
             </div>
 
