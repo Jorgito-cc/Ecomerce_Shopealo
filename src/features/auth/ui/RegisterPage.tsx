@@ -28,7 +28,7 @@ export const RegisterPage = () => {
   nombre: data.nombre,   // 👈 no "name"
   email: data.email,
   password: data.password,
-  rolId: 2,             // 👈 dale un rol por defecto si es necesario
+         // 👈 dale un rol por defecto si es necesario
 });
 
       // Si registerRequest guarda token + user (según tu AuthContext),
