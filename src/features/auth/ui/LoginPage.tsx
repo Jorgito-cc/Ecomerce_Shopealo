@@ -35,21 +35,25 @@ export const LoginPage = () => {
   const [apiError, setApiError] = useState<string | null>(null);
 
   // === LOGIN ===
-  const onSubmit = async (data: LoginForm) => {
-    setApiError(null);
-    try {
-      await login({ email: data.email, password: data.password }); // usa AuthContext
-      navigate("/"); // redirige a tu dashboard/home
-    } catch (err: any) {
-      const msg =
-        err?.response?.data?.message ||
-        err?.message ||
-        "No se pudo iniciar sesión";
-      setApiError(msg);
-      setError("email", { message: "Revisa tu correo o contraseña" });
-      setError("password", { message: "Revisa tu correo o contraseña" });
-    }
-  };
+const onSubmit = async (data: LoginForm) => {
+  setApiError(null);
+  try {
+    await login({
+      email: data.email.trim().toLowerCase(), // 👈
+      password: data.password.trim(),         // 👈
+    });
+    navigate("/");
+  } catch (err: any) {
+    const msg =
+      err?.response?.data?.message ||
+      err?.message ||
+      "No se pudo iniciar sesión";
+    setApiError(msg);
+    setError("email", { message: "Revisa tu correo o contraseña" });
+    setError("password", { message: "Revisa tu correo o contraseña" });
+  }
+};
+
 
   // === RECUPERAR (paso 1: enviar correo) ===
   const handleRecuperar = async (email: string) => {

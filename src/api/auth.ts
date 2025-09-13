@@ -29,13 +29,17 @@ export const clearSession = () => {
 
 // Siempre con "/api/v1/..." para evitar problemas de concatenación.
 
+// src/api/auth.ts (rutas SIEMPRE con /api/v1/..)
 export const loginRequest = async (payload: LoginRequest): Promise<AuthResponse> => {
-  const { data } = await http.post<AuthResponse>("/api/v1/auth/login", payload, {
-    headers: { "Content-Type": "application/json" },
-  });
+  const { data } = await http.post<AuthResponse>("/api/v1/auth/login", {
+    email: payload.email.trim().toLowerCase(),
+    password: payload.password.trim(),
+  }, { headers: { "Content-Type": "application/json" } });
+
   saveSession(data);
   return data;
 };
+
 
 // IMPORTANTE: tu /auth/register NO devuelve { user, token }.
 // Solución: tras registrar, hacemos login automático.
