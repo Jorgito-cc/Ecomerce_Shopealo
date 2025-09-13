@@ -1,9 +1,18 @@
+// src/pages/auth/LoginPage.tsx
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import login_imagen from "../../../assets/img/imagen6.jpg";
 import { ModalRecuperar } from "../ui/ModalRecuperar";
 import { ModalCodigo } from "../ui/ModalCodigo";
-import { useNavigate } from "react-router-dom";
+ // <-- ajusta la ruta si difiere
+
+// Endpoints de auth
+import {
+  forgotPasswordRequest,
+  resetPasswordRequest,
+} from "../../../api/auth";
+import { useAuth } from "../../../context/AuthContext";
 
 type LoginForm = {
   email: string;
@@ -11,18 +20,51 @@ type LoginForm = {
 };
 
 export const LoginPage = () => {
-  const navigate = useNavigate(); // 👈
+  const navigate = useNavigate();
+  const { login } = useAuth(); // usa tu AuthContext (setea user, guarda token, etc.)
+
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<LoginForm>();
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<LoginForm>({ mode: "onTouched" });
 
   const [showRecuperar, setShowRecuperar] = useState(false);
   const [emailRecuperar, setEmailRecuperar] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<string | null>(null);
 
-  const handleRecuperar = (email: string) => {
-    setEmailRecuperar(email);
+  // === LOGIN ===
+  const onSubmit = async (data: LoginForm) => {
+    setApiError(null);
+    try {
+      await login({ email: data.email, password: data.password }); // usa AuthContext
+      navigate("/"); // redirige a tu dashboard/home
+    } catch (err: any) {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "No se pudo iniciar sesión";
+      setApiError(msg);
+      setError("email", { message: "Revisa tu correo o contraseña" });
+      setError("password", { message: "Revisa tu correo o contraseña" });
+    }
+  };
+
+  // === RECUPERAR (paso 1: enviar correo) ===
+  const handleRecuperar = async (email: string) => {
+    await forgotPasswordRequest({ email }); // si falla lanzará error que captura el modal
+    setEmailRecuperar(email); // abre el modal del código
+  };
+
+  // === RESET (paso 2: enviar código + nueva contraseña) ===
+  const handleResetPassword = async (code: string, password: string) => {
+    if (!emailRecuperar) return;
+    await resetPasswordRequest({ email: emailRecuperar, code, password });
+    // Éxito
+    setShowRecuperar(false);
+    setEmailRecuperar(null);
+    navigate("/login");
   };
 
   const handleCloseModals = () => {
@@ -30,15 +72,11 @@ export const LoginPage = () => {
     setEmailRecuperar(null);
   };
 
-  const onSubmit = (data: LoginForm) => {
-    console.log("Login:", data);
-  };
-
   return (
     <>
-      {/* Página Login */}
       <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4 relative">
         <div className="flex flex-col md:flex-row w-full max-w-5xl bg-white rounded-xl shadow-lg overflow-hidden z-10">
+          {/* Imagen */}
           <div className="w-full md:w-1/2 h-64 md:h-auto">
             <img
               src={login_imagen}
@@ -47,24 +85,27 @@ export const LoginPage = () => {
             />
           </div>
 
+          {/* Formulario */}
           <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
             <h2 className="text-3xl md:text-4xl font-semibold mb-2">
               Inicia sesión en Shopealoo
             </h2>
-            <p className="text-gray-500 mb-8">
-              Ingresa tus datos a continuación
-            </p>
+            <p className="text-gray-500 mb-4">Ingresa tus datos a continuación</p>
+
+            {apiError && (
+              <div className="mb-4 text-sm text-red-600">{apiError}</div>
+            )}
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div>
                 <input
                   type="email"
-                  placeholder="Correo electrónico o número"
+                  placeholder="Correo electrónico"
                   {...register("email", {
                     required: "Campo obligatorio",
                     pattern: {
-                      value: /^\S+@\S+$/i,
-                      message: "Correo electrónico inválido",
+                      value: /^\S+@\S+\.\S+$/,
+                      message: "Correo inválido",
                     },
                   })}
                   className="w-full border-b border-gray-300 py-3 px-1 focus:outline-none focus:border-black"
@@ -80,10 +121,7 @@ export const LoginPage = () => {
                   placeholder="Contraseña"
                   {...register("password", {
                     required: "Campo obligatorio",
-                    minLength: {
-                      value: 6,
-                      message: "Mínimo 6 caracteres",
-                    },
+                    minLength: { value: 6, message: "Mínimo 6 caracteres" },
                   })}
                   className="w-full border-b border-gray-300 py-3 px-1 focus:outline-none focus:border-black"
                 />
@@ -97,10 +135,12 @@ export const LoginPage = () => {
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mt-6">
                 <button
                   type="submit"
-                  className="bg-red-500 text-white font-semibold py-3 px-10 rounded-md hover:bg-red-600 transition-colors"
+                  disabled={isSubmitting}
+                  className="bg-red-500 text-white font-semibold py-3 px-10 rounded-md hover:bg-red-600 transition-colors disabled:opacity-60"
                 >
-                  Iniciar sesión
+                  {isSubmitting ? "Ingresando..." : "Iniciar sesión"}
                 </button>
+
                 <button
                   type="button"
                   onClick={() => setShowRecuperar(true)}
@@ -114,7 +154,7 @@ export const LoginPage = () => {
             <div className="mt-8 text-center text-gray-500">
               ¿No tienes una cuenta?{" "}
               <button
-              onClick={() => navigate("/register")}
+                onClick={() => navigate("/register")}
                 className="font-semibold underline text-black"
               >
                 Regístrate
@@ -123,40 +163,20 @@ export const LoginPage = () => {
           </div>
         </div>
 
-        {/* Modales */}
+        {/* MODALES */}
         {showRecuperar && !emailRecuperar && (
-          <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
-            <div className="relative bg-white w-[90%] max-w-md p-6 rounded-xl shadow-xl">
-              <button
-                onClick={handleCloseModals}
-                className="absolute top-2 right-2 text-gray-500 hover:text-black text-xl"
-              >
-                ❌
-              </button>
-              <ModalRecuperar
-                onClose={handleCloseModals}
-                onSend={handleRecuperar}
-              />
-            </div>
-          </div>
+          <ModalRecuperar
+            onClose={handleCloseModals}
+            onSend={handleRecuperar}
+          />
         )}
 
         {showRecuperar && emailRecuperar && (
-         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
-            <div className="relative bg-white w-[90%] max-w-md p-6 rounded-xl shadow-xl">
-              <button
-                onClick={handleCloseModals}
-                className="absolute top-2 right-2 text-gray-500 hover:text-black text-xl"
-              >
-                ❌
-              </button>
-              <ModalCodigo
-                email={emailRecuperar}
-                onClose={handleCloseModals}
-                onGuardar={handleCloseModals}
-              />
-            </div>
-          </div>
+          <ModalCodigo
+            email={emailRecuperar}
+            onClose={handleCloseModals}
+            onGuardar={handleResetPassword}
+          />
         )}
       </div>
     </>
