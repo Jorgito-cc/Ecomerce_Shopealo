@@ -7,7 +7,7 @@ import {
   loginRequest,
   registerRequest,
 } from "../api/auth";
-import type { LoginRequest, RegisterRequest } from "..//types/auth";
+import type { LoginRequest, RegisterRequest } from "../types/auth";
 
 type AuthContextType = {
   user: UserDTO | null;
