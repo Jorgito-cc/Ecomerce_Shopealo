@@ -72,23 +72,33 @@ export const registerRequest = async (payload: RegisterRequest): Promise<AuthRes
     return normalized;
   }
 };
-
+// FORGOT PASSWORD (envía código al correo)
 export const forgotPasswordRequest = async (
   payload: ForgotPasswordRequest
 ): Promise<{ message: string }> => {
+  const body = { email: payload.email.trim().toLowerCase() };
   const { data } = await http.post<{ message: string }>(
     "/api/v1/auth/forgotpassword",
-    payload
+    body,
+    { headers: { "Content-Type": "application/json" } }
   );
   return data;
 };
 
+
+// RESET PASSWORD (valida código + nueva pass)
 export const resetPasswordRequest = async (
   payload: ResetPasswordRequest
 ): Promise<{ message?: string }> => {
+  const body = {
+    email: payload.email.trim().toLowerCase(),
+    code: payload.code.trim(),
+    password: payload.password.trim(), // min 8
+  };
   const { data } = await http.post<{ message?: string }>(
     "/api/v1/auth/resetPassword",
-    payload
+    body,
+    { headers: { "Content-Type": "application/json" } }
   );
   return data;
 };
