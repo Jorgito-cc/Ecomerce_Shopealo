@@ -8,7 +8,7 @@ export type RegisterRequest = {
   nombre: string;
   email: string;
   password: string;
-  
+  roleId: number; 
   isActive?: boolean;
 };
 

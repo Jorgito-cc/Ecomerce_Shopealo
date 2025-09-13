@@ -29,6 +29,7 @@ export const RegisterPage = () => {
   email: data.email,
   password: data.password,
          // 👈 dale un rol por defecto si es necesario
+         roleId: Number(import.meta.env.VITE_DEFAULT_ROLE_ID ?? 2),
 });
 
       // Si registerRequest guarda token + user (según tu AuthContext),
