@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 
 import { motion, AnimatePresence } from "framer-motion";
-import type { User } from "../../../types/user";
+import type { User } from "../../../types/UsersType";
 
 type Props = {
   user: User;

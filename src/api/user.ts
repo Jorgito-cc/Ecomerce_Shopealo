@@ -1,4 +1,4 @@
-import type { User } from "../types/user";
+import type { User } from "../types/UsersType"
 import { http } from "./http"; 
 
 // GET todos los usuarios

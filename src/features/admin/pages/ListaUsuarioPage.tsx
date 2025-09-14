@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getUsers, updateUser, deleteUser } from "../../../api/user";
 import { EditModalUsuario } from "../components/EditModalUsuario";
-import type { User } from "../../../types/user";
+import type { User } from "../../../types/UsersType";
 
 export const ListaUsuarioPage = () => {
   const [users, setUsers] = useState<User[]>([]);
