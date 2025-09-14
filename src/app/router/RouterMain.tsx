@@ -19,6 +19,7 @@ import { RedirectIfAuth } from "../guards/RedirectIfAuth";
 import { LoginPage } from "../../features/auth/ui/LoginPage";
 import { RegisterPage } from "../../features/auth/ui/RegisterPage";
 import { RecuperarPasswordPage } from "../../features/auth/ui/RecuperarPasswordPage";
+import { CategoriasPage } from "../../features/admin/pages/CategoriasPage";
 export const Router = () => {
   return (
     <BrowserRouter>
@@ -73,6 +74,8 @@ export const Router = () => {
           <Route path="bitacora" element={<BitacoraPage />} />
           <Route path="soporte" element={<Soporte />} />
           <Route path="listausuario" element={<ListaUsuarioPage />} />
+                    <Route path="registrar-categoria" element={<CategoriasPage />} />
+
           <Route
             path="registrar-empleado"
             element={<RegistrarEmpleadoPage />}
