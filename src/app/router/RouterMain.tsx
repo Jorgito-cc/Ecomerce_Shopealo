@@ -32,9 +32,9 @@ export const Router = () => {
           <Route
             path="login"
             element={
-              <RedirectIfAuth>
+              
                 <LoginPage />
-              </RedirectIfAuth>
+           
             }
           />
           <Route
