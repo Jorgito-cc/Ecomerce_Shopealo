@@ -18,3 +18,4 @@ export type User = {
   img_dir?: string;
   password?: string; // opcional, para que no dé error
 };
+
