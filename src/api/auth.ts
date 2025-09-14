@@ -1,6 +1,7 @@
 // src/api/auth.ts
 import type {
   AuthResponse,
+  EmpleadoRegisterRequest,
   ForgotPasswordRequest,
   LoginRequest,
   RegisterRequest,
@@ -100,5 +101,31 @@ export const resetPasswordRequest = async (
     body,
     { headers: { "Content-Type": "application/json" } }
   );
+  return data;
+};
+// src/types/auth.ts
+ // Crea empleado (no hace login, no guarda token)
+export const registerEmpleadoRequest = async (
+  payload: EmpleadoRegisterRequest
+): Promise<UserDTO> => {
+  const body = {
+    nombre: payload.nombre.trim(),
+    email: payload.email.trim().toLowerCase(),
+    password: payload.password.trim(),
+    roleId: payload.roleId ?? 3, // 👈 CHOFER
+    ci: payload.ci?.trim(),
+    username: payload.username?.trim(),
+    telefono: payload.telefono?.trim(),
+    direccion: payload.direccion?.trim(),
+    img_dir: payload.img_dir?.trim(),
+  };
+
+  // Si tu backend crea usuarios desde /api/v1/auth/register
+  // y acepta los campos extra, usamos ese mismo.
+  // Si tienes un endpoint específico (p.ej. POST /api/v1/usuario),
+  // cambia la ruta aquí.
+  const { data } = await http.post<UserDTO>("/api/v1/auth/register", body, {
+    headers: { "Content-Type": "application/json" },
+  });
   return data;
 };

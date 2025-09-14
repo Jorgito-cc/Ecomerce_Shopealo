@@ -35,3 +35,17 @@ export type AuthResponse = {
   user: UserDTO;
   token: string;
 };
+
+// src/types/auth.ts
+export type EmpleadoRegisterRequest = {
+  nombre: string;
+  email: string;
+  password: string;
+  roleId?: number;     // por defecto 3 (CHOFER)
+  ci?: string;
+  username?: string;
+  telefono?: string;
+  direccion?: string;
+  img_dir?: string;
+};
+
