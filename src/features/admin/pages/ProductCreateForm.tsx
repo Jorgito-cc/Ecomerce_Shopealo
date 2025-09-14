@@ -42,6 +42,8 @@ export const ProductCreateForm: React.FC<{ onCreated?: () => void }> = ({ onCrea
 
   return (
     <div className="max-w-2xl mx-auto bg-white dark:bg-slate-900 rounded-xl shadow p-6">
+         <h1 className="text-3xl font-bold text-indigo-700 mb-6">Productos</h1>
+
       <h2 className="text-2xl font-semibold mb-4">Registrar Producto</h2>
 
       {errors.root?.message && (

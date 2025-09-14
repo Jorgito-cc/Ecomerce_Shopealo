@@ -28,9 +28,7 @@ export const ListaProductosPage: React.FC = () => {
     <section className="px-4 py-10 max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold text-indigo-700 mb-6">Productos</h1>
 
-      <div className="mb-8">
-        <ProductCreateForm onCreated={load} />
-      </div>
+    
 
       <div className="overflow-x-auto rounded-lg shadow border bg-white">
         <table className="min-w-full divide-y">
