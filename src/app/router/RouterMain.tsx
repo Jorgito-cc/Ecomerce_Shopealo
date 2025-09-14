@@ -20,6 +20,8 @@ import { LoginPage } from "../../features/auth/ui/LoginPage";
 import { RegisterPage } from "../../features/auth/ui/RegisterPage";
 import { RecuperarPasswordPage } from "../../features/auth/ui/RecuperarPasswordPage";
 import { CategoriasPage } from "../../features/admin/pages/CategoriasPage";
+import { ListaProductosPage } from "../../features/admin/pages/ListaProductosPage";
+import { ProductCreateForm } from "../../features/admin/pages/ProductCreateForm";
 export const Router = () => {
   return (
     <BrowserRouter>
@@ -74,7 +76,11 @@ export const Router = () => {
           <Route path="bitacora" element={<BitacoraPage />} />
           <Route path="soporte" element={<Soporte />} />
           <Route path="listausuario" element={<ListaUsuarioPage />} />
-                    <Route path="registrar-categoria" element={<CategoriasPage />} />
+                    <Route path="registrar-categoria" element={< CategoriasPage/>} />
+
+          <Route path="istar-producto" element={<ListaProductosPage />} />
+          <Route path="registrar-producto" element={<ProductCreateForm />} />
+
 
           <Route
             path="registrar-empleado"
