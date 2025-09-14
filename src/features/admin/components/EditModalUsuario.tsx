@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
-import type { User } from "../../../core/entites/User";
+
 import { motion, AnimatePresence } from "framer-motion";
+import type { User } from "../../../types/user";
 
 type Props = {
   user: User;
@@ -49,6 +50,14 @@ export const EditModalUsuario: React.FC<Props> = ({ user, onClose, onSave }) => 
               <label className="text-sm text-gray-700">Email</label>
               <input {...register("email")} className="w-full border p-2 rounded mt-1" />
             </div>
+            <div>
+  <label className="text-sm text-gray-700">Contraseña</label>
+  <input
+    type="password"
+    {...register("password")}
+    className="w-full border p-2 rounded mt-1"
+  />
+</div>
             <div>
               <label className="text-sm text-gray-700">Teléfono</label>
               <input {...register("telefono")} className="w-full border p-2 rounded mt-1" />
