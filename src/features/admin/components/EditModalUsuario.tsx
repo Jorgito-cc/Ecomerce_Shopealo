@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
-import type { User } from "../../../core/entites/User";
 import { motion, AnimatePresence } from "framer-motion";
+import type { User } from "../../../types/UsersTypes";
 
 type Props = {
   user: User;
@@ -13,10 +13,13 @@ export const EditModalUsuario: React.FC<Props> = ({ user, onClose, onSave }) => 
     defaultValues: user,
   });
 
-  const onSubmit = (data: User) => {
-    onSave(data);
-    onClose();
-  };
+const onSubmit = (data: User) => {
+  const payload = { ...data };
+  if (!payload.password) delete payload.password; // no enviar si vacío
+  onSave(payload as User);
+  onClose();
+};
+
 
   return (
     <AnimatePresence>

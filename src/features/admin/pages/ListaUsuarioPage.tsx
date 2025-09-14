@@ -1,15 +1,34 @@
-import { staticUsers } from "../../products/infrastructure/data/staticusers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EditModalUsuario } from "../components/EditModalUsuario";
-import type { User } from "../../../core/entites/User";
+import { FaEdit, FaTrash, FaUndo } from "react-icons/fa";
+import type { User } from "../../../types/UsersTypes";
+import { deleteUser, getUsers, restoreUser, updateUser } from "../../../api/userApi";
 
 export const ListaUsuarioPage = () => {
-  const [users, setUsers] = useState<User[]>(staticUsers);
+  const [users, setUsers] = useState<User[]>([]);
   const [userEdit, setUserEdit] = useState<User | null>(null);
 
-  const handleSave = (updated: User) => {
-    const updatedList = users.map((u) => (u.id === updated.id ? updated : u));
-    setUsers(updatedList);
+  useEffect(() => {
+    (async () => {
+      const data = await getUsers();
+      setUsers(data);
+    })();
+  }, []);
+
+  const handleSave = async (updated: User) => {
+    const res = await updateUser(updated.id, updated);
+    setUsers(prev => prev.map(u => (u.id === res.id ? res : u)));
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("¿Seguro que deseas eliminar este usuario?")) return;
+    await deleteUser(id);
+    setUsers(prev => prev.map(u => (u.id === id ? { ...u, isActive: false } : u)));
+  };
+
+  const handleRestore = async (id: number) => {
+    const res = await restoreUser(id);
+    setUsers(prev => prev.map(u => (u.id === id ? res : u)));
   };
 
   return (
@@ -21,41 +40,60 @@ export const ListaUsuarioPage = () => {
           <thead className="bg-gray-100">
             <tr>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">ID</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">CI</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Username</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Nombre</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Email</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Teléfono</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Dirección</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Imagen</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Rol</th>
+              <th className="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase">Estado</th>
               <th className="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase">Acciones</th>
             </tr>
           </thead>
 
           <tbody className="divide-y divide-gray-200">
-            {users.map((user) => (
+            {users.map(user => (
               <tr key={user.id} className="hover:bg-gray-50 transition">
                 <td className="px-4 py-2 text-sm">{user.id}</td>
-                <td className="px-4 py-2 text-sm">{user.ci}</td>
-                <td className="px-4 py-2 text-sm">{user.username}</td>
                 <td className="px-4 py-2 text-sm">{user.nombre}</td>
                 <td className="px-4 py-2 text-sm">{user.email}</td>
-                <td className="px-4 py-2 text-sm">{user.telefono}</td>
-                <td className="px-4 py-2 text-sm">{user.direccion}</td>
-                <td className="px-4 py-2 text-sm">
-                  {user.img_dir ? (
-                    <img src={user.img_dir} alt={user.username} className="w-8 h-8 rounded-full object-cover" />
+                <td className="px-4 py-2 text-sm">{user.role?.nombre}</td>
+                <td className="px-4 py-2 text-sm text-center">
+                  {user.isActive ? (
+                    <span className="px-2 py-1 text-xs font-semibold rounded bg-green-100 text-green-700">
+                      Activo
+                    </span>
                   ) : (
-                    <span className="text-gray-400">N/A</span>
+                    <span className="px-2 py-1 text-xs font-semibold rounded bg-red-100 text-red-700">
+                      Inactivo
+                    </span>
                   )}
                 </td>
-                <td className="px-4 py-2 text-sm text-center">
+                <td className="px-4 py-2 text-sm text-center flex gap-3 justify-center">
+                  {/* Editar */}
                   <button
                     onClick={() => setUserEdit(user)}
-                    className="bg-yellow-400 text-white px-2 py-1 rounded hover:bg-yellow-500"
+                    title="Editar"
+                    className="p-2 bg-yellow-100 text-yellow-600 rounded-full hover:bg-yellow-200 transition"
                   >
-                    Editar
+                    <FaEdit />
                   </button>
+
+                  {/* Eliminar o Reactivar */}
+                  {user.isActive ? (
+                    <button
+                      onClick={() => handleDelete(user.id)}
+                      title="Eliminar"
+                      className="p-2 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition"
+                    >
+                      <FaTrash />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleRestore(user.id)}
+                      title="Reactivar"
+                      className="p-2 bg-green-100 text-green-600 rounded-full hover:bg-green-200 transition"
+                    >
+                      <FaUndo />
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
