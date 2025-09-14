@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { FaChevronLeft, FaChevronRight, FaChevronDown, FaMoon, FaSun, FaCog } from 'react-icons/fa';
 import { BRAND, sections, soporteLink } from '../components/SidebarData';
+import { DarkToggle } from '../../products/ui/DarkToggle';
 
 const cn = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(' ');
 
@@ -167,7 +168,7 @@ export const Sidebar: React.FC = () => {
         {/* Dark mode */}
         <div className="mt-6 flex items-center gap-3 rounded-xl px-3 py-2 bg-white/60 dark:bg-slate-800/60 border border-indigo-100/70 dark:border-slate-700">
           <span className={cn('text-sm', !isOpen && 'sr-only')}>Dark mode</span>
-          <button
+        {/*   <button
             onClick={() => setDark(v => !v)}
             className={cn(
               'ml-auto inline-flex items-center justify-center w-10 h-6 rounded-full transition',
@@ -176,7 +177,8 @@ export const Sidebar: React.FC = () => {
             aria-label="toggle dark mode"
           >
             {dark ? <FaSun className="text-white" /> : <FaMoon className="text-slate-700" />}
-          </button>
+          </button> */}
+          <DarkToggle />
         </div>
       </div>
     </aside>
