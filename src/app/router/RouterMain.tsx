@@ -22,6 +22,8 @@ import { RecuperarPasswordPage } from "../../features/auth/ui/RecuperarPasswordP
 import { CategoriasPage } from "../../features/admin/pages/CategoriasPage";
 import { ListaProductosPage } from "../../features/admin/pages/ListaProductosPage";
 import { ProductCreateForm } from "../../features/admin/pages/ProductCreateForm";
+import { ListaProveedoresPage } from "../../features/admin/pages/ListaProveedoresPage";
+import { RegistrarProveedorPage } from "../../features/admin/pages/RegistrarProveedorPage";
 export const Router = () => {
   return (
     <BrowserRouter>
@@ -80,6 +82,9 @@ export const Router = () => {
 
           <Route path="listar-producto" element={<ListaProductosPage />} />
           <Route path="registrar-producto" element={<ProductCreateForm />} />
+          <Route path="listarproveedores" element={<ListaProveedoresPage />} />
+          <Route path="registrar-proveedores" element={<RegistrarProveedorPage />} />
+
 
 
           <Route
