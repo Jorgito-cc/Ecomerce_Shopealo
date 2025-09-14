@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getUsers, updateUser, deleteUser } from "../../../api/user";
+import { getUsers, updateUser, deleteUser } from "../../../api/userApi";
 import { EditModalUsuario } from "../components/EditModalUsuario";
 import type { User } from "../../../types/UsersType";
 
