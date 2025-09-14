@@ -1,5 +1,5 @@
 import type { User } from "../types/user";
-import { http } from "./http"; // tu cliente axios preconfigurado
+import { http } from "./http"; 
 
 // GET todos los usuarios
 export const getUsers = async (): Promise<User[]> => {
