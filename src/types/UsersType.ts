@@ -1,4 +1,3 @@
-// src/types/User.ts
 export type RoleDTO = {
   id: number;
   nombre: string;
