@@ -78,7 +78,7 @@ export const Router = () => {
           <Route path="listausuario" element={<ListaUsuarioPage />} />
                     <Route path="registrar-categoria" element={< CategoriasPage/>} />
 
-          <Route path="istar-producto" element={<ListaProductosPage />} />
+          <Route path="listar-producto" element={<ListaProductosPage />} />
           <Route path="registrar-producto" element={<ProductCreateForm />} />
 
 
