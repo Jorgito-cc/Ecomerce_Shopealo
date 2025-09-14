@@ -1,13 +1,18 @@
 // src/context/AuthContext.tsx
 import { createContext, useContext, useMemo, useState } from "react";
 import type { AuthResponse, UserDTO } from "../types/auth";
-import {
-  clearSession,
-  getSessionUser,
-  loginRequest,
-  registerRequest,
-} from "../api/auth";
+import { clearSession, getSessionUser, loginRequest, registerRequest } from "../api/auth";
 import type { LoginRequest, RegisterRequest } from "../types/auth";
+
+function normalizeUser(raw: any): UserDTO {
+  return {
+    id: raw.id,
+    email: raw.email,
+    nombre: raw.nombre,
+    rolId: raw.rolId ?? raw.role?.id ?? 0,
+    rolNombre: raw.rolNombre ?? raw.role?.nombre ?? "",
+  };
+}
 
 type AuthContextType = {
   user: UserDTO | null;
@@ -20,18 +25,25 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<UserDTO | null>(getSessionUser());
+  const [user, setUser] = useState<UserDTO | null>(
+    (() => {
+      const u = getSessionUser();
+      return u ? normalizeUser(u) : null;   // <-- normaliza desde localStorage también
+    })()
+  );
 
   const login = async (payload: LoginRequest) => {
     const res = await loginRequest(payload);
-    setUser(res.user);
-    return res;
+    const u = normalizeUser(res.user);
+    setUser(u);
+    return { ...res, user: u };
   };
 
   const register = async (payload: RegisterRequest) => {
     const res = await registerRequest(payload);
-    setUser(res.user);
-    return res;
+    const u = normalizeUser(res.user);
+    setUser(u);
+    return { ...res, user: u };
   };
 
   const logout = () => {
