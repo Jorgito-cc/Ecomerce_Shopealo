@@ -17,7 +17,6 @@ import { ProductGrid } from "../../shared/ProductGrid";
 import { CartPage } from "../../pages/CartPage";
 import { CheckoutPage } from "../../pages/CheckoutPage";
 
-import { RequireAuth } from "../guards/RequireAuth";
 import { RequireRole } from "../guards/RequireRole";
 import { RedirectIfAuth } from "../guards/RedirectIfAuth";
 export const Router = () => {
