@@ -1,7 +1,6 @@
 // src/features/product/pages/ListaProductosPage.tsx
 import { useEffect, useState } from "react";
 import { ProductEditModal } from "../components/ProductEditModal";
-import { ProductCreateForm } from "./ProductCreateForm";
 import { deleteProduct, getProducts, updateProduct } from "../../../api/productApi";
 import type { ProductDTO, UpdateProductDTO } from "../../../types/product";
 
