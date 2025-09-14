@@ -38,11 +38,22 @@ export const LoginPage = () => {
 const onSubmit = async (data: LoginForm) => {
   setApiError(null);
   try {
-    await login({
-      email: data.email.trim(), // 👈
-      password: data.password.trim(),         // 👈
+    // login devuelve AuthResponse con el user
+    const res = await login({
+      email: data.email.trim(),
+      password: data.password.trim(),
     });
-    navigate("/");
+
+    // leer rol de dos formas posibles (según tu backend/frontend)
+    const roleName = (res.user as any).rolNombre ?? (res.user as any).role?.nombre;
+    const roleId = (res.user as any).rolId ?? (res.user as any).role?.id;
+
+    // redirigir según el rol
+    if (roleName === "ADMINISTRADOR" || roleId === 1) {
+      navigate("/admin", { replace: true });
+    } else {
+      navigate("/", { replace: true });
+    }
   } catch (err: any) {
     const msg =
       err?.response?.data?.message ||
@@ -53,6 +64,7 @@ const onSubmit = async (data: LoginForm) => {
     setError("password", { message: "Revisa tu correo o contraseña" });
   }
 };
+
 
 
   // === RECUPERAR (paso 1: enviar correo) ===
