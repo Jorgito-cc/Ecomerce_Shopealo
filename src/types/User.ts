@@ -1,3 +1,4 @@
+// src/types/User.ts
 export type RoleDTO = {
   id: number;
   nombre: string;
@@ -10,11 +11,10 @@ export type User = {
   isActive: boolean;
   role: RoleDTO;
 
-  // opcionales
   username?: string;
   ci?: string;
   telefono?: string;
   direccion?: string;
   img_dir?: string;
-  password?: string;   // 👈 añadirlo como opcional
+  password?: string; // opcional, para que no dé error
 };
