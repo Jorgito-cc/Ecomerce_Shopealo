@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
+import { getUsers, updateUser, deleteUser } from "../../../api/userApi";
 import { EditModalUsuario } from "../components/EditModalUsuario";
-import { FaEdit, FaTrash, FaUndo } from "react-icons/fa";
 import type { User } from "../../../types/UsersTypes";
-import { deleteUser, getUsers, restoreUser, updateUser } from "../../../api/userApi";
 
 export const ListaUsuarioPage = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [userEdit, setUserEdit] = useState<User | null>(null);
 
+  // carga inicial
   useEffect(() => {
     (async () => {
       const data = await getUsers();
@@ -15,20 +15,17 @@ export const ListaUsuarioPage = () => {
     })();
   }, []);
 
+  // guardar cambios de edición
   const handleSave = async (updated: User) => {
     const res = await updateUser(updated.id, updated);
     setUsers(prev => prev.map(u => (u.id === res.id ? res : u)));
   };
 
+  // eliminar usuario (soft delete)
   const handleDelete = async (id: number) => {
     if (!confirm("¿Seguro que deseas eliminar este usuario?")) return;
     await deleteUser(id);
-    setUsers(prev => prev.map(u => (u.id === id ? { ...u, isActive: false } : u)));
-  };
-
-  const handleRestore = async (id: number) => {
-    const res = await restoreUser(id);
-    setUsers(prev => prev.map(u => (u.id === id ? res : u)));
+    setUsers(prev => prev.filter(u => u.id !== id));
   };
 
   return (
@@ -43,7 +40,6 @@ export const ListaUsuarioPage = () => {
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Nombre</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Email</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Rol</th>
-              <th className="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase">Estado</th>
               <th className="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase">Acciones</th>
             </tr>
           </thead>
@@ -55,45 +51,19 @@ export const ListaUsuarioPage = () => {
                 <td className="px-4 py-2 text-sm">{user.nombre}</td>
                 <td className="px-4 py-2 text-sm">{user.email}</td>
                 <td className="px-4 py-2 text-sm">{user.role?.nombre}</td>
-                <td className="px-4 py-2 text-sm text-center">
-                  {user.isActive ? (
-                    <span className="px-2 py-1 text-xs font-semibold rounded bg-green-100 text-green-700">
-                      Activo
-                    </span>
-                  ) : (
-                    <span className="px-2 py-1 text-xs font-semibold rounded bg-red-100 text-red-700">
-                      Inactivo
-                    </span>
-                  )}
-                </td>
-                <td className="px-4 py-2 text-sm text-center flex gap-3 justify-center">
-                  {/* Editar */}
+                <td className="px-4 py-2 text-sm text-center flex gap-2 justify-center">
                   <button
                     onClick={() => setUserEdit(user)}
-                    title="Editar"
-                    className="p-2 bg-yellow-100 text-yellow-600 rounded-full hover:bg-yellow-200 transition"
+                    className="bg-yellow-400 text-white px-2 py-1 rounded hover:bg-yellow-500"
                   >
-                    <FaEdit />
+                    Editar
                   </button>
-
-                  {/* Eliminar o Reactivar */}
-                  {user.isActive ? (
-                    <button
-                      onClick={() => handleDelete(user.id)}
-                      title="Eliminar"
-                      className="p-2 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition"
-                    >
-                      <FaTrash />
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => handleRestore(user.id)}
-                      title="Reactivar"
-                      className="p-2 bg-green-100 text-green-600 rounded-full hover:bg-green-200 transition"
-                    >
-                      <FaUndo />
-                    </button>
-                  )}
+                  <button
+                    onClick={() => handleDelete(user.id)}
+                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                  >
+                    Eliminar
+                  </button>
                 </td>
               </tr>
             ))}
