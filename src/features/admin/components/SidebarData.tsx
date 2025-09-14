@@ -29,10 +29,9 @@ export const sections: Section[] = [
       { label: "Listar Producto", to: "/admin/listar-producto" },
 
       { label: "Registrar Categoría", to: "/admin/registrar-categoria" },
-            { label: "Registrar Proveedores", to: "/admin/registrar-proveedores" },
+      { label: "Registrar Proveedores", to: "/admin/registrar-proveedores" },
 
-                  { label: "Listar Proveedores", to: "/admin/listarproveedores" },
-
+      { label: "Listar Proveedores", to: "/admin/listarproveedores" },
     ],
   },
   {

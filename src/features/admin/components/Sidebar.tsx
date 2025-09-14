@@ -1,10 +1,10 @@
 // src/features/admin/components/Sidebar.tsx
 import { useEffect, useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation ,useNavigate} from 'react-router-dom';
 import { FaChevronLeft, FaChevronRight, FaChevronDown, FaCog } from 'react-icons/fa';
 import { BRAND, sections, soporteLink } from '../components/SidebarData';
 import { DarkToggle } from '../../products/ui/DarkToggle';
-
+import { useAuth } from '../../../context/AuthContext';     
 const cn = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(' ');
 
 export const Sidebar: React.FC = () => {
@@ -12,12 +12,17 @@ export const Sidebar: React.FC = () => {
   const [openKey, setOpenKey] = useState<string | null>('usuario');
   const location = useLocation();
 
+   const navigate = useNavigate();              // 👈
+  const { logout } = useAuth();  
   // Abrir sección según ruta
   useEffect(() => {
     const found = sections.find(s => s.items.some(i => location.pathname.startsWith(i.to)));
     if (found) setOpenKey(found.key);
   }, [location.pathname]);
-
+ const handleLogout = () => {
+    logout();
+    navigate('/login'); // o a donde quieras enviarlo tras cerrar sesión
+  };
   return (
     <aside
       className={cn(
@@ -129,6 +134,22 @@ export const Sidebar: React.FC = () => {
           <span className={cn('text-sm', !isOpen && 'sr-only')}>Dark mode</span>
           <DarkToggle /> {/* 👈 usa tu toggle aquí */}
         </div>
+
+        {/* boton de cerrar seccion  */}
+<button
+          onClick={handleLogout}
+          className={cn(
+            'mt-3 w-full rounded-xl px-3 py-2 text-left',
+            'bg-white/70 dark:bg-slate-800/70',
+            'border border-indigo-100/70 dark:border-slate-700',
+            'hover:bg-white/90 dark:hover:bg-slate-800',
+            'transition text-sm font-medium text-red-600 dark:text-red-400'
+          )}
+          title="Cerrar sesión"
+        >
+          {isOpen ? 'Cerrar sesión' : '⎋'}
+        </button>
+
       </div>
     </aside>
   );
