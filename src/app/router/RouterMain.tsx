@@ -13,31 +13,64 @@ import { ListaUsuarioPage } from "../../features/admin/pages/ListaUsuarioPage";
 import { RegistrarEmpleadoPage } from "../../features/admin/pages/RegistrarEmpleadoPage ";
 import { RegisterPage } from "../../features/auth/ui/RegisterPage";
 import { RecuperarPasswordPage } from "../../features/auth/ui/RecuperarPasswordPage";
-import { ProductGrid } from '../../shared/ProductGrid';
+import { ProductGrid } from "../../shared/ProductGrid";
 import { CartPage } from "../../pages/CartPage";
 import { CheckoutPage } from "../../pages/CheckoutPage";
 
+import { RequireAuth } from "../guards/RequireAuth";
+import { RequireRole } from "../guards/RequireRole";
+import { RedirectIfAuth } from "../guards/RedirectIfAuth";
 export const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Publico  */}
         <Route path="/" element={<MainLayout />}>
-          <Route index element={<HomePage />} /> {/* Ruta para "/" */}
+          <Route index element={<HomePage />} />
           <Route path="contactanos" element={<Contact />} />
           <Route path="sobrenosotros" element={<About />} />
-          <Route path="login" element={<LoginPage />} />
-                    <Route path="register" element={<RegisterPage />} />
+          {/* Evita que usuarios logueados vean login/register */}
+          <Route
+            path="login"
+            element={
+              <RedirectIfAuth>
+                <LoginPage />
+              </RedirectIfAuth>
+            }
+          />
+          <Route
+            path="register"
+            element={
+              <RedirectIfAuth>
+                <RegisterPage />
+              </RedirectIfAuth>
+            }
+          />
 
-                    <Route path="recuperar" element={<RecuperarPasswordPage />} />
-                     <Route path="all-products" element={<ProductGrid />} />
 
-                                  <Route path="cart" element={<CartPage />} />
-                                               <Route path="checkout" element={<CheckoutPage />} />
-
+          <Route path="recuperar" element={<RecuperarPasswordPage />} />
+          <Route path="all-products" element={<ProductGrid />} />
+          <Route path="cart" element={<CartPage />} />
+          {/* solo cliente  por nombre o id  */}
+          <Route
+            path="checkout"
+            element={
+              <RequireRole allow={['CLIENTE', 2]}>
+                <CheckoutPage />
+              </RequireRole>
+            }
+          />
         </Route>
 
-        <Route path="/admin" element={<AdminLayout />}>
-          {/* rutas de admin aquí */}
+          {/* rutas de admin aquí  mas autenticado */}
+       <Route
+          path="/admin"
+          element={
+            <RequireRole allow={['ADMINISTRADOR', 1]} /* fallback="/403" */>
+              <AdminLayout />
+            </RequireRole>
+          }
+        >
           <Route path="bitacora" element={<BitacoraPage />} />
           <Route path="soporte" element={<Soporte />} />
           <Route path="listausuario" element={<ListaUsuarioPage />} />
@@ -46,6 +79,8 @@ export const Router = () => {
             element={<RegistrarEmpleadoPage />}
           />
         </Route>
+        
+        {/* <Route path="/403" element={<Forbidden />} /> */}
       </Routes>
     </BrowserRouter>
   );
