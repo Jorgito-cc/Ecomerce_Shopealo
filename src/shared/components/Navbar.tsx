@@ -68,7 +68,7 @@ const toggleCart = () => {
           <Link to="/">Inicio</Link>
           <Link to="/contactanos">Contacto</Link>
           <Link to="/sobrenosotros">Sobre nosotros</Link>
-          <Link to="/register">Inicia Sesion </Link>
+          <Link to="/login">Inicia Sesion </Link>
           {!isAuthenticated && <Link to="/login">Login</Link>}
         </nav>
 
