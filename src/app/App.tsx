@@ -1,6 +1,6 @@
 import { AuthProvider } from "../context/AuthContext";
 import { CartProvider } from "../context/CartContext";
-import { DarkModeProvider } from "../context/DarkModeContext";
+/* import { DarkModeProvider } from "../context/DarkModeContext"; */
 import { FavoritesProvider } from "../context/FavoritesContext";
 import { Router } from "./router/RouterMain";
 
@@ -10,9 +10,9 @@ function App() {
       <AuthProvider>
         <CartProvider>
           <FavoritesProvider>
-            <DarkModeProvider>
+        {/*     <DarkModeProvider> */}
               <Router />
-            </DarkModeProvider>
+           {/*  </DarkModeProvider> */}
           </FavoritesProvider>
         </CartProvider>
       </AuthProvider>
