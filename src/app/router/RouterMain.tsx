@@ -28,6 +28,8 @@ import { Manual } from "../../features/admin/manual/Manual";
 import ManuaTeorico from "../../features/admin/manual/ManuaTeorico";
 import { ProductDetail } from "../../shared/ProductDetail";
 import { FavoritesPage } from "../../pages/FavoritesPage";
+import { MyOrdersPage } from "../../pages/MyOrdersPage";
+import { MyAccountPage } from "../../pages/MyAccountPage";
 export const Router = () => {
   return (
     <BrowserRouter>
@@ -50,10 +52,12 @@ export const Router = () => {
 
           <Route path="recuperar" element={<RecuperarPasswordPage />} />
           <Route path="all-products" element={<ProductGrid />} />
-                    <Route path="product/:id" element={<ProductDetail />} />
-                                        <Route path="product/:id" element={<ProductDetail />} />
-                    <Route path="favorites" element={<FavoritesPage />} />
+          <Route path="product/:id" element={<ProductDetail />} />
+          <Route path="product/:id" element={<ProductDetail />} />
+          <Route path="misordenes" element={<MyOrdersPage />} />
+          <Route path="micuenta" element={<MyAccountPage />} />
 
+          <Route path="favorites" element={<FavoritesPage />} />
 
           <Route path="cart" element={<CartPage />} />
           {/* solo cliente  por nombre o id  */}
@@ -65,6 +69,12 @@ export const Router = () => {
               </RequireRole>
             }
           />
+
+
+
+
+
+          
         </Route>
 
         {/* rutas de admin aquí  mas autenticado */}

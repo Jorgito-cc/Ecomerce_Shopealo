@@ -20,6 +20,7 @@ type AuthContextType = {
   login: (payload: LoginRequest) => Promise<AuthResponse>;
   register: (payload: RegisterRequest) => Promise<AuthResponse>;
   logout: () => void;
+  
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);

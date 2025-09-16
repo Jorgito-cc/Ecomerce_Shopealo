@@ -1,4 +1,4 @@
-// src/shared/components/Navbar.tsx  (o la ruta que uses)
+// src/shared/components/Navbar.tsx
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -12,13 +12,13 @@ import {
 import {
   UserIcon as UserSolid,
   ShoppingBagIcon as ShoppingBagSolid,
-  
   StarIcon,
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/solid";
 
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
+import { useFavorites } from "../../context/FavoritesContext"; // <-- Importa el hook de favoritos
 
 const gradientStyle = {
   background: "linear-gradient(180deg, #A040A6 0%, #D85698 100%)",
@@ -28,7 +28,11 @@ export const Navbar: React.FC = () => {
   const { items } = useCart();
   const cartCount = items.reduce((total, item) => total + item.quantity, 0);
 
-  const { user, isAuthenticated, logout } = useAuth(); // <-- usamos el contexto real
+  // Obtén el estado de favoritos del contexto
+  const { favorites } = useFavorites(); 
+  const favoritesCount = favorites.length;
+
+  const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -67,8 +71,7 @@ export const Navbar: React.FC = () => {
         {/* Navegación escritorio */}
         <nav className="hidden md:flex items-center space-x-8 text-sm text-gray-700">
           <Link to="/">Inicio</Link>
-                    <Link to="/all-products">Catalogo</Link>
-
+          <Link to="/all-products">Catalogo</Link>
           <Link to="/contactanos">Contacto</Link>
           <Link to="/sobrenosotros">Sobre nosotros</Link>
           {/* Si no está autenticado mostramos Login */}
@@ -79,8 +82,16 @@ export const Navbar: React.FC = () => {
         <div className="hidden md:flex items-center space-x-4">
           {isAuthenticated && (
             <>
-              <HeartIcon className="h-6 w-6 text-gray-700 cursor-pointer" />
-
+              {/* Enlace al componente de Favoritos con el contador */}
+              <Link to="/favorites" className="relative">
+                <HeartIcon className="h-6 w-6 text-gray-700 cursor-pointer" />
+                {favoritesCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">
+                    {favoritesCount}
+                  </span>
+                )}
+              </Link>
+              
               <div className="relative">
                 <button onClick={toggleCart}>
                   <ShoppingBagIcon className="h-6 w-6 text-gray-700 cursor-pointer" />
@@ -161,23 +172,26 @@ export const Navbar: React.FC = () => {
                         <div className="text-xs opacity-80">{user?.email}</div>
                       </div>
 
-                      <Link to="/profile" className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
-                        <UserSolid className="mr-3 h-5 w-5 text-gray-200" /> Manage My Account
+                      {/* Corregido: Usar <Link> en lugar de <a> para navegar a la ruta de Mi Cuenta */}
+                      <Link to="/micuenta" onClick={() => setIsDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <UserSolid className="mr-3 h-5 w-5 text-gray-200" /> Mi cuenta
                       </Link>
 
-                      <Link to="/orders" className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
-                        <ShoppingBagSolid className="mr-3 h-5 w-5 text-gray-200" /> My Orders
+                      {/* Corregido: Usar <Link> en lugar de <a> para navegar a la ruta de Mis Ordenes */}
+                      <Link to="/misordenes" onClick={() => setIsDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <ShoppingBagSolid className="mr-3 h-5 w-5 text-gray-200" /> Mis Ordenes 
                       </Link>
 
-                      <a href="#" className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
-                        <StarIcon className="mr-3 h-5 w-5 text-gray-200" /> My Reviews
-                      </a>
+                      {/* Corregido: Usar <Link> en lugar de <a> para navegar a la ruta de Mis Productos Favoritos */}
+                      <Link to="/favorites" onClick={() => setIsDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <StarIcon className="mr-3 h-5 w-5 text-gray-200" /> Mis Productos Favoritos
+                      </Link>
 
                       <button
                         onClick={handleLogout}
                         className="w-full text-left flex items-center px-4 py-2 text-sm hover:bg-pink-600/40"
                       >
-                        <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5 text-gray-200" /> Logout
+                        <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5 text-gray-200" /> Salir 
                       </button>
                     </div>
                   </div>
@@ -232,8 +246,16 @@ export const Navbar: React.FC = () => {
           {/* Íconos móviles si logueado */}
           {isAuthenticated && (
             <div className="flex gap-6 pt-4 border-t border-gray-200 items-center">
-              <HeartIcon className="h-6 w-6 text-gray-700" />
-
+              {/* Enlace al componente de Favoritos móvil */}
+              <Link to="/favorites" className="relative">
+                <HeartIcon className="h-6 w-6 text-gray-700" />
+                {favoritesCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">
+                    {favoritesCount}
+                  </span>
+                )}
+              </Link>
+              
               <div className="relative">
                 <Link to="/cart" onClick={() => setIsMobileMenuOpen(false)}>
                   <ShoppingBagIcon className="h-6 w-6 text-gray-700 cursor-pointer" />
@@ -261,12 +283,20 @@ export const Navbar: React.FC = () => {
                         <div className="text-xs opacity-80">{user?.email}</div>
                       </div>
 
-                      <Link to="/profile" className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
-                        <UserSolid className="mr-3 h-5 w-5 text-gray-200" /> Manage My Account
+                      <Link to="/micuenta" onClick={() => setIsDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <UserSolid className="mr-3 h-5 w-5 text-gray-200" /> Mi cuenta
+                      </Link>
+
+                      <Link to="/misordenes" onClick={() => setIsDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <ShoppingBagSolid className="mr-3 h-5 w-5 text-gray-200" /> Mis Ordenes
+                      </Link>
+                      
+                      <Link to="/favorites" onClick={() => setIsDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <StarIcon className="mr-3 h-5 w-5 text-gray-200" /> Mis Productos Favoritos
                       </Link>
 
                       <button onClick={handleLogout} className="w-full text-left flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
-                        <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5 text-gray-200" /> Logout
+                        <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5 text-gray-200" /> Salir
                       </button>
                     </div>
                   </div>
