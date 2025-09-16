@@ -48,4 +48,6 @@ export const sections: Section[] = [
 export const soporteLink: LinkItem = { label: "Soporte", to: "/admin/soporte" };
 
 export const ManualLink: LinkItem = { label: "Manual", to: "/admin/manual" };
+export const ManualteoricoLink: LinkItem = { label: "Manual", to: "/admin/manualteorico" };
+
 export const BRAND = "Shoealo.Admin";

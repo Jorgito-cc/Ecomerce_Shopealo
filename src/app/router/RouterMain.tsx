@@ -25,6 +25,7 @@ import { ProductCreateForm } from "../../features/admin/pages/ProductCreateForm"
 import { ListaProveedoresPage } from "../../features/admin/pages/ListaProveedoresPage";
 import { RegistrarProveedorPage } from "../../features/admin/pages/RegistrarProveedorPage";
 import { Manual } from "../../features/admin/manual/Manual";
+import ManuaTeorico from "../../features/admin/manual/ManuaTeorico";
 export const Router = () => {
   return (
     <BrowserRouter>
@@ -71,6 +72,8 @@ export const Router = () => {
           <Route path="bitacora" element={<BitacoraPage />} />
           <Route path="soporte" element={<Soporte />} />
                     <Route path="manual" element={<Manual />} />
+                                        <Route path="manualteorico" element={<ManuaTeorico />} />
+
 
           <Route path="listausuario" element={<ListaUsuarioPage />} />
           <Route path="registrar-categoria" element={<CategoriasPage />} />

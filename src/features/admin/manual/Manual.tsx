@@ -1,6 +1,5 @@
 
 import React, { useMemo, useState } from "react";
-import ManuaTeorico from "./ManuaTeorico";
 
 type Section = {
   id: string;
@@ -182,7 +181,7 @@ export const Manual: React.FC = () => {
           )}
         </main>
       </div>
-      <ManuaTeorico/>
+  
 
       <footer className="mt-6 text-sm text-gray-500">
       </footer>
