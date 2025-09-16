@@ -1,5 +1,6 @@
 
 import React, { useMemo, useState } from "react";
+import ManuaTeorico from "./ManuaTeorico";
 
 type Section = {
   id: string;
@@ -101,7 +102,7 @@ export const Manual: React.FC = () => {
     <div className="p-6 max-w-6xl mx-auto">
       <header className="mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-indigo-700">Manual de la aplicación</h1>
+          <h1 className="text-2xl font-extrabold text-indigo-700">Manual de la Tecnico de la aplicación</h1>
           <p className="text-sm text-gray-600">Guía rápida: rutas, endpoints, patrones y variables de entorno.</p>
         </div>
 
@@ -181,9 +182,9 @@ export const Manual: React.FC = () => {
           )}
         </main>
       </div>
+      <ManuaTeorico/>
 
       <footer className="mt-6 text-sm text-gray-500">
-        <div>Nota: para subir imágenes desde el frontend usa un <strong>unsigned upload preset</strong> de Cloudinary (no pongas API secrets en el cliente).</div>
       </footer>
     </div>
   );
