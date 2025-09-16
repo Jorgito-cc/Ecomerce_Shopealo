@@ -34,14 +34,7 @@ export const Router = () => {
           <Route path="contactanos" element={<Contact />} />
           <Route path="sobrenosotros" element={<About />} />
           {/* Evita que usuarios logueados vean login/register */}
-          <Route
-            path="login"
-            element={
-              
-                <LoginPage />
-           
-            }
-          />
+          <Route path="login" element={<LoginPage />} />
           <Route
             path="register"
             element={
@@ -51,7 +44,6 @@ export const Router = () => {
             }
           />
 
-
           <Route path="recuperar" element={<RecuperarPasswordPage />} />
           <Route path="all-products" element={<ProductGrid />} />
           <Route path="cart" element={<CartPage />} />
@@ -59,18 +51,18 @@ export const Router = () => {
           <Route
             path="checkout"
             element={
-              <RequireRole allow={['CLIENTE', 2]}>
+              <RequireRole allow={["CLIENTE", 2]}>
                 <CheckoutPage />
               </RequireRole>
             }
           />
         </Route>
 
-          {/* rutas de admin aquí  mas autenticado */}
-       <Route
+        {/* rutas de admin aquí  mas autenticado */}
+        <Route
           path="/admin"
           element={
-            <RequireRole allow={['ADMINISTRADOR', 1]} /* fallback="/403" */>
+            <RequireRole allow={["ADMINISTRADOR", 1]} /* fallback="/403" */>
               <AdminLayout />
             </RequireRole>
           }
@@ -78,21 +70,22 @@ export const Router = () => {
           <Route path="bitacora" element={<BitacoraPage />} />
           <Route path="soporte" element={<Soporte />} />
           <Route path="listausuario" element={<ListaUsuarioPage />} />
-                    <Route path="registrar-categoria" element={< CategoriasPage/>} />
+          <Route path="registrar-categoria" element={<CategoriasPage />} />
 
           <Route path="listar-producto" element={<ListaProductosPage />} />
           <Route path="registrar-producto" element={<ProductCreateForm />} />
           <Route path="listarproveedores" element={<ListaProveedoresPage />} />
-          <Route path="registrar-proveedores" element={<RegistrarProveedorPage />} />
-
-
+          <Route
+            path="registrar-proveedores"
+            element={<RegistrarProveedorPage />}
+          />
 
           <Route
             path="registrar-empleado"
             element={<RegistrarEmpleadoPage />}
           />
         </Route>
-        
+
         {/* <Route path="/403" element={<Forbidden />} /> */}
       </Routes>
     </BrowserRouter>

@@ -1,6 +1,11 @@
 
-import cristian from "../../../assets/img/imagen1.png"
-import jorge from "../../../assets/img/imagen1.png";
+import nadie from "../../../assets/img/imagenv1.jpg"
+import jorge from "../../../assets/img/jorge.jpeg";
+import jose from "../../../assets/img/jose.jpg";
+import andres from "../../../assets/img/andres.jpg";
+import carlos from "../../../assets/img/carlos.jpg";
+
+
 import { SoporteCard } from "./SoporteCard";
 export const Soporte = () => {
   return (
@@ -19,37 +24,37 @@ export const Soporte = () => {
         <SoporteCard
           nombre="Beimar Meza Mamani "
           email="beimar@gmail.com"
-          telefono="+591 75568384"
-          whatsapp="59175568384"
-          foto={jorge}
+          telefono="+591 69245917"
+          whatsapp="59169245917"
+          foto={nadie}
         />
         <SoporteCard
           nombre="Cristian Gabriel Gedalge Cayhuara"
           email="cristian34@gmail.com"
           telefono="+591 77074673"
           whatsapp="59177074673"
-          foto={cristian}
+          foto={nadie}
         />
          <SoporteCard
           nombre="Carlos Alberto Rodriguez Mansilla"
           email="carlosalberto@gmail.com"
-          telefono="+591 77074673"
-          whatsapp="59177074673"
-          foto={cristian}
+          telefono="+591 71025695"
+          whatsapp="59171025695"
+          foto={carlos}
         />
          <SoporteCard
           nombre="Andres Leonardo Callisaya Quispe "
           email="andreleonardp@gmail.com"
-          telefono="+591 77074673"
-          whatsapp="59177074673"
-          foto={cristian}
+          telefono="+591 77084158"
+          whatsapp="59177084158"
+          foto={andres}
         />
          <SoporteCard
           nombre="jose victor ugarteche ancieta"
           email="josevistor@gmail.com"
-          telefono="+591 77074673"
-          whatsapp="59177074673"
-          foto={cristian}
+          telefono="+591 63560825"
+          whatsapp="59163560825"
+          foto={jose}
         />
       </div>
     </div>
