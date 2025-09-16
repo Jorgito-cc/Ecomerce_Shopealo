@@ -7,7 +7,7 @@ import {
   FaChevronDown,
   FaCog,
 } from "react-icons/fa";
-import { BRAND, sections, soporteLink } from "../components/SidebarData";
+import { BRAND, sections, soporteLink ,ManualLink } from "../components/SidebarData";
 import { DarkToggle } from "../../products/ui/DarkToggle";
 import { useAuth } from "../../../context/AuthContext";
 const cn = (...c: (string | false | null | undefined)[]) =>
@@ -155,7 +155,28 @@ export const Sidebar: React.FC = () => {
             </span>
           </NavLink>
         </div>
-
+{/*manual  */}
+    <div className="mt-4">
+          <NavLink
+            to={ManualLink.to}
+            className={({ isActive }) =>
+              cn(
+                "flex items-center gap-2 rounded-xl px-3 py-2",
+                "bg-white/70 dark:bg-slate-800/70",
+                "border border-indigo-100/70 dark:border-slate-700",
+                "hover:bg-white/90 dark:hover:bg-slate-800",
+                "transition",
+                isActive &&
+                  "ring-1 ring-inset ring-fuchsia-300/50 dark:ring-fuchsia-700/40"
+              )
+            }
+          >
+            <FaCog className="text-lg" />
+            <span className={cn(!isOpen && "sr-only")}>
+              {ManualLink.label}
+            </span>
+          </NavLink>
+        </div>
         {/* Dark mode con componente global */}
         <div className="mt-6 flex items-center gap-3 rounded-xl px-3 py-2 bg-white/60 dark:bg-slate-800/60 border border-indigo-100/70 dark:border-slate-700">
           <span className={cn("text-sm", !isOpen && "sr-only")}>Dark mode</span>

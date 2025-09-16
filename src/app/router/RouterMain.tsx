@@ -70,7 +70,7 @@ export const Router = () => {
         >
           <Route path="bitacora" element={<BitacoraPage />} />
           <Route path="soporte" element={<Soporte />} />
-                    <Route path="maual" element={<Manual />} />
+                    <Route path="manual" element={<Manual />} />
 
           <Route path="listausuario" element={<ListaUsuarioPage />} />
           <Route path="registrar-categoria" element={<CategoriasPage />} />
