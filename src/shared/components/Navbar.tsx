@@ -67,6 +67,8 @@ export const Navbar: React.FC = () => {
         {/* Navegación escritorio */}
         <nav className="hidden md:flex items-center space-x-8 text-sm text-gray-700">
           <Link to="/">Inicio</Link>
+                    <Link to="/all-products">Catalogo</Link>
+
           <Link to="/contactanos">Contacto</Link>
           <Link to="/sobrenosotros">Sobre nosotros</Link>
           {/* Si no está autenticado mostramos Login */}
