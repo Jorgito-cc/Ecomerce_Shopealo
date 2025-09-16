@@ -1,4 +1,6 @@
+// src/shared/components/Navbar.tsx  (o la ruta que uses)
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   HeartIcon,
   ShoppingBagIcon,
@@ -10,40 +12,39 @@ import {
 import {
   UserIcon as UserSolid,
   ShoppingBagIcon as ShoppingBagSolid,
-  XCircleIcon,
+  
   StarIcon,
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/solid";
 
-import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
+import { useAuth } from "../../context/AuthContext";
 
 const gradientStyle = {
   background: "linear-gradient(180deg, #A040A6 0%, #D85698 100%)",
 };
 
-// dentro del componente
-// dentro del componente
-
-export const Navbar = () => {
+export const Navbar: React.FC = () => {
   const { items } = useCart();
   const cartCount = items.reduce((total, item) => total + item.quantity, 0);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+
+  const { user, isAuthenticated, logout } = useAuth(); // <-- usamos el contexto real
+  const navigate = useNavigate();
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
-  const toggleAuth = () => {
-    setIsAuthenticated((prev) => !prev);
+  const toggleDropdown = () => setIsDropdownOpen((v) => !v);
+  const toggleMobileMenu = () => setIsMobileMenuOpen((v) => !v);
+  const toggleCart = () => setIsCartOpen((v) => !v);
+
+  const handleLogout = () => {
+    // cerrar dropdown antes de logout
     setIsDropdownOpen(false);
+    logout();
+    navigate("/", { replace: true });
   };
-
-  const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
-  const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
-const [isCartOpen, setIsCartOpen] = useState(false);
-
-const toggleCart = () => {
-  setIsCartOpen((prev) => !prev);
-};
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
@@ -68,7 +69,7 @@ const toggleCart = () => {
           <Link to="/">Inicio</Link>
           <Link to="/contactanos">Contacto</Link>
           <Link to="/sobrenosotros">Sobre nosotros</Link>
-      {/*     <Link to="/login">Inicia Sesion </Link> */}
+          {/* Si no está autenticado mostramos Login */}
           {!isAuthenticated && <Link to="/login">Login</Link>}
         </nav>
 
@@ -77,118 +78,105 @@ const toggleCart = () => {
           {isAuthenticated && (
             <>
               <HeartIcon className="h-6 w-6 text-gray-700 cursor-pointer" />
-      <div className="relative">
-  <button onClick={toggleCart}>
-    <ShoppingBagIcon className="h-6 w-6 text-gray-700 cursor-pointer" />
-    {cartCount > 0 && (
-      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">
-        {cartCount}
-      </span>
-    )}
-  </button>
 
-  {isCartOpen && (
-    <div className="absolute right-0 mt-2 w-80 bg-white shadow-xl rounded-md z-50 border border-gray-200">
-      <div className="p-4 max-h-96 overflow-y-auto">
-        {items.length === 0 ? (
-          <p className="text-gray-500 text-sm">Tu carrito está vacío.</p>
-        ) : (
-          <ul className="divide-y divide-gray-200">
-            {items.map((item) => (
-              <li key={item.id} className="py-2 flex items-center gap-3">
-                <img src={item.image} alt={item.name} className="w-12 h-12 object-cover rounded" />
-                <div className="flex-1">
-                  <p className="text-sm font-medium">{item.name}</p>
-                  <p className="text-xs text-gray-500">Cantidad: {item.quantity}</p>
-                </div>
-                <span className="text-sm font-semibold text-gray-700">
-                  ${item.price * item.quantity}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+              <div className="relative">
+                <button onClick={toggleCart}>
+                  <ShoppingBagIcon className="h-6 w-6 text-gray-700 cursor-pointer" />
+                  {cartCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">
+                      {cartCount}
+                    </span>
+                  )}
+                </button>
 
-      <div className="px-4 py-3 border-t border-gray-200 bg-gray-50">
-        <div className="flex justify-between text-sm font-semibold mb-2">
-          <span>Subtotal:</span>
-          <span>
-            ${items.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}
-          </span>
-        </div>
-        <div className="flex flex-col gap-2">
-          <Link
-            to="/cart"
-            className="text-center w-full py-1.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-            onClick={() => setIsCartOpen(false)}
-          >
-            Ver carrito
-          </Link>
-          <Link
-            to="/checkout"
-            className="text-center w-full py-1.5 bg-green-600 text-white text-sm rounded hover:bg-green-700"
-            onClick={() => setIsCartOpen(false)}
-          >
-            Checkout
-          </Link>
-        </div>
-      </div>
-    </div>
-  )}
-</div>
+                {isCartOpen && (
+                  <div className="absolute right-0 mt-2 w-80 bg-white shadow-xl rounded-md z-50 border border-gray-200">
+                    <div className="p-4 max-h-96 overflow-y-auto">
+                      {items.length === 0 ? (
+                        <p className="text-gray-500 text-sm">Tu carrito está vacío.</p>
+                      ) : (
+                        <ul className="divide-y divide-gray-200">
+                          {items.map((item) => (
+                            <li key={item.id} className="py-2 flex items-center gap-3">
+                              <img src={item.image} alt={item.name} className="w-12 h-12 object-cover rounded" />
+                              <div className="flex-1">
+                                <p className="text-sm font-medium">{item.name}</p>
+                                <p className="text-xs text-gray-500">Cantidad: {item.quantity}</p>
+                              </div>
+                              <span className="text-sm font-semibold text-gray-700">
+                                ${Number(item.price * item.quantity).toFixed(2)}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+
+                    <div className="px-4 py-3 border-t border-gray-200 bg-gray-50">
+                      <div className="flex justify-between text-sm font-semibold mb-2">
+                        <span>Subtotal:</span>
+                        <span>
+                          ${items.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <Link
+                          to="/cart"
+                          className="text-center w-full py-1.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                          onClick={() => setIsCartOpen(false)}
+                        >
+                          Ver carrito
+                        </Link>
+                        <Link
+                          to="/checkout"
+                          className="text-center w-full py-1.5 bg-green-600 text-white text-sm rounded hover:bg-green-700"
+                          onClick={() => setIsCartOpen(false)}
+                        >
+                          Checkout
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* User Dropdown */}
               <div className="relative">
                 <button
                   onClick={toggleDropdown}
-                  className={`p-1 rounded-full ${
-                    isDropdownOpen ? "bg-red-500 text-white" : ""
-                  }`}
+                  className={`p-1 rounded-full ${isDropdownOpen ? "bg-red-500 text-white" : ""}`}
+                  aria-label="user menu"
                 >
                   <UserSolid className="h-6 w-6" />
                 </button>
+
                 {isDropdownOpen && (
-                  <div
-                    className="absolute right-0 mt-2 w-56 rounded-md shadow-lg z-50"
-                    style={gradientStyle}
-                  >
+                  <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg z-50" style={gradientStyle}>
                     <div className="py-1 text-white">
-                      <a
-                        href="#"
-                        className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40"
-                      >
-                        <UserSolid className="mr-3 h-5 w-5 text-gray-200" />{" "}
-                        Manage My Account
+                      {/* mostramos nombre de usuario arriba */}
+                      <div className="px-4 py-2 text-sm border-b border-white/20">
+                        <div className="font-semibold">{user?.nombre ?? "Usuario"}</div>
+                        <div className="text-xs opacity-80">{user?.email}</div>
+                      </div>
+
+                      <Link to="/profile" className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <UserSolid className="mr-3 h-5 w-5 text-gray-200" /> Manage My Account
+                      </Link>
+
+                      <Link to="/orders" className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <ShoppingBagSolid className="mr-3 h-5 w-5 text-gray-200" /> My Orders
+                      </Link>
+
+                      <a href="#" className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <StarIcon className="mr-3 h-5 w-5 text-gray-200" /> My Reviews
                       </a>
-                      <a
-                        href="#"
-                        className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40"
+
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left flex items-center px-4 py-2 text-sm hover:bg-pink-600/40"
                       >
-                        <ShoppingBagSolid className="mr-3 h-5 w-5 text-gray-200" />{" "}
-                        My Order
-                      </a>
-                      <a
-                        href="#"
-                        className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40"
-                      >
-                        <XCircleIcon className="mr-3 h-5 w-5 text-gray-200" />{" "}
-                        My Cancellations
-                      </a>
-                      <a
-                        href="#"
-                        className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40"
-                      >
-                        <StarIcon className="mr-3 h-5 w-5 text-gray-200" /> My
-                        Reviews
-                      </a>
-                      <a
-                        href="#"
-                        className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40"
-                      >
-                        <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5 text-gray-200" />{" "}
-                        Logout
-                      </a>
+                        <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5 text-gray-200" /> Logout
+                      </button>
                     </div>
                   </div>
                 )}
@@ -196,13 +184,13 @@ const toggleCart = () => {
             </>
           )}
 
-          {/* Botón login/logout */}
-          <button
-            onClick={toggleAuth}
-            className="ml-4 text-sm text-red-500 font-semibold hover:underline"
-          >
-            {isAuthenticated ? "Logout" : "Login"}
-          </button>
+          {/* Si NO está autenticado mostramos los botones públicos (escritorio) */}
+          {!isAuthenticated && (
+            <div className="flex items-center gap-3">
+              <Link to="/register" className="text-sm text-gray-700 hover:underline">Regístrate</Link>
+              <Link to="/login" className="ml-4 text-sm text-red-500 font-semibold hover:underline">Login</Link>
+            </div>
+          )}
         </div>
 
         {/* Botón hamburguesa (mobile) */}
@@ -235,7 +223,7 @@ const toggleCart = () => {
             <Link to="/">Inicio</Link>
             <Link to="/contactanos">Contacto</Link>
             <Link to="/sobrenosotros">Sobre nosotros</Link>
-            <Link to="/register">Regístrate</Link>
+            {!isAuthenticated && <Link to="/register">Regístrate</Link>}
             {!isAuthenticated && <Link to="/login">Login</Link>}
           </nav>
 
@@ -243,14 +231,9 @@ const toggleCart = () => {
           {isAuthenticated && (
             <div className="flex gap-6 pt-4 border-t border-gray-200 items-center">
               <HeartIcon className="h-6 w-6 text-gray-700" />
-              {/* 
 
               <div className="relative">
-                <ShoppingBagIcon className="h-6 w-6 text-gray-700" />
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">2</span>
-              </div> */}
-              <div className="relative">
-                <Link to="/cart">
+                <Link to="/cart" onClick={() => setIsMobileMenuOpen(false)}>
                   <ShoppingBagIcon className="h-6 w-6 text-gray-700 cursor-pointer" />
                   {cartCount > 0 && (
                     <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">
@@ -259,9 +242,10 @@ const toggleCart = () => {
                   )}
                 </Link>
               </div>
-              {/* Ícono usuario con dropdown en mobile */}
+
+              {/* Usuario mobile dropdown */}
               <div className="relative">
-                <button onClick={toggleDropdown}>
+                <button onClick={() => setIsDropdownOpen((s) => !s)}>
                   <UserSolid className="h-6 w-6 text-gray-700" />
                 </button>
                 {isDropdownOpen && (
@@ -270,41 +254,18 @@ const toggleCart = () => {
                     style={gradientStyle}
                   >
                     <div className="py-1 text-white">
-                      <a
-                        href="#"
-                        className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40"
-                      >
-                        <UserSolid className="mr-3 h-5 w-5 text-gray-200" />{" "}
-                        Manage My Account
-                      </a>
-                      <a
-                        href="#"
-                        className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40"
-                      >
-                        <ShoppingBagSolid className="mr-3 h-5 w-5 text-gray-200" />{" "}
-                        My Order
-                      </a>
-                      <a
-                        href="#"
-                        className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40"
-                      >
-                        <XCircleIcon className="mr-3 h-5 w-5 text-gray-200" />{" "}
-                        My Cancellations
-                      </a>
-                      <a
-                        href="#"
-                        className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40"
-                      >
-                        <StarIcon className="mr-3 h-5 w-5 text-gray-200" /> My
-                        Reviews
-                      </a>
-                      <a
-                        href="#"
-                        className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40"
-                      >
-                        <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5 text-gray-200" />{" "}
-                        Logout
-                      </a>
+                      <div className="px-4 py-2 text-sm border-b border-white/20">
+                        <div className="font-semibold">{user?.nombre ?? "Usuario"}</div>
+                        <div className="text-xs opacity-80">{user?.email}</div>
+                      </div>
+
+                      <Link to="/profile" className="flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <UserSolid className="mr-3 h-5 w-5 text-gray-200" /> Manage My Account
+                      </Link>
+
+                      <button onClick={handleLogout} className="w-full text-left flex items-center px-4 py-2 text-sm hover:bg-pink-600/40">
+                        <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5 text-gray-200" /> Logout
+                      </button>
                     </div>
                   </div>
                 )}
