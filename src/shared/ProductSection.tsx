@@ -47,14 +47,14 @@ export const ProductSection: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <p className="text-sm text-red-500 font-semibold">This Month</p>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Best Selling Products</h2>
+          <p className="text-sm text-red-500 font-semibold">Seccion de Prodcutos</p>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Productos</h2>
         </div>
         <button
           onClick={() => navigate('/all-products')}
           className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
         >
-          View All
+          Ver todo
         </button>
       </div>
 

@@ -26,6 +26,7 @@ import { ListaProveedoresPage } from "../../features/admin/pages/ListaProveedore
 import { RegistrarProveedorPage } from "../../features/admin/pages/RegistrarProveedorPage";
 import { Manual } from "../../features/admin/manual/Manual";
 import ManuaTeorico from "../../features/admin/manual/ManuaTeorico";
+import { ProductDetail } from "../../shared/ProductDetail";
 export const Router = () => {
   return (
     <BrowserRouter>
@@ -48,6 +49,9 @@ export const Router = () => {
 
           <Route path="recuperar" element={<RecuperarPasswordPage />} />
           <Route path="all-products" element={<ProductGrid />} />
+                    <Route path="product/:id" element={<ProductDetail />} />
+
+
           <Route path="cart" element={<CartPage />} />
           {/* solo cliente  por nombre o id  */}
           <Route

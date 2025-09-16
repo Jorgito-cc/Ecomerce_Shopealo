@@ -51,7 +51,7 @@ export const ProductGrid: React.FC = () => {
           className={`px-4 py-2 border rounded-full transition ${selectedCategoryId === null ? 'bg-black text-white' : 'bg-white text-black'}`}
           onClick={() => setSelectedCategoryId(null)}
         >
-          All
+          Todo
         </button>
         {categories.map((cat) => (
           <button
