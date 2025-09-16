@@ -27,6 +27,7 @@ import { RegistrarProveedorPage } from "../../features/admin/pages/RegistrarProv
 import { Manual } from "../../features/admin/manual/Manual";
 import ManuaTeorico from "../../features/admin/manual/ManuaTeorico";
 import { ProductDetail } from "../../shared/ProductDetail";
+import { FavoritesPage } from "../../pages/FavoritesPage";
 export const Router = () => {
   return (
     <BrowserRouter>
@@ -50,6 +51,8 @@ export const Router = () => {
           <Route path="recuperar" element={<RecuperarPasswordPage />} />
           <Route path="all-products" element={<ProductGrid />} />
                     <Route path="product/:id" element={<ProductDetail />} />
+                                        <Route path="product/:id" element={<ProductDetail />} />
+                    <Route path="favorites" element={<FavoritesPage />} />
 
 
           <Route path="cart" element={<CartPage />} />
