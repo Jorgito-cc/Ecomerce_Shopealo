@@ -1,13 +1,46 @@
-import React, { useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProductCard } from './components/ProductCard';
-import type { Product } from '../core/entites/Product';
-import { staticProducts } from '../features/products/infrastructure/data/staticProduct';
+import { getProducts } from '../api/productApi';
+import type { ProductDTO } from '../types/product';
 
 export const ProductSection: React.FC = () => {
-  const [products] = useState<Product[]>(staticProducts.slice(0, 2)); // Solo 8 productos destacados
+  const [products, setProducts] = useState<ProductDTO[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const data = await getProducts();
+        // You can still slice the array to show a limited number of products
+        setProducts(data.slice(0, 8));
+      } catch (err) {
+        console.error('Error fetching products:', err);
+        setError('Error al cargar los productos. Por favor, inténtelo de nuevo más tarde.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="px-4 py-8 text-center">
+        Cargando los mejores productos...
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="px-4 py-8 text-center text-red-500">
+        {error}
+      </section>
+    );
+  }
 
   return (
     <section className="px-4 py-8">
