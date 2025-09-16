@@ -179,16 +179,16 @@ export const Sidebar: React.FC = () => {
         </button>
         {/* ir a shopealo */}
         <button
-        title="Ir a Shopealo"
          className={cn(
-            "mt-3 w-full rounded-xl px-3 py-2 text-left",
-            "bg-white/70 dark:bg-slate-800/70",
-            "border border-indigo-100/70 dark:border-slate-700",
-            "hover:bg-white/90 dark:hover:bg-slate-800",
-            "transition text-sm font-medium text-red-600 dark:text-red-400"
+           "mt-3 w-full rounded-xl px-3 py-2 text-left",
+           "bg-white/70 dark:bg-slate-800/70",
+           "border border-indigo-100/70 dark:border-slate-700",
+           "hover:bg-white/90 dark:hover:bg-slate-800",
+           "transition text-sm font-medium text-red-600 dark:text-red-400"
           )}
-        >
-
+          title="Ir a Shopealo"
+          >
+Ir a Shopealo
         </button>
       </div>
     </aside>
