@@ -1,19 +1,21 @@
 import { AuthProvider } from "../context/AuthContext";
 import { CartProvider } from "../context/CartContext";
 import { DarkModeProvider } from "../context/DarkModeContext";
+import { FavoritesProvider } from "../context/FavoritesContext";
 import { Router } from "./router/RouterMain";
 
 function App() {
   return (
     <>
-      <CartProvider>
-        <AuthProvider>
-          <DarkModeProvider>
-
-          <Router />
-          </DarkModeProvider>
-        </AuthProvider>
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <FavoritesProvider>
+            <DarkModeProvider>
+              <Router />
+            </DarkModeProvider>
+          </FavoritesProvider>
+        </CartProvider>
+      </AuthProvider>
     </>
   );
 }

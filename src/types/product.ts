@@ -7,8 +7,7 @@ export type ProductDTO = {
   stock?: number;
   stock_minimo?: number;
   urlImage: string;
-  // Si luego agregas relación:
-  // category?: { id: number; name: string }
+  categoryId?: number;
 };
 
 export type CreateProductDTO = {
