@@ -116,7 +116,7 @@ const ManuaTeorico: React.FC = () => {
 
           <Row label="Flow para subir imagen">
             1) Crear FormData con <code>file</code> + <code>upload_preset</code>. 2) POST a{" "}
-            <code>https://api.cloudinary.com/v1_1/{cloud_name}/upload</code>. 3) Usar <code>secure_url</code> devuelto en el
+            <code>https://api.cloudinary.com/v1_1/{}/upload</code>. 3) Usar <code>secure_url</code> devuelto en el
             body para crear el producto en el backend.
           </Row>
         </Section>
