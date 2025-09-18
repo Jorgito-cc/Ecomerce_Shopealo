@@ -7,7 +7,9 @@ export type ProductDTO = {
   stock?: number;
   stock_minimo?: number;
   urlImage: string;
-  categoryId?: number;
+  category?: {
+id: number;
+name: string; };
 };
 
 export type CreateProductDTO = {
@@ -17,6 +19,7 @@ export type CreateProductDTO = {
   stock?: number;
   stock_minimo?: number;
   urlImage: string;
+  categoryId: number; // <-- Añadido
 };
 
 export type UpdateProductDTO = Partial<CreateProductDTO>;
