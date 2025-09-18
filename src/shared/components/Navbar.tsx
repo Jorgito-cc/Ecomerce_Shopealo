@@ -117,7 +117,7 @@ export const Navbar: React.FC = () => {
                                 <p className="text-xs text-gray-500">Cantidad: {item.quantity}</p>
                               </div>
                               <span className="text-sm font-semibold text-gray-700">
-                                Bs{Number(item.price * item.quantity).toFixed(2)}
+                                Bs {Number(item.price * item.quantity).toFixed(2)}
                               </span>
                             </li>
                           ))}
@@ -129,7 +129,7 @@ export const Navbar: React.FC = () => {
                       <div className="flex justify-between text-sm font-semibold mb-2">
                         <span>Subtotal:</span>
                         <span>
-                          Bs{items.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}
+                          Bs {items.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}
                         </span>
                       </div>
                       <div className="flex flex-col gap-2">

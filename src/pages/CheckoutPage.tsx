@@ -23,14 +23,14 @@ export const CheckoutPage: React.FC = () => {
           {items.map((item) => (
             <li key={item.id} className="flex justify-between">
               <span>{item.name}</span>
-              <span>${(item.price * item.quantity).toFixed(2)}</span>
+              <span>Bs {(item.price * item.quantity).toFixed(2)}</span>
             </li>
           ))}
         </ul>
 
         <div className="flex justify-between mb-2">
           <span>Subtotal:</span>
-          <span>${subtotal.toFixed(2)}</span>
+          <span>Bs {subtotal.toFixed(2)}</span>
         </div>
         <div className="flex justify-between mb-2">
           <span>Envío:</span>
@@ -38,7 +38,7 @@ export const CheckoutPage: React.FC = () => {
         </div>
         <div className="flex justify-between font-bold text-lg mb-4">
           <span>Total:</span>
-          <span>${subtotal.toFixed(2)}</span>
+          <span>Bs {subtotal.toFixed(2)}</span>
         </div>
 
         <div className="mb-4">
