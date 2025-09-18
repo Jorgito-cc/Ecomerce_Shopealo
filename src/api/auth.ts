@@ -114,7 +114,7 @@ export const resetPasswordRequest = async (
 export const registerEmpleadoRequest = async (
   payload: EmpleadoRegisterRequest
 ): Promise<UserDTO> => {
-  const body = {
+  const body: any = {
     nombre: payload.nombre.trim(),
     email: payload.email.trim().toLowerCase(),
     password: payload.password.trim(),
@@ -122,11 +122,11 @@ export const registerEmpleadoRequest = async (
     ci: payload.ci?.trim(),
     telefono: payload.telefono?.trim(),
     direccion: payload.direccion?.trim(),
-    imgUrl: payload.img_dir, // 👈 Se deja solo la variable, no se usa .trim()
-  }; // Eliminar la propiedad si es undefined para que el backend no la reciba
+  };
 
-  if (body.imgUrl === undefined) {
-    delete body.imgUrl;
+  // Añadir la URL de la imagen solo si existe
+  if (payload.img_dir) {
+    body.imgUrl = payload.img_dir;
   }
 
   const { data } = await http.post<UserDTO>("/api/v1/auth/register", body, {
