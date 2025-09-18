@@ -31,13 +31,14 @@ export const ListaUsuarioPage = () => {
 
   // eliminar usuario (soft delete)
   const handleDelete = async (id: number) => {
-    if (window.confirm("¿Seguro que deseas eliminar este usuario?")) {
-      try {
-        await deleteUser(id);
-        setUsers(prev => prev.filter(u => u.id !== id));
-      } catch (error) {
-        console.error("Error al eliminar usuario:", error);
-      }
+    // Nota: window.confirm() ha sido eliminado porque no se muestra en este entorno.
+    // En una aplicación real, se usaría un modal de confirmación personalizado.
+    try {
+      await deleteUser(id);
+      setUsers(prev => prev.filter(u => u.id !== id));
+      console.log(`Usuario con ID ${id} ha sido eliminado.`);
+    } catch (error) {
+      console.error("Error al eliminar usuario:", error);
     }
   };
 

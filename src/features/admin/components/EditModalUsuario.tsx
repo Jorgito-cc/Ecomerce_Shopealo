@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
-import type { User } from "../../../types/UsersTypes";
+import type { User, RoleDTO } from "../../../types/UsersTypes";
+import { getRoles } from "../../../api/rolApi";
 
 type Props = {
   user: User;
@@ -9,11 +11,29 @@ type Props = {
 };
 
 export const EditModalUsuario: React.FC<Props> = ({ user, onClose, onSave }) => {
-  const { register, handleSubmit, reset } = useForm<User>({ defaultValues: user });
+  const [roles, setRoles] = useState<RoleDTO[]>([]);
+  const { register, handleSubmit, reset } = useForm<User>({
+    defaultValues: {
+      ...user,
+      roleId: user.role.id // Establece el valor inicial del rol para el select
+    }
+  });
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const fetchedRoles = await getRoles();
+        setRoles(fetchedRoles);
+      } catch (error) {
+        console.error("Error al obtener roles:", error);
+      }
+    };
+    fetchRoles();
+  }, []);
 
   const onSubmit = (data: User) => {
     const payload = { ...data };
-    if (!payload.password) delete payload.password; // no enviar si vacío
+    if (!payload.password) delete payload.password;
     onSave(payload as User);
     onClose();
   };
@@ -62,6 +82,19 @@ export const EditModalUsuario: React.FC<Props> = ({ user, onClose, onSave }) => 
             <div>
               <label className="text-sm text-gray-700">URL Imagen</label>
               <input {...register("imgUrl")} className="w-full border p-2 rounded mt-1" />
+            </div>
+            <div>
+              <label className="text-sm text-gray-700">Rol</label>
+              <select
+                {...register("roleId", { valueAsNumber: true })}
+                className="w-full border p-2 rounded mt-1"
+              >
+                {roles.map((role) => (
+                  <option key={role.id} value={role.id}>
+                    {role.nombre}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="flex justify-end gap-4 mt-4">
