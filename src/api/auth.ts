@@ -124,9 +124,9 @@ export const registerEmpleadoRequest = async (
     direccion: payload.direccion?.trim(),
   };
 
-  // Añadir la URL de la imagen solo si existe
-  if (payload.img_dir) {
-    body.imgUrl = payload.img_dir;
+  // El payload ya contiene la URL de la imagen en la propiedad `imgUrl`
+  if (payload.imgUrl) {
+    body.imgUrl = payload.imgUrl;
   }
 
   const { data } = await http.post<UserDTO>("/api/v1/auth/register", body, {
