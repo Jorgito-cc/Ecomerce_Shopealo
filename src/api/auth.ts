@@ -1,4 +1,3 @@
-// src/api/auth.ts
 import type {
   AuthResponse,
   EmpleadoRegisterRequest,
@@ -31,33 +30,38 @@ export const clearSession = () => {
 // Siempre con "/api/v1/..." para evitar problemas de concatenación.
 
 // src/api/auth.ts (rutas SIEMPRE con /api/v1/..)
-export const loginRequest = async (payload: LoginRequest): Promise<AuthResponse> => {
-  const { data } = await http.post<AuthResponse>("/api/v1/auth/login", {
-    email: payload.email.trim(),
-    password: payload.password.trim(),
-  }, { headers: { "Content-Type": "application/json" } });
+export const loginRequest = async (
+  payload: LoginRequest
+): Promise<AuthResponse> => {
+  const { data } = await http.post<AuthResponse>(
+    "/api/v1/auth/login",
+    {
+      email: payload.email.trim(),
+      password: payload.password.trim(),
+    },
+    { headers: { "Content-Type": "application/json" } }
+  );
 
   saveSession(data);
   return data;
 };
 
-
 // IMPORTANTE: tu /auth/register NO devuelve { user, token }.
 // Solución: tras registrar, hacemos login automático.
 // Si falla el login, normalizamos localmente la respuesta para guardar sesión.
-export const registerRequest = async (payload: RegisterRequest): Promise<AuthResponse> => {
+export const registerRequest = async (
+  payload: RegisterRequest
+): Promise<AuthResponse> => {
   // 1) Registro (devuelve algo tipo { id, email, nombre, token, role?... })
   const { data } = await http.post<any>("/api/v1/auth/register", payload, {
     headers: { "Content-Type": "application/json" },
-  });
+  }); // 2) Intentar login para obtener { user, token } consistente
 
-  // 2) Intentar login para obtener { user, token } consistente
   try {
     const normalized = await loginRequest({
       email: payload.email,
       password: payload.password,
-    });
-    // loginRequest ya hace saveSession(normalized)
+    }); // loginRequest ya hace saveSession(normalized)
     return normalized;
   } catch {
     // 3) Plan B: normalizamos lo que vino del register
@@ -86,7 +90,6 @@ export const forgotPasswordRequest = async (
   return data;
 };
 
-
 // RESET PASSWORD (valida código + nueva pass)
 export const resetPasswordRequest = async (
   payload: ResetPasswordRequest
@@ -103,8 +106,7 @@ export const resetPasswordRequest = async (
   );
   return data;
 };
-// src/types/auth.ts
- // Crea empleado (no hace login, no guarda token)
+// Crea empleado (no hace login, no guarda token)
 export const registerEmpleadoRequest = async (
   payload: EmpleadoRegisterRequest
 ): Promise<UserDTO> => {
@@ -114,16 +116,11 @@ export const registerEmpleadoRequest = async (
     password: payload.password.trim(),
     roleId: payload.roleId ?? 3, // 👈 CHOFER
     ci: payload.ci?.trim(),
-    username: payload.username?.trim(),
     telefono: payload.telefono?.trim(),
     direccion: payload.direccion?.trim(),
-    img_dir: payload.img_dir?.trim(),
-  };
+    imgUrl: payload.img_dir?.trim(), // 👈 Cambiado a 'imgUrl' para que coincida con tu backend
+  }; // Si tu backend crea usuarios desde /api/v1/auth/register // y acepta los campos extra, usamos ese mismo. // Si tienes un endpoint específico (p.ej. POST /api/v1/usuario), // cambia la ruta aquí.
 
-  // Si tu backend crea usuarios desde /api/v1/auth/register
-  // y acepta los campos extra, usamos ese mismo.
-  // Si tienes un endpoint específico (p.ej. POST /api/v1/usuario),
-  // cambia la ruta aquí.
   const { data } = await http.post<UserDTO>("/api/v1/auth/register", body, {
     headers: { "Content-Type": "application/json" },
   });
