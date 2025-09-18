@@ -11,12 +11,12 @@ type Props = {
 export const EditModalUsuario: React.FC<Props> = ({ user, onClose, onSave }) => {
   const { register, handleSubmit, reset } = useForm<User>({ defaultValues: user });
 
- const onSubmit = (data: User) => {
-  const payload = { ...data };
-  if (!payload.password) delete payload.password; // no enviar si vacío
-  onSave(payload as User);
-  onClose();
-};
+  const onSubmit = (data: User) => {
+    const payload = { ...data };
+    if (!payload.password) delete payload.password; // no enviar si vacío
+    onSave(payload as User);
+    onClose();
+  };
 
   return (
     <AnimatePresence>
@@ -53,15 +53,15 @@ export const EditModalUsuario: React.FC<Props> = ({ user, onClose, onSave }) => 
             </div>
             <div>
               <label className="text-sm text-gray-700">Teléfono</label>
-              <input {...register("telefono")} className="w-full border p-2 rounded mt-1" />
+              <input {...register("phone")} className="w-full border p-2 rounded mt-1" />
             </div>
             <div>
               <label className="text-sm text-gray-700">Dirección</label>
-              <input {...register("direccion")} className="w-full border p-2 rounded mt-1" />
+              <input {...register("address")} className="w-full border p-2 rounded mt-1" />
             </div>
             <div>
               <label className="text-sm text-gray-700">URL Imagen</label>
-              <input {...register("img_dir")} className="w-full border p-2 rounded mt-1" />
+              <input {...register("imgUrl")} className="w-full border p-2 rounded mt-1" />
             </div>
 
             <div className="flex justify-end gap-4 mt-4">
