@@ -49,7 +49,7 @@ export const RegistrarEmpleadoPage = () => {
         ci: form.ci,
         telefono: form.telefono,
         direccion: form.direccion,
-        img_dir: imgUrl, // Asignar la URL de Cloudinary
+        imgUrl: imgUrl
       };
       await registerEmpleadoRequest(payload);
       toast.success("Chofer creado correctamente");
