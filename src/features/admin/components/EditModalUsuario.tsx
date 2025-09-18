@@ -1,13 +1,6 @@
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
-import type { User, RoleDTO } from "../../../types/UsersTypes";
-import { getRoles } from "../../../api/rolApi";
-
-// Define un tipo de datos específico para el formulario, que incluye la propiedad 'roleId'.
-type FormData = User & {
-  roleId: number;
-};
+import type { User } from "../../../types/UsersTypes";
 
 type Props = {
   user: User;
@@ -16,40 +9,20 @@ type Props = {
 };
 
 export const EditModalUsuario: React.FC<Props> = ({ user, onClose, onSave }) => {
-  const [roles, setRoles] = useState<RoleDTO[]>([]);
-  const { register, handleSubmit, reset } = useForm<FormData>({
-    defaultValues: {
-      ...user,
-      roleId: user.role.id,
-    },
+  const { register, handleSubmit, reset } = useForm<User>({
+    defaultValues: user,
   });
 
-  useEffect(() => {
-    const fetchRoles = async () => {
-      try {
-        const fetchedRoles = await getRoles();
-        setRoles(fetchedRoles);
-      } catch (error) {
-        console.error("Error al obtener roles:", error);
-      }
-    };
-    fetchRoles();
-  }, []);
-
-  const onSubmit = (data: FormData) => {
-    // Aquí, se construye el objeto 'payload' que se enviará,
-    // extrayendo las propiedades del formulario y el 'roleId' si es necesario.
-    const payload = {
-      ...data,
-      role: { id: data.roleId, nombre: roles.find(r => r.id === data.roleId)?.nombre || "" },
-    };
+  const onSubmit = (data: User) => {
+    // Aquí, se construye el objeto 'payload' con los datos del formulario.
+    const payload = { ...data };
 
     if (!payload.password) {
       delete payload.password;
     }
     
-    // Se pasa el payload a la función onSave, asegurando que solo los campos de User se envíen.
-    onSave(payload as unknown as User);
+    // Se pasa el payload a la función onSave.
+    onSave(payload);
     onClose();
   };
 
@@ -97,19 +70,6 @@ export const EditModalUsuario: React.FC<Props> = ({ user, onClose, onSave }) => 
             <div>
               <label className="text-sm text-gray-700">URL Imagen</label>
               <input {...register("imgUrl")} className="w-full border p-2 rounded mt-1" />
-            </div>
-            <div>
-              <label className="text-sm text-gray-700">Rol</label>
-              <select
-                {...register("roleId", { valueAsNumber: true })}
-                className="w-full border p-2 rounded mt-1"
-              >
-                {roles.map((role) => (
-                  <option key={role.id} value={role.id}>
-                    {role.nombre}
-                  </option>
-                ))}
-              </select>
             </div>
 
             <div className="flex justify-end gap-4 mt-4">
