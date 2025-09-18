@@ -14,14 +14,14 @@ export const EditModalUsuario: React.FC<Props> = ({ user, onClose, onSave }) => 
   });
 
   const onSubmit = (data: User) => {
-    // Aquí, se construye el objeto 'payload' con los datos del formulario.
-    const payload = { ...data };
+    // Destructure to separate 'role' from the rest of the data.
+    const {  ...payload } = data;
 
     if (!payload.password) {
       delete payload.password;
     }
-    
-    // Se pasa el payload a la función onSave.
+
+    // Pass the modified payload to the onSave function.
     onSave(payload);
     onClose();
   };
