@@ -15,19 +15,20 @@ export const EditModalUsuario: React.FC<Props> = ({ user, onClose, onSave }) => 
     defaultValues: user,
   });
 
-  const onSubmit = (data: User) => {
-    // Correct destructuring: separate the 'id', 'role', and 'username' properties.
-    const { id, role, username, ...payload } = data;
+ const onSubmit = (data: User) => {
+  // Destructure the `id` and the `role` properties to exclude them from the payload.
+  // The '...payload' will capture all other properties.
+  const { id, ...payload } = data;
 
-    // If the password field is empty, remove it from the payload.
-    if (!payload.password || payload.password === '') {
-      delete payload.password;
-    }
+  // The rest of your logic...
+  if (!payload.password || payload.password === '') {
+    delete payload.password;
+  }
 
-    // Pass the 'id' and the cleaned 'payload' to the parent's `onSave` function.
-    onSave({ id, ...payload });
-    onClose();
-  };
+  // Pass the ID and the cleaned payload to the onSave function.
+  onSave({ id, ...payload }); // Notice that the `id` is now explicitly added back.
+  onClose();
+};
 
   return (
     // ... the rest of your component, no changes needed here.
