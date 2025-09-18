@@ -20,11 +20,11 @@ export const ListaUsuarioPage = () => {
   }, []);
 
   // guardar cambios de edición
-const handleSave = async (updated: User) => {
+const handleSave = async (updated: Partial<User>) => {
   try {
-    // This is where you consume the updateUser API call
-    const res = await updateUser(updated.id, updated);
-    // After the update is successful, you update the state to reflect the change
+    // The `updated` object now correctly contains the `id` from the modal.
+    // The API call will now work as intended.
+    const res = await updateUser(updated.id!, updated);
     setUsers(prev => prev.map(u => (u.id === res.id ? res : u)));
   } catch (error) {
     console.error("Error al guardar usuario:", error);

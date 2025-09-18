@@ -1,4 +1,4 @@
-// EditModalUsuario.tsx
+// src/pages/Usuario/components/EditModalUsuario.tsx
 import { useForm } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
 import type { User } from "../../../types/UsersTypes";
@@ -6,7 +6,8 @@ import type { User } from "../../../types/UsersTypes";
 type Props = {
   user: User;
   onClose: () => void;
-  onSave: (data: Partial<User>) => void; // Cambiado a Partial<User>
+  // This type definition is correct
+  onSave: (data: Partial<User>) => void; 
 };
 
 export const EditModalUsuario: React.FC<Props> = ({ user, onClose, onSave }) => {
@@ -15,21 +16,21 @@ export const EditModalUsuario: React.FC<Props> = ({ user, onClose, onSave }) => 
   });
 
   const onSubmit = (data: User) => {
-    // Desestructurar para separar las propiedades que el backend no acepta en el payload.
-    // Aunque `username` está en el formulario, la API de PATCH lo rechaza.
-    const {  ...payload } = data;
+    // Correct destructuring: separate the 'id', 'role', and 'username' properties.
+    const { id, role, username, ...payload } = data;
 
-    // Si la contraseña no se modificó, no la incluimos en el payload.
+    // If the password field is empty, remove it from the payload.
     if (!payload.password || payload.password === '') {
       delete payload.password;
     }
 
-    // Pasamos el ID y el payload limpio a la función onSave
-    onSave({ ...payload });
+    // Pass the 'id' and the cleaned 'payload' to the parent's `onSave` function.
+    onSave({ id, ...payload });
     onClose();
   };
 
   return (
+    // ... the rest of your component, no changes needed here.
     <AnimatePresence>
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm px-2">
         <motion.div
@@ -40,7 +41,6 @@ export const EditModalUsuario: React.FC<Props> = ({ user, onClose, onSave }) => 
           className="bg-white rounded-2xl shadow-2xl w-full max-w-md md:max-w-lg p-6 overflow-y-auto max-h-[90vh]"
         >
           <h2 className="text-xl font-semibold text-center mb-6 text-gray-800">✏️ Editar Usuario</h2>
-
           <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-4">
             <div>
               <label className="text-sm text-gray-700">CI</label>
@@ -74,7 +74,6 @@ export const EditModalUsuario: React.FC<Props> = ({ user, onClose, onSave }) => 
               <label className="text-sm text-gray-700">URL Imagen</label>
               <input {...register("imgUrl")} className="w-full border p-2 rounded mt-1" />
             </div>
-
             <div className="flex justify-end gap-4 mt-4">
               <button
                 type="button"
