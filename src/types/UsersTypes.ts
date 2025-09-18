@@ -3,18 +3,20 @@ export type RoleDTO = {
   nombre: string;
 };
 
+
+
 export type User = {
   id: number;
   nombre: string;
   email: string;
   isActive: boolean;
+  address?: string; // Campo agregado
+  ci?: string;     // Campo agregado
+  phone?: string;  // Campo agregado
+  imgUrl?: string; // Campo agregado
   role: RoleDTO;
 
   username?: string;
-  ci?: string;
-  telefono?: string;
-  direccion?: string;
   img_dir?: string;
-  password?: string; // opcional, para que no dé error
+  password?: string;
 };
-
