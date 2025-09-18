@@ -32,9 +32,8 @@ export const ProductGrid: React.FC = () => {
     fetchData();
   }, []);
 
-  const filteredProducts = selectedCategoryId === null
-    ? products
-    : products.filter(p => p.categoryId === selectedCategoryId);
+const filteredProducts = selectedCategoryId === null
+? products : products.filter(p => p.category?.id === selectedCategoryId);
 
   if (loading) {
     return <div className="text-center py-10">Cargando productos y categorías...</div>;
