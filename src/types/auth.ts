@@ -41,11 +41,9 @@ export type EmpleadoRegisterRequest = {
   nombre: string;
   email: string;
   password: string;
-  roleId?: number;     // por defecto 3 (CHOFER)
+  roleId?: number;
   ci?: string;
-
   telefono?: string;
   direccion?: string;
-  imgUrl?: string; 
+  imgUrl?: string;
 };
-
