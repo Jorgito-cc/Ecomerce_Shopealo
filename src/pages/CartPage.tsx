@@ -40,7 +40,7 @@ export const CartPage: React.FC = () => {
             <h2 className="text-xl font-semibold mb-4">Resumen del Carrito</h2>
             <div className="flex justify-between mb-2">
               <span>Subtotal:</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>Bs{subtotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between mb-4">
               <span>Envío:</span>
@@ -48,7 +48,7 @@ export const CartPage: React.FC = () => {
             </div>
             <div className="flex justify-between font-bold text-lg mb-4">
               <span>Total:</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>Bs{subtotal.toFixed(2)}</span>
             </div>
 
             <Link
