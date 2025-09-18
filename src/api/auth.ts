@@ -1,4 +1,3 @@
-// src/api/auth.ts
 import type {
   AuthResponse,
   EmpleadoRegisterRequest,
@@ -10,10 +9,14 @@ import type {
 } from "../types/auth";
 import { http } from "./http";
 
-// Helpers sesión
+// Helpers para la sesión
 const saveSession = (data: AuthResponse) => {
   localStorage.setItem("access_token", data.token);
   localStorage.setItem("auth_user", JSON.stringify(data.user));
+};
+
+export const getSessionToken = (): string | null => {
+  return localStorage.getItem("access_token");
 };
 
 export const getSessionUser = (): UserDTO | null => {
@@ -30,7 +33,6 @@ export const clearSession = () => {
 
 // Siempre con "/api/v1/..." para evitar problemas de concatenación.
 
-// src/api/auth.ts (rutas SIEMPRE con /api/v1/..)
 export const loginRequest = async (
   payload: LoginRequest
 ): Promise<AuthResponse> => {
@@ -47,9 +49,6 @@ export const loginRequest = async (
   return data;
 };
 
-// IMPORTANTE: tu /auth/register NO devuelve { user, token }.
-// Solución: tras registrar, hacemos login automático.
-// Si falla el login, normalizamos localmente la respuesta para guardar sesión.
 export const registerRequest = async (
   payload: RegisterRequest
 ): Promise<AuthResponse> => {
@@ -75,11 +74,12 @@ export const registerRequest = async (
       rolId: data.rolId ?? data.role?.id ?? payload.roleId ?? 0,
       rolNombre: data.rolNombre ?? data.role?.nombre ?? "USER",
     };
-    const normalized: AuthResponse = { user, token: data.token };
+    const normalized: AuthResponse = { token: data.token, user };
     saveSession(normalized);
     return normalized;
   }
 };
+
 // FORGOT PASSWORD (envía código al correo)
 export const forgotPasswordRequest = async (
   payload: ForgotPasswordRequest
@@ -100,7 +100,7 @@ export const resetPasswordRequest = async (
   const body = {
     email: payload.email.trim().toLowerCase(),
     code: payload.code.trim(),
-    password: payload.password.trim(), // min 8
+    password: payload.password.trim(),
   };
   const { data } = await http.post<{ message?: string }>(
     "/api/v1/auth/resetPassword",
@@ -109,7 +109,7 @@ export const resetPasswordRequest = async (
   );
   return data;
 };
-// src/types/auth.ts
+
 // Crea empleado (no hace login, no guarda token)
 export const registerEmpleadoRequest = async (
   payload: EmpleadoRegisterRequest
@@ -124,7 +124,6 @@ export const registerEmpleadoRequest = async (
     address: payload.direccion?.trim(),
   };
 
-  // El payload ya contiene la URL de la imagen en la propiedad `imgUrl`
   if (payload.imgUrl) {
     body.imgUrl = payload.imgUrl;
   }
@@ -135,3 +134,26 @@ export const registerEmpleadoRequest = async (
   return data;
 };
 
+/**
+ * Llama a la API para registrar el cierre de sesión en el backend antes de
+ * borrar la sesión localmente. Esto asegura que el evento quede en la bitácora.
+ */
+export const logoutRequest = async (): Promise<void> => {
+  const token = getSessionToken();
+  if (!token) {
+    // Si no hay token, no hay nada que registrar en el backend.
+    return;
+  }
+  
+  try {
+    // Envía el token en los encabezados para que el backend lo valide.
+    await http.post("/api/v1/auth/logout", {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  } catch (error) {
+    console.error("Error al llamar a la API de logout, la sesión del cliente se cerrará de todos modos.", error);
+  }
+  // La sesión local se borra en el `AuthContext`
+};

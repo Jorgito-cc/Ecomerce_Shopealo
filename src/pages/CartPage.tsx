@@ -17,7 +17,7 @@ export const CartPage: React.FC = () => {
         <p className="text-gray-500">Tu carrito está vacío.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Lista de productos */}
+          {/* Lista de productos------------------ */}
           <div className="md:col-span-2 space-y-4">
             {items.map((item) => (
               <CartItem key={item.id} item={item} />

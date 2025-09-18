@@ -1,7 +1,12 @@
-// src/context/AuthContext.tsx
 import { createContext, useContext, useMemo, useState } from "react";
 import type { AuthResponse, UserDTO } from "../types/auth";
-import { clearSession, getSessionUser, loginRequest, registerRequest } from "../api/auth";
+import {
+  clearSession,
+  getSessionUser,
+  loginRequest,
+  logoutRequest, // <-- ¡Importado!
+  registerRequest,
+} from "../api/auth";
 import type { LoginRequest, RegisterRequest } from "../types/auth";
 
 function normalizeUser(raw: any): UserDTO {
@@ -19,17 +24,18 @@ type AuthContextType = {
   isAuthenticated: boolean;
   login: (payload: LoginRequest) => Promise<AuthResponse>;
   register: (payload: RegisterRequest) => Promise<AuthResponse>;
-  logout: () => void;
-  
+  logout: () => Promise<void>; // <-- ¡Cambiado a una Promesa!
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<UserDTO | null>(
     (() => {
       const u = getSessionUser();
-      return u ? normalizeUser(u) : null;   // <-- normaliza desde localStorage también
+      return u ? normalizeUser(u) : null;
     })()
   );
 
@@ -47,9 +53,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { ...res, user: u };
   };
 
-  const logout = () => {
-    clearSession();
-    setUser(null);
+  const logout = async () => { // <-- ¡Ahora es asíncrona!
+    await logoutRequest(); // Llama a la API para registrar el evento
+    clearSession(); // Limpia la sesión local
+    setUser(null); // Borra el estado del usuario
   };
 
   const value = useMemo(
