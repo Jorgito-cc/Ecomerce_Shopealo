@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { FaUser, FaBox, FaClipboardList } from "react-icons/fa";
-
+import { FaUser, FaBox } from "react-icons/fa";
+/* despues para el sp2 hay que añadir FaClipboardList */
 export type LinkItem = { label: string; to: string };
 export type Section = {
   key: string;
@@ -34,7 +34,7 @@ export const sections: Section[] = [
       { label: "Listar Proveedores", to: "/admin/listarproveedores" },
     ],
   },
-  {
+/*   {
     key: "ventas",
     icon: <FaClipboardList />,
     title: "Ventas",
@@ -42,7 +42,7 @@ export const sections: Section[] = [
       { label: "Ventas Vendidas", to: "/admin/ventas-vendidas" },
       { label: "Detalle Venta", to: "/admin/detalle-venta" },
     ],
-  },
+  }, */
 ];
 
 export const soporteLink: LinkItem = { label: "Soporte", to: "/admin/soporte" };
