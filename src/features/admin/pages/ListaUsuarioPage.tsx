@@ -10,22 +10,35 @@ export const ListaUsuarioPage = () => {
   // carga inicial
   useEffect(() => {
     (async () => {
-      const data = await getUsers();
-      setUsers(data);
+      try {
+        const data = await getUsers();
+        setUsers(data);
+      } catch (error) {
+        console.error("Error al obtener usuarios:", error);
+      }
     })();
   }, []);
 
   // guardar cambios de edición
   const handleSave = async (updated: User) => {
-    const res = await updateUser(updated.id, updated);
-    setUsers(prev => prev.map(u => (u.id === res.id ? res : u)));
+    try {
+      const res = await updateUser(updated.id, updated);
+      setUsers(prev => prev.map(u => (u.id === res.id ? res : u)));
+    } catch (error) {
+      console.error("Error al guardar usuario:", error);
+    }
   };
 
   // eliminar usuario (soft delete)
   const handleDelete = async (id: number) => {
-    if (!confirm("¿Seguro que deseas eliminar este usuario?")) return;
-    await deleteUser(id);
-    setUsers(prev => prev.filter(u => u.id !== id));
+    if (window.confirm("¿Seguro que deseas eliminar este usuario?")) {
+      try {
+        await deleteUser(id);
+        setUsers(prev => prev.filter(u => u.id !== id));
+      } catch (error) {
+        console.error("Error al eliminar usuario:", error);
+      }
+    }
   };
 
   return (
@@ -40,6 +53,10 @@ export const ListaUsuarioPage = () => {
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Nombre</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Email</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Rol</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">CI</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Teléfono</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Dirección</th>
+              <th className="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase">Estado</th>
               <th className="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase">Acciones</th>
             </tr>
           </thead>
@@ -51,6 +68,14 @@ export const ListaUsuarioPage = () => {
                 <td className="px-4 py-2 text-sm">{user.nombre}</td>
                 <td className="px-4 py-2 text-sm">{user.email}</td>
                 <td className="px-4 py-2 text-sm">{user.role?.nombre}</td>
+                <td className="px-4 py-2 text-sm">{user.ci ?? 'N/A'}</td>
+                <td className="px-4 py-2 text-sm">{user.phone ?? 'N/A'}</td>
+                <td className="px-4 py-2 text-sm">{user.address ?? 'N/A'}</td>
+                <td className="px-4 py-2 text-sm text-center">
+                  <span className={`inline-block px-2 py-1 leading-none rounded-full font-semibold uppercase text-xs ${user.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                    {user.isActive ? 'Activo' : 'Inactivo'}
+                  </span>
+                </td>
                 <td className="px-4 py-2 text-sm text-center flex gap-2 justify-center">
                   <button
                     onClick={() => setUserEdit(user)}
