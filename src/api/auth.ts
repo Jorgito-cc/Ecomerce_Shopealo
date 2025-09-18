@@ -120,8 +120,8 @@ export const registerEmpleadoRequest = async (
     password: payload.password.trim(),
     roleId: payload.roleId ?? 3, // 👈 CHOFER
     ci: payload.ci?.trim(),
-    telefono: payload.telefono?.trim(),
-    direccion: payload.direccion?.trim(),
+    phone: payload.telefono?.trim(),
+    address: payload.direccion?.trim(),
   };
 
   // El payload ya contiene la URL de la imagen en la propiedad `imgUrl`
@@ -134,3 +134,4 @@ export const registerEmpleadoRequest = async (
   });
   return data;
 };
+
