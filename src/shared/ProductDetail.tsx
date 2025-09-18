@@ -70,7 +70,7 @@ export const ProductDetail: React.FC = () => {
           <h1 className="text-4xl font-bold mb-2">{product.name}</h1>
           <p className="text-gray-600 mb-4">{product.description}</p>
           <div className="text-2xl font-bold text-red-600 mb-4">
-            ${product.price}
+            Bs {product.price}
           </div>
           <p className="text-gray-500 mb-4">
             Stock disponible: <span className="font-semibold">{product.stock}</span>
