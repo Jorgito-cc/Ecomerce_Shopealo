@@ -4,6 +4,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { User, RoleDTO } from "../../../types/UsersTypes";
 import { getRoles } from "../../../api/rolApi";
 
+// Define un tipo de datos específico para el formulario, que incluye la propiedad 'roleId'.
+type FormData = User & {
+  roleId: number;
+};
+
 type Props = {
   user: User;
   onClose: () => void;
@@ -12,11 +17,11 @@ type Props = {
 
 export const EditModalUsuario: React.FC<Props> = ({ user, onClose, onSave }) => {
   const [roles, setRoles] = useState<RoleDTO[]>([]);
-  const { register, handleSubmit, reset } = useForm<User>({
+  const { register, handleSubmit, reset } = useForm<FormData>({
     defaultValues: {
       ...user,
-      roleId: user.role.id // Establece el valor inicial del rol para el select
-    }
+      roleId: user.role.id,
+    },
   });
 
   useEffect(() => {
@@ -31,10 +36,20 @@ export const EditModalUsuario: React.FC<Props> = ({ user, onClose, onSave }) => 
     fetchRoles();
   }, []);
 
-  const onSubmit = (data: User) => {
-    const payload = { ...data };
-    if (!payload.password) delete payload.password;
-    onSave(payload as User);
+  const onSubmit = (data: FormData) => {
+    // Aquí, se construye el objeto 'payload' que se enviará,
+    // extrayendo las propiedades del formulario y el 'roleId' si es necesario.
+    const payload = {
+      ...data,
+      role: { id: data.roleId, nombre: roles.find(r => r.id === data.roleId)?.nombre || "" },
+    };
+
+    if (!payload.password) {
+      delete payload.password;
+    }
+    
+    // Se pasa el payload a la función onSave, asegurando que solo los campos de User se envíen.
+    onSave(payload as unknown as User);
     onClose();
   };
 
