@@ -57,6 +57,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     await logoutRequest(); // Llama a la API para registrar el evento
     clearSession(); // Limpia la sesión local
     setUser(null); // Borra el estado del usuario
+    window.location.reload(); // <-- ¡Añadido!
   };
 
   const value = useMemo(
