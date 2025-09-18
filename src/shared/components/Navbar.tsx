@@ -74,6 +74,13 @@ export const Navbar: React.FC = () => {
           <Link to="/all-products">Catalogo</Link>
           <Link to="/contactanos">Contacto</Link>
           <Link to="/sobrenosotros">Sobre nosotros</Link>
+
+                {/* Agrega el botón del dashboard para administradores */}
+        {isAuthenticated && user?.rolNombre === "ADMINISTRADOR" && (
+          <Link to="/admin" className="font-semibold text-indigo-600">
+            Dashboard
+          </Link>
+        )}
           {/* Si no está autenticado mostramos Login */}
           {!isAuthenticated && <Link to="/login">Login</Link>}
         </nav>
