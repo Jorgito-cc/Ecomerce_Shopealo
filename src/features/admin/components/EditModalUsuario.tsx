@@ -1,3 +1,4 @@
+// EditModalUsuario.tsx
 import { useForm } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
 import type { User } from "../../../types/UsersTypes";
@@ -5,7 +6,7 @@ import type { User } from "../../../types/UsersTypes";
 type Props = {
   user: User;
   onClose: () => void;
-  onSave: (data: User) => void;
+  onSave: (data: Partial<User>) => void; // Cambiado a Partial<User>
 };
 
 export const EditModalUsuario: React.FC<Props> = ({ user, onClose, onSave }) => {
@@ -14,15 +15,17 @@ export const EditModalUsuario: React.FC<Props> = ({ user, onClose, onSave }) => 
   });
 
   const onSubmit = (data: User) => {
-    // Destructure to separate 'role' from the rest of the data.
+    // Desestructurar para separar las propiedades que el backend no acepta en el payload.
+    // Aunque `username` está en el formulario, la API de PATCH lo rechaza.
     const {  ...payload } = data;
 
-    if (!payload.password) {
+    // Si la contraseña no se modificó, no la incluimos en el payload.
+    if (!payload.password || payload.password === '') {
       delete payload.password;
     }
 
-    // Pass the modified payload to the onSave function.
-    onSave(payload);
+    // Pasamos el ID y el payload limpio a la función onSave
+    onSave({ ...payload });
     onClose();
   };
 
