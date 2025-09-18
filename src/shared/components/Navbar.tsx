@@ -117,7 +117,7 @@ export const Navbar: React.FC = () => {
                                 <p className="text-xs text-gray-500">Cantidad: {item.quantity}</p>
                               </div>
                               <span className="text-sm font-semibold text-gray-700">
-                                ${Number(item.price * item.quantity).toFixed(2)}
+                                Bs{Number(item.price * item.quantity).toFixed(2)}
                               </span>
                             </li>
                           ))}
@@ -129,7 +129,7 @@ export const Navbar: React.FC = () => {
                       <div className="flex justify-between text-sm font-semibold mb-2">
                         <span>Subtotal:</span>
                         <span>
-                          ${items.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}
+                          Bs{items.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}
                         </span>
                       </div>
                       <div className="flex flex-col gap-2">
@@ -200,13 +200,13 @@ export const Navbar: React.FC = () => {
             </>
           )}
 
-          {/* Si NO está autenticado mostramos los botones públicos (escritorio) */}
-          {!isAuthenticated && (
+          {/* Si NO está autenticado mostramos los botones públicos (escritorio)------------------------------------------------------------------------------------------------ */}
+        {/*   {!isAuthenticated && (
             <div className="flex items-center gap-3">
               <Link to="/register" className="text-sm text-gray-700 hover:underline">Regístrate</Link>
               <Link to="/login" className="ml-4 text-sm text-red-500 font-semibold hover:underline">Login</Link>
             </div>
-          )}
+          )} */}
         </div>
 
         {/* Botón hamburguesa (mobile) */}

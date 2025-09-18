@@ -5,7 +5,7 @@ export const staticFullService: FullServices[] = [
   {
     id: 1,
     title: "ENVÍO GRATIS Y RÁPIDO",
-    subtitle: "Envío gratuito para todos los pedidos mayores a $140",
+    subtitle: "Envío gratuito para todos los pedidos ",
     icon: <FaTruck className="text-white text-xl" />,
   },
   {

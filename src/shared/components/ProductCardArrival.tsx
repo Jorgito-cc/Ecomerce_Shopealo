@@ -26,7 +26,7 @@ export const ProductCardArrival: React.FC<Props> = ({
           href={href}
           className="text-white mt-2 inline-block border-b border-white hover:text-gray-300"
         >
-          Shop Now →
+          Ir →
         </a>
       </div>
     </div>

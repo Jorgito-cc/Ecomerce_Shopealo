@@ -10,7 +10,7 @@ interface Feature {
   {
     icon: <FaShippingFast className="text-white text-2xl" />,
     title: "FREE AND FAST DELIVERY",
-    description: "Free delivery for all orders over $100",
+    description: "Free delivery for all orders over Bs 100",
   },
   {
     icon: <FaHeadset className="text-white text-2xl" />,
