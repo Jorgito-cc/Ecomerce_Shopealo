@@ -62,7 +62,7 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
       <img src={product.urlImage} alt={product.name} className="mx-auto h-36 object-contain" />
       <h3 className="mt-4 text-sm font-medium text-gray-800">{product.name}</h3>
       <div className="mt-2 text-sm text-red-600 font-semibold">
-        ${product.price}
+        Bs {product.price}
       </div>
       <div className="mt-1 text-xs text-gray-500">
         Stock disponible: {product.stock}
