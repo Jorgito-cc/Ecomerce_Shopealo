@@ -50,6 +50,7 @@ export const ListaUsuarioPage = () => {
           <thead className="bg-gray-100">
             <tr>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">ID</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Imagen</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Nombre</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Email</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Rol</th>
@@ -65,6 +66,16 @@ export const ListaUsuarioPage = () => {
             {users.map(user => (
               <tr key={user.id} className="hover:bg-gray-50 transition">
                 <td className="px-4 py-2 text-sm">{user.id}</td>
+                <td className="px-4 py-2 text-sm">
+                  <img
+                    src={user.imgUrl || "https://placehold.co/40x40/E5E7EB/A1A5B4?text=N/A"}
+                    alt="User profile"
+                    className="w-10 h-10 rounded-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = "https://placehold.co/40x40/E5E7EB/A1A5B4?text=N/A";
+                    }}
+                  />
+                </td>
                 <td className="px-4 py-2 text-sm">{user.nombre}</td>
                 <td className="px-4 py-2 text-sm">{user.email}</td>
                 <td className="px-4 py-2 text-sm">{user.role?.nombre}</td>
