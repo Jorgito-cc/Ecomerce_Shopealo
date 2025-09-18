@@ -20,14 +20,16 @@ export const ListaUsuarioPage = () => {
   }, []);
 
   // guardar cambios de edición
-  const handleSave = async (updated: User) => {
-    try {
-      const res = await updateUser(updated.id, updated);
-      setUsers(prev => prev.map(u => (u.id === res.id ? res : u)));
-    } catch (error) {
-      console.error("Error al guardar usuario:", error);
-    }
-  };
+const handleSave = async (updated: User) => {
+  try {
+    // This is where you consume the updateUser API call
+    const res = await updateUser(updated.id, updated);
+    // After the update is successful, you update the state to reflect the change
+    setUsers(prev => prev.map(u => (u.id === res.id ? res : u)));
+  } catch (error) {
+    console.error("Error al guardar usuario:", error);
+  }
+};
 
   // eliminar usuario (soft delete)
   const handleDelete = async (id: number) => {
