@@ -14,14 +14,17 @@
 
 
 export const getBitacoraLogs = async (password: string) => {
-  const response = await fetch("https://backend-ecommerce-production-0ef1.up.railway.app/api/v1/bitacora", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    // ⚠️ algunos navegadores ignoran body en GET, pero si tu backend lo acepta, funcionará
-    body: JSON.stringify({ password }),
-  });
+  const response = await fetch(
+    "https://backend-ecommerce-production-0ef1.up.railway.app/api/v1/bitacora",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        password,
+        _method: "GET", // 👈 algunos servidores lo interpretan
+      }),
+    }
+  );
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
