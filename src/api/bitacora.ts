@@ -13,6 +13,8 @@
 import { http } from "./http";
 import type { BitacoraLog } from "../types/bitacora";
 
+
+// getbitacora
 export const getBitacoraLogs = async (password: string): Promise<BitacoraLog[]> => {
   const { data } = await http.post<BitacoraLog[]>("/api/v1/bitacora/listar", { password });
   return data;
