@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { getBitacoraLogs } from "../../../api/bitacora";
 import type { BitacoraLog } from "../../../types/bitacora";
 
