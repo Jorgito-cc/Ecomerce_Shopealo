@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { createCheckoutSession } from "../api/paymentApi";
 
 export const CheckoutPage: React.FC = () => {
-  const { items, clearCart } = useCart();
+  const { items } = useCart();
   const { isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(false);
 
