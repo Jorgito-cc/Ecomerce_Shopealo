@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { FaUser, FaBox } from "react-icons/fa";
+import { FaUser, FaBox, FaCloudUploadAlt } from "react-icons/fa";
 /* despues para el sp2 hay que añadir FaClipboardList */
 export type LinkItem = { label: string; to: string };
 export type Section = {
@@ -36,7 +36,7 @@ export const sections: Section[] = [
   },
   {
     key: "Caracteristicas",
-    icon: <FaClipboardList />,
+    icon: < FaCloudUploadAlt />,
     title: "Caracteristicas",
     items: [
       { label: "Backup", to: "/admin/backup" },

@@ -30,6 +30,7 @@ import { ProductDetail } from "../../shared/ProductDetail";
 import { FavoritesPage } from "../../pages/FavoritesPage";
 import { MyOrdersPage } from "../../pages/MyOrdersPage";
 import { MyAccountPage } from "../../pages/MyAccountPage";
+import { Backup } from "../../features/admin/pages/Backup";
 export const Router = () => {
   return (
     <BrowserRouter>
@@ -97,6 +98,8 @@ export const Router = () => {
           <Route path="listar-producto" element={<ListaProductosPage />} />
           <Route path="registrar-producto" element={<ProductCreateForm />} />
           <Route path="listarproveedores" element={<ListaProveedoresPage />} />
+                    <Route path="backup" element={<Backup />} />
+
           <Route
             path="registrar-proveedores"
             element={<RegistrarProveedorPage />}
