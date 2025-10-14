@@ -51,7 +51,7 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
         >
           <FaHeart color={isFavorite(product.id) ? 'red' : 'gray'} />
         </button>
-        <Button
+        <button
           onClick={handleViewProduct}
           className="bg-white p-2 rounded-full shadow hover:bg-gray-100"
         >
