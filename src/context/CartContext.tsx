@@ -16,7 +16,7 @@ type CartContextType = {
   clearCart: () => void;
 };
 
-// ⚠️ NO exportes useCart desde aquí, solo el contexto
+//  NO exportes useCart desde aquí, solo el contexto
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

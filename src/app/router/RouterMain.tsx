@@ -31,6 +31,7 @@ import { FavoritesPage } from "../../pages/FavoritesPage";
 import { MyOrdersPage } from "../../pages/MyOrdersPage";
 import { MyAccountPage } from "../../pages/MyAccountPage";
 import { Backup } from "../../features/admin/pages/Backup";
+import { OrderSuccessPage } from "../../pages/OrderSuccessPage";
 export const Router = () => {
   return (
     <BrowserRouter>
@@ -70,12 +71,8 @@ export const Router = () => {
               </RequireRole>
             }
           />
+          <Route path="success" element={<OrderSuccessPage />} />
 
-
-
-
-
-          
         </Route>
 
         {/* rutas de admin aquí  mas autenticado */}
@@ -98,7 +95,7 @@ export const Router = () => {
           <Route path="listar-producto" element={<ListaProductosPage />} />
           <Route path="registrar-producto" element={<ProductCreateForm />} />
           <Route path="listarproveedores" element={<ListaProveedoresPage />} />
-                    <Route path="backup" element={<Backup />} />
+          <Route path="backup" element={<Backup />} />
 
           <Route
             path="registrar-proveedores"
@@ -116,3 +113,4 @@ export const Router = () => {
     </BrowserRouter>
   );
 };
+

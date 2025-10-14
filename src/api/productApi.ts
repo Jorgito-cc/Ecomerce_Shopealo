@@ -1,4 +1,3 @@
-// src/api/productApi.ts
 import { http } from "./http";
 import type { ProductDTO, CreateProductDTO, UpdateProductDTO } from "../types/product";
 

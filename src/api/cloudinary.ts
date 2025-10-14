@@ -1,4 +1,3 @@
-// src/api/cloudinary.ts
 export async function uploadImageToCloudinary(file: File): Promise<string> {
   const cloud = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME as string;
   const preset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET as string;

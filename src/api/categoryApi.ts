@@ -1,4 +1,3 @@
-// src/api/category.ts
 import { http } from "./http";
 import type { Category, CreateCategoryDTO, UpdateCategoryDTO } from "../types/category";
 
