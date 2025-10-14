@@ -34,7 +34,15 @@ export const sections: Section[] = [
       { label: "Listar Proveedores", to: "/admin/listarproveedores" },
     ],
   },
-/*   {
+  {
+    key: "Caracteristicas",
+    icon: <FaClipboardList />,
+    title: "Caracteristicas",
+    items: [
+      { label: "Backup", to: "/admin/backup" },
+    ],
+  }, 
+  /*   {
     key: "ventas",
     icon: <FaClipboardList />,
     title: "Ventas",
