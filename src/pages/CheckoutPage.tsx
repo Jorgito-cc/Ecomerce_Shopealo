@@ -23,12 +23,13 @@ export const CheckoutPage: React.FC = () => {
     try {
       setLoading(true);
 
-      const payload = {
-        items: items.map((i) => ({
-          productId: i.id,
-          quantity: i.quantity,
-        })),
-      };
+    const payload = {
+  items: items.map((i) => ({
+    productId: i.id,
+    quantity: i.quantity,
+    subtotal: i.price * i.quantity, // ✅ agregado
+  })),
+};
 
       const response = await createCheckoutSession(payload);
       console.log("Stripe Session:", response);
