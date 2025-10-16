@@ -1,30 +1,25 @@
 import { useForm } from "react-hook-form";
 import { uploadImageToCloudinary } from "../../../api/cloudinary";
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"; // <-- Agregado useEffect
 import { createProduct } from "../../../api/productApi";
-import { getCategories } from "../../../api/categoryApi";
+import { getCategories } from "../../../api/categoryApi"; // <-- Importa la función para obtener categorías
 import type { CreateProductDTO } from "../../../types/product";
-import type { Category } from "../../../types/category";
-import { toast } from "react-toastify"; // ✅ Importamos Toastify
+import type { Category } from "../../../types/category"; // <-- Importa el tipo de categoría
 
+// **1. Añadido categoryId a FormValues**
 type FormValues = Omit<CreateProductDTO, "urlImage"> & {
   imageFile?: FileList;
-  categoryId: number;
+  categoryId: number; // <-- Añadido el ID de la categoría
 };
 
 export const ProductCreateForm: React.FC<{ onCreated?: () => void }> = ({ onCreated }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
-    setError,
-  } = useForm<FormValues>({ mode: "onTouched" });
-
+  const { register, handleSubmit, formState: { errors, isSubmitting }, reset, setError } =
+    useForm<FormValues>({ mode: "onTouched" });
   const [preview, setPreview] = useState<string | null>(null);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]); // <-- Estado para guardar las categorías
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
 
+  // Hook para cargar las categorías al inicio
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -35,7 +30,6 @@ export const ProductCreateForm: React.FC<{ onCreated?: () => void }> = ({ onCrea
         setError("root", {
           message: "No se pudieron cargar las categorías.",
         });
-        toast.error("❌ Error al cargar categorías");
       } finally {
         setIsLoadingCategories(false);
       }
@@ -50,10 +44,10 @@ export const ProductCreateForm: React.FC<{ onCreated?: () => void }> = ({ onCrea
         urlImage = await uploadImageToCloudinary(values.imageFile[0]);
       } else {
         setError("imageFile", { message: "Debes subir una imagen" });
-        toast.warning("⚠️ Debes subir una imagen antes de continuar");
         return;
       }
 
+      // **3. Ajustado el payload para incluir categoryId**
       const payload: CreateProductDTO = {
         name: values.name.trim(),
         description: values.description.trim(),
@@ -61,22 +55,19 @@ export const ProductCreateForm: React.FC<{ onCreated?: () => void }> = ({ onCrea
         stock: values.stock ? Number(values.stock) : undefined,
         stock_minimo: values.stock_minimo ? Number(values.stock_minimo) : undefined,
         urlImage,
-        categoryId: Number(values.categoryId),
+        categoryId: Number(values.categoryId), // <-- Añadido
       };
 
       await createProduct(payload);
-
-      toast.success("✅ Producto creado correctamente");
       reset();
       setPreview(null);
       onCreated?.();
     } catch (e: any) {
-      const message = e?.response?.data?.message ?? e.message ?? "Error al crear producto";
-      setError("root", { message });
-      toast.error(`❌ ${message}`);
+      setError("root", { message: e?.response?.data?.message ?? e.message ?? "Error al crear" });
     }
   };
 
+  // Muestra un mensaje de carga mientras se obtienen las categorías
   if (isLoadingCategories) {
     return (
       <div className="text-center py-12">
@@ -85,6 +76,7 @@ export const ProductCreateForm: React.FC<{ onCreated?: () => void }> = ({ onCrea
     );
   }
 
+  // Muestra un mensaje si no hay categorías disponibles
   if (categories.length === 0) {
     return (
       <div className="text-center py-12">
@@ -94,7 +86,7 @@ export const ProductCreateForm: React.FC<{ onCreated?: () => void }> = ({ onCrea
       </div>
     );
   }
-
+  
   return (
     <div className="max-w-2xl mx-auto bg-white dark:bg-slate-900 rounded-xl shadow p-6">
       <h1 className="text-3xl font-bold text-indigo-700 mb-6">Productos</h1>
@@ -105,7 +97,8 @@ export const ProductCreateForm: React.FC<{ onCreated?: () => void }> = ({ onCrea
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* Nombre */}
+        {/* ... (otros campos del formulario) ... */}
+        
         <div className="sm:col-span-1">
           <label className="text-sm">Nombre</label>
           <input
@@ -115,7 +108,6 @@ export const ProductCreateForm: React.FC<{ onCreated?: () => void }> = ({ onCrea
           {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
         </div>
 
-        {/* Precio */}
         <div className="sm:col-span-1">
           <label className="text-sm">Precio</label>
           <input
@@ -126,8 +118,7 @@ export const ProductCreateForm: React.FC<{ onCreated?: () => void }> = ({ onCrea
           />
           {errors.price && <p className="text-xs text-red-500">Precio inválido</p>}
         </div>
-
-        {/* Descripción */}
+        
         <div className="sm:col-span-2">
           <label className="text-sm">Descripción</label>
           <textarea
@@ -138,19 +129,17 @@ export const ProductCreateForm: React.FC<{ onCreated?: () => void }> = ({ onCrea
           {errors.description && <p className="text-xs text-red-500">{errors.description.message}</p>}
         </div>
 
-        {/* Stock */}
         <div>
           <label className="text-sm">Stock</label>
           <input type="number" {...register("stock")} className="w-full border p-2 rounded mt-1" />
         </div>
 
-        {/* Stock mínimo */}
         <div>
           <label className="text-sm">Stock mínimo</label>
           <input type="number" {...register("stock_minimo")} className="w-full border p-2 rounded mt-1" />
         </div>
 
-        {/* Categoría */}
+        {/* **2. Añadido el campo de selección de categoría** */}
         <div className="sm:col-span-2">
           <label className="text-sm">Categoría</label>
           <select
@@ -167,10 +156,11 @@ export const ProductCreateForm: React.FC<{ onCreated?: () => void }> = ({ onCrea
               </option>
             ))}
           </select>
-          {errors.categoryId && <p className="text-xs text-red-500">{errors.categoryId.message}</p>}
+          {errors.categoryId && (
+            <p className="text-xs text-red-500">{errors.categoryId.message}</p>
+          )}
         </div>
-
-        {/* Imagen */}
+        
         <div className="sm:col-span-2">
           <label className="text-sm">Imagen</label>
           <input
@@ -187,24 +177,11 @@ export const ProductCreateForm: React.FC<{ onCreated?: () => void }> = ({ onCrea
           {errors.imageFile && <p className="text-xs text-red-500">{errors.imageFile.message}</p>}
         </div>
 
-        {/* Botones */}
         <div className="sm:col-span-2 flex justify-end gap-3 mt-2">
-          <button
-            type="button"
-            onClick={() => {
-              reset();
-              setPreview(null);
-              toast.info("Formulario limpiado");
-            }}
-            className="px-4 py-2 bg-gray-300 rounded"
-          >
-            Cancelar
-          </button>
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
-          >
+          <button type="button" onClick={() => { reset(); setPreview(null); }}
+            className="px-4 py-2 bg-gray-300 rounded">Cancelar</button>
+          <button type="submit" disabled={isSubmitting}
+            className="px-4 py-2 bg-indigo-600 text-white rounded">
             {isSubmitting ? "Guardando..." : "Registrar"}
           </button>
         </div>
