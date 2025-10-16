@@ -25,7 +25,7 @@ export const sections: Section[] = [
     icon: <FaBox />,
     title: "Inventario",
     items: [
-      { label: "", to: "/admin/registrar-producto" },
+      { label: "Registrar Producto", to: "/admin/registrar-producto" },
       { label: "Listar Producto", to: "/admin/listar-producto" },
 
       { label: "Registrar Categoría", to: "/admin/registrar-categoria" },
@@ -53,7 +53,7 @@ export const sections: Section[] = [
   }, */
 ];
 
-export const soporteLink: LinkItem = { label: "Soporte", to: "/admin/soporte" };
+export const soporteLink: LinkItem = { label: "Soporte Tecnico", to: "/admin/soporte" };
 
 export const ManualLink: LinkItem = { label: "Manual Tecnico", to: "/admin/manual" };
 export const ManualteoricoLink: LinkItem = { label: "Manual", to: "/admin/manualteorico" };

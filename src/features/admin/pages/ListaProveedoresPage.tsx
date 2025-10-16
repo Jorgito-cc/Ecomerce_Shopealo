@@ -3,6 +3,7 @@ import type { ProviderDTO, UpdateProviderDTO } from "../../../types/provider";
 import { getProviders, updateProvider } from "../../../api/providerApi"; // ¡OJO!
 import { ProviderEditModal } from "../components/ProviderEditModal";
 import { deleteProvider } from "../../../api/providerApi";
+import { toast } from "react-toastify";
 
 export const ListaProveedoresPage: React.FC = () => {
   const [rows, setRows] = useState<ProviderDTO[]>([]);
@@ -11,17 +12,28 @@ export const ListaProveedoresPage: React.FC = () => {
   const load = async () => setRows(await getProviders());
   useEffect(() => { load(); }, []);
 
-  const onSave = async (patch: UpdateProviderDTO) => {
-    if (!editing) return;
+const onSave = async (patch: UpdateProviderDTO) => {
+  if (!editing) return;
+  try {
     const updated = await updateProvider(editing.id, patch);
     setRows(prev => prev.map(p => (p.id === updated.id ? updated : p)));
-  };
+    toast.success("Proveedor actualizado correctamente ✅");
+  } catch (e: any) {
+    toast.error(e?.response?.data?.message ?? "Error al actualizar proveedor ❌");
+  }
+};
 
-  const onDelete = async (id: number) => {
-    if (!confirm("¿Eliminar proveedor?")) return;
+const onDelete = async (id: number) => {
+  if (!confirm("¿Eliminar proveedor?")) return;
+  try {
     await deleteProvider(id);
     setRows(prev => prev.filter(p => p.id !== id));
-  };
+    toast.info("Proveedor eliminado correctamente 🗑️");
+  } catch (e: any) {
+    toast.error("Error al eliminar proveedor ❌");
+  }
+};
+
 
   return (
     <section className="px-4 py-10 max-w-7xl mx-auto">

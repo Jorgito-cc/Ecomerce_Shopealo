@@ -22,12 +22,18 @@ export const createProvider = async (payload: CreateProviderDTO): Promise<Provid
 };
 
 // PATCH /provider/:id
-export const updateProvider = async (id: number, payload: UpdateProviderDTO): Promise<ProviderDTO> => {
-  const { data } = await http.patch<ProviderDTO>(`/api/v1/provider/${id}`, payload, {
-    headers: { "Content-Type": "application/json" },
-  });
+export const updateProvider = async (
+  id: number,
+  payload: UpdateProviderDTO
+): Promise<ProviderDTO> => {
+  const { data } = await http.patch<ProviderDTO>(
+    `/api/v1/provider/${id}`,
+    payload // ✅ sin stringify, sin headers forzados
+  );
   return data;
 };
+
+
 
 // DELETE /provider/:id
 export const deleteProvider = async (id: number): Promise<void> => {
