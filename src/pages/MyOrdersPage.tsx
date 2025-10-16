@@ -19,18 +19,22 @@ export const ReportesPage: React.FC = () => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
-  const fetchReport = async () => {
-    try {
-      setLoading(true);
-      const data = await getFilteredOrders(filters);
-      setOrders(data);
-    } catch (err) {
-      console.error("❌ Error al obtener reporte:", err);
-      alert("Error al cargar el reporte");
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchReport = async () => {
+  try {
+    setLoading(true);
+    const data = await getFilteredOrders({
+      ...filters,
+      minTotal: filters.minTotal ? Number(filters.minTotal) : undefined,
+      maxTotal: filters.maxTotal ? Number(filters.maxTotal) : undefined,
+    });
+    setOrders(data);
+  } catch (err) {
+    console.error("❌ Error al obtener reporte:", err);
+    alert("Error al cargar el reporte");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const exportPDF = () => {
     const doc = new jsPDF();
@@ -62,37 +66,39 @@ export const ReportesPage: React.FC = () => {
       {/* Filtros */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6 bg-white p-4 rounded-xl shadow">
         <div>
-          <label className="block text-sm text-gray-600">Desde</label>
-          <input
-            type="date"
-            name="dateStart"
-            value={filters.dateStart}
-            onChange={handleChange}
-            className="w-full border rounded-lg p-2"
-          />
-        </div>
-        <div>
-          <label className="block text-sm text-gray-600">Hasta</label>
-          <input
-            type="date"
-            name="dateEnd"
-            value={filters.dateEnd}
-            onChange={handleChange}
-            className="w-full border rounded-lg p-2"
-          />
-        </div>
-        <div>
-          <label className="block text-sm text-gray-600">Estado</label>
-          <select
-            name="status"
-            value={filters.status}
-            onChange={handleChange}
-            className="w-full border rounded-lg p-2"
-          >
-            <option value="">Todos</option>
-            <option value="PAGADO">Pagado</option>
-            <option value="PENDIENTE">Pendiente</option>
-          </select>
+        <label htmlFor="dateStart" className="block text-sm text-gray-600">Desde</label>
+<input
+  id="dateStart"
+  type="date"
+  name="dateStart"
+  value={filters.dateStart}
+  onChange={handleChange}
+  className="w-full border rounded-lg p-2"
+/>
+
+<label htmlFor="dateEnd" className="block text-sm text-gray-600">Hasta</label>
+<input
+  id="dateEnd"
+  type="date"
+  name="dateEnd"
+  value={filters.dateEnd}
+  onChange={handleChange}
+  className="w-full border rounded-lg p-2"
+/>
+
+<label htmlFor="status" className="block text-sm text-gray-600">Estado</label>
+<select
+  id="status"
+  name="status"
+  value={filters.status}
+  onChange={handleChange}
+  className="w-full border rounded-lg p-2"
+>
+  <option value="">Todos</option>
+  <option value="PAGADO">Pagado</option>
+  <option value="PENDIENTE">Pendiente</option>
+</select>
+
         </div>
         <div>
           <label className="block text-sm text-gray-600">Precio mínimo</label>
