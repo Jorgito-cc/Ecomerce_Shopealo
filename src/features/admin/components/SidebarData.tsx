@@ -32,6 +32,8 @@ export const sections: Section[] = [
       { label: "Registrar Proveedores", to: "/admin/registrar-proveedores" },
 
       { label: "Listar Proveedores", to: "/admin/listarproveedores" },
+            { label: "Listar ORdenes", to: "/admin/ordenes" },
+
     ],
   },
   {
@@ -40,6 +42,8 @@ export const sections: Section[] = [
     title: "Caracteristicas",
     items: [
       { label: "Backup", to: "/admin/backup" },
+     { label: "Reportes", to: "/admin/reportes" },
+
     ],
   }, 
   /*   {

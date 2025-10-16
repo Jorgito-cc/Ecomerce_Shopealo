@@ -32,6 +32,7 @@ import { MyOrdersPage } from "../../pages/MyOrdersPage";
 import { MyAccountPage } from "../../pages/MyAccountPage";
 import { Backup } from "../../features/admin/pages/Backup";
 import { OrderSuccessPage } from "../../pages/OrderSuccessPage";
+import OrdersAdminPage from "../../features/admin/pages/OrdersAdminPage";
 export const Router = () => {
   return (
     <BrowserRouter>
@@ -96,6 +97,8 @@ export const Router = () => {
           <Route path="registrar-producto" element={<ProductCreateForm />} />
           <Route path="listarproveedores" element={<ListaProveedoresPage />} />
           <Route path="backup" element={<Backup />} />
+                    <Route path="ordenes" element={<OrdersAdminPage />} />
+
 
           <Route
             path="registrar-proveedores"
