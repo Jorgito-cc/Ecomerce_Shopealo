@@ -6,22 +6,26 @@ type FavoriteResponse = {
   producto: ProductDTO;
 };
 
-// ✅ Obtener todos los favoritos del usuario
+// ✅ Obtener todos los favoritos del usuario autenticado
 export const getFavorites = async (): Promise<ProductDTO[]> => {
   const { data } = await http.get<FavoriteResponse[]>("/api/v1/favoritos", {
-    headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    },
   });
-  // Extraemos solo el producto de cada favorito
+  // el backend devuelve un array de {id, producto}, mapeamos solo el producto
   return data.map((f) => f.producto);
 };
 
 // ✅ Agregar producto a favoritos
 export const addFavorite = async (productId: number): Promise<ProductDTO> => {
   const { data } = await http.post<FavoriteResponse>(
-    `/favoritos/${productId}`,
+    `/api/v1/favoritos/${productId}`,
     {},
     {
-      headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
     }
   );
   return data.producto;
@@ -29,7 +33,9 @@ export const addFavorite = async (productId: number): Promise<ProductDTO> => {
 
 // ✅ Eliminar producto de favoritos
 export const removeFavorite = async (productId: number): Promise<void> => {
-  await http.delete(`/favoritos/${productId}`, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
+  await http.delete(`/api/v1/favoritos/${productId}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    },
   });
 };
