@@ -2,8 +2,8 @@ import { Navbar } from "../../shared/components/Navbar";
 
 import { Outlet } from "react-router-dom";
 import { Footer } from "../../shared/components/Footer";
-import { ToastContainer } from "react-toastify";
-
+/* import { ToastContainer } from "react-toastify";
+ */
 export const MainLayout = () => {
   return (
     <>
