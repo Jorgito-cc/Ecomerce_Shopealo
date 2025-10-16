@@ -1,4 +1,3 @@
-// src/pages/RecomendacionesPage.tsx
 import React, { useEffect, useState } from "react";
 import { http } from "../../../api/http";
 import { toast } from "react-toastify";
@@ -16,15 +15,20 @@ export const RecomendacionesPage: React.FC = () => {
   const [modelo, setModelo] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
-  // 🔁 Función para reentrenar modelos automáticamente
-  const retrainModel = async () => {
+  // 🔁 Función para reentrenar modelos (solo si no se ha hecho en esta sesión)
+  const retrainModel = async (): Promise<boolean> => {
+    const alreadyTrained = sessionStorage.getItem("ml_retrained");
+    if (alreadyTrained) return true; // ya se reentrenó en esta sesión
+
     try {
       const { data } = await http.get("/api/v1/recomendaciones/reentrenar", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       });
+
       toast.info(data.message || "Modelos reentrenados con éxito 🔁");
+      sessionStorage.setItem("ml_retrained", "true"); // ✅ Marcamos como hecho
       return true;
     } catch (err) {
       console.error("❌ Error al reentrenar modelos:", err);
@@ -33,7 +37,7 @@ export const RecomendacionesPage: React.FC = () => {
     }
   };
 
-  // 📦 Función para obtener recomendaciones
+  // 📦 Obtener recomendaciones personalizadas
   const fetchRecomendaciones = async () => {
     try {
       const { data } = await http.get<RecomendacionResponse>(
@@ -55,11 +59,11 @@ export const RecomendacionesPage: React.FC = () => {
     }
   };
 
-  // 🚀 Al montar la página → reentrena y luego trae recomendaciones
+  // 🚀 Al montar la página → reentrena si no se hizo aún, luego carga recomendaciones
   useEffect(() => {
     const init = async () => {
       setLoading(true);
-      const ok = await retrainModel(); // se reentrena automáticamente
+      const ok = await retrainModel(); // solo ejecuta la primera vez
       if (ok) await fetchRecomendaciones();
       else setLoading(false);
     };
