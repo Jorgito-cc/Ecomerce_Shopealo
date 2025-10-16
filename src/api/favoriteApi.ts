@@ -15,11 +15,11 @@ export const getFavorites = async (): Promise<ProductDTO[]> => {
 
 // ✅ Agregar producto a favoritos
 export const addFavorite = async (productId: number): Promise<ProductDTO> => {
-  const { data } = await http.post<FavoriteResponse>(`/favoritos/${productId}`, {});
+  const { data } = await http.post<FavoriteResponse>(`favoritos/${productId}`, {});
   return data.producto;
 };
 
 // ✅ Eliminar producto de favoritos
 export const removeFavorite = async (productId: number): Promise<void> => {
-  await http.delete(`/favoritos/${productId}`);
+  await http.delete(`avoritos/${productId}`);
 };
