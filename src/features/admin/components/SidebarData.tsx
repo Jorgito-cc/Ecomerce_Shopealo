@@ -25,7 +25,7 @@ export const sections: Section[] = [
     icon: <FaBox />,
     title: "Inventario",
     items: [
-      { label: "Registrar Producto", to: "/admin/registrar-producto" },
+      { label: "", to: "/admin/registrar-producto" },
       { label: "Listar Producto", to: "/admin/listar-producto" },
 
       { label: "Registrar Categoría", to: "/admin/registrar-categoria" },
