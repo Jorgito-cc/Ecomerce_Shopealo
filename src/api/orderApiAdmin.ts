@@ -1,6 +1,7 @@
-import { http } from './http';
+// src/api/orderApiAdmin.ts
+import { http } from "./http";
 
-export type OrderItemDTO = {
+export type OrderProduct = {
   id: number;
   quantity: number;
   subtotal: number;
@@ -12,16 +13,29 @@ export type OrderItemDTO = {
   };
 };
 
-export type OrderDTO = {
+export type OrderAdmin = {
   id: number;
-  status: string;
   total: number;
-  createdAt: string;
-  usuario: { id: number; name?: string; email?: string } | null;
-  items: OrderItemDTO[];
+  status: string;
+  date: string;
+  usuario?: {
+    id: number;
+    nombre?: string;
+    email?: string;
+  };
+  orderProducts: OrderProduct[];
 };
 
-export const getAllOrders = async (): Promise<OrderDTO[]> => {
-  const { data } = await http.get<OrderDTO[]>('/api/v1/order');
+export const getAllOrders = async (): Promise<OrderAdmin[]> => {
+  const token = localStorage.getItem("access_token");
+  if (!token) throw new Error("Token no encontrado. Usuario no autenticado.");
+
+  const { data } = await http.get<OrderAdmin[]>("/api/v1/order", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log("📦 Órdenes de todos los usuarios:", data);
   return data;
 };

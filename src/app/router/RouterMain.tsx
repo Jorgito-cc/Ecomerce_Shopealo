@@ -98,10 +98,7 @@ export const Router = () => {
           <Route path="backup" element={<Backup />} />
           <Route path="ordenesAdmin" element={<OrdersAdminPage />} />
 
-          <Route
-            path="registrar-proveedores"
-            element={<RegistrarProveedorPage />}
-          />
+          <Route path="registrar-proveedores" element={<RegistrarProveedorPage />} />
 
           <Route
             path="registrar-empleado"
