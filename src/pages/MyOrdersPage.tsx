@@ -80,17 +80,18 @@ if (loading)
                   </h2>
                   <p className="text-sm text-gray-500">Fecha: {order.date}</p>
                 </div>
-                <span
-                  className={`px-3 py-1 text-sm font-medium rounded-full ${
-                    order.status === "COMPLETED"
-                      ? "bg-green-100 text-green-700"
-                      : order.status === "PENDING"
-                      ? "bg-yellow-100 text-yellow-700"
-                      : "bg-gray-100 text-gray-700"
-                  }`}
-                >
-                  {order.status}
-                </span>
+            <span
+  className={`px-3 py-1 text-sm font-medium rounded-full ${
+    order.status === "PAGADO"
+      ? "bg-green-100 text-green-700"
+      : order.status === "PENDIENTE"
+      ? "bg-yellow-100 text-yellow-700"
+      : "bg-gray-100 text-gray-700"
+  }`}
+>
+  {order.status}
+</span>
+
               </div>
 
               <div className="space-y-4">

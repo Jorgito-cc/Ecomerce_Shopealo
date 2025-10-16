@@ -8,8 +8,8 @@ export type ProductDTO = {
   stock_minimo?: number;
   urlImage: string;
   category?: {
-id: number;
-name: string; };
+  id: number;
+  name: string; };
 };
 
 export type CreateProductDTO = {

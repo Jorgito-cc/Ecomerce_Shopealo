@@ -22,10 +22,15 @@ export type Order = {
 
 // 🔥 Llama al endpoint protegido del backend
 export const getClientOrders = async (): Promise<Order[]> => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("Token no encontrado. El usuario no está autenticado.");
+  }
+
   const { data } = await http.get<Order[]>("/api/v1/order/client-history", {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
+    headers: { Authorization: `Bearer ${token}` },
   });
+
+  console.log("🟢 Órdenes recibidas:", data); // <-- agrega esto temporalmente
   return data;
 };
