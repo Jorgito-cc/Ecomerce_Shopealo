@@ -18,7 +18,7 @@ export const getFavorites = async (): Promise<ProductDTO[]> => {
 // ✅ Agregar producto a favoritos
 export const addFavorite = async (productId: number): Promise<ProductDTO> => {
   const { data } = await http.post<FavoriteResponse>(
-    `/api/v1/favoritos/${productId}`,
+    `/favoritos/${productId}`,
     {},
     {
       headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
@@ -29,7 +29,7 @@ export const addFavorite = async (productId: number): Promise<ProductDTO> => {
 
 // ✅ Eliminar producto de favoritos
 export const removeFavorite = async (productId: number): Promise<void> => {
-  await http.delete(`/api/v1/favoritos/${productId}`, {
+  await http.delete(`/favoritos/${productId}`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
   });
 };
