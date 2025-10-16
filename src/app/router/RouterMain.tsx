@@ -73,7 +73,6 @@ export const Router = () => {
             }
           />
           <Route path="success" element={<OrderSuccessPage />} />
-
         </Route>
 
         {/* rutas de admin aquí  mas autenticado */}
@@ -97,8 +96,7 @@ export const Router = () => {
           <Route path="registrar-producto" element={<ProductCreateForm />} />
           <Route path="listarproveedores" element={<ListaProveedoresPage />} />
           <Route path="backup" element={<Backup />} />
-                    <Route path="ordenes" element={<OrdersAdminPage />} />
-
+          <Route path="ordenesAdmin" element={<OrdersAdminPage />} />
 
           <Route
             path="registrar-proveedores"
@@ -116,4 +114,3 @@ export const Router = () => {
     </BrowserRouter>
   );
 };
-
