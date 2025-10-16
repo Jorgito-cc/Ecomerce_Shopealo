@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getFilteredOrders } from "../../../../api/reportApi";
+import { getFilteredOrders } from "../api/reportApi";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
