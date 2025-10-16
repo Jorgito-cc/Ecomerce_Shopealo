@@ -107,12 +107,13 @@ if (loading)
                     />
                     <div>
                       <h4 className="font-medium">{item.product.name}</h4>
-                      <p className="text-sm text-gray-600">
-                        Bs {item.product.price} × {item.quantity}
-                      </p>
+                    <p className="text-sm text-gray-600">
+  Bs {Number(item.product.price)} × {item.quantity}
+</p>
+
                     </div>
                     <div className="ml-auto font-semibold">
-                      Bs {(item.product.price * item.quantity).toFixed(2)}
+Bs {(Number(item.product.price) * item.quantity).toFixed(2)}
                     </div>
                   </div>
                 ))}
