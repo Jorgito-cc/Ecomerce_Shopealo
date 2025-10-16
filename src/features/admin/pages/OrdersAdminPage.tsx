@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { getAllOrders, type OrderAdmin } from "../../../api/orderApiAdmin";
 
-export const OrdersAdminPage: React.FC = () => {
+const OrdersAdminPage: React.FC = () => {
   const [orders, setOrders] = useState<OrderAdmin[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -105,7 +105,7 @@ export const OrdersAdminPage: React.FC = () => {
                       </span>
                     </td>
                     <td className="px-4 py-3 text-right font-semibold">
-                      Bs {order.total.toFixed(2)}
+                      Bs {Number(order.total).toFixed(2)}
                     </td>
                     <td className="px-4 py-3 text-center">
                       <button
@@ -138,11 +138,11 @@ export const OrdersAdminPage: React.FC = () => {
                                   </div>
                                   <div className="text-xs text-gray-500">
                                     Cantidad: {item.quantity} · Precio: Bs{" "}
-                                    {item.product.price.toFixed(2)}
+                                    {Number(item.product.price).toFixed(2)}
                                   </div>
                                   <div className="text-sm font-semibold">
                                     Subtotal: Bs{" "}
-                                    {(item.product.price * item.quantity).toFixed(2)}
+                                    {(Number(item.product.price) * item.quantity).toFixed(2)}
                                   </div>
                                 </div>
                               </div>
@@ -157,10 +157,7 @@ export const OrdersAdminPage: React.FC = () => {
 
             {orders.length === 0 && (
               <tr>
-                <td
-                  colSpan={6}
-                  className="px-4 py-6 text-center text-gray-500"
-                >
+                <td colSpan={6} className="px-4 py-6 text-center text-gray-500">
                   No hay órdenes registradas.
                 </td>
               </tr>

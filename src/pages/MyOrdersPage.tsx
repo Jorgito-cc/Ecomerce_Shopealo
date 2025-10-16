@@ -1,132 +1,182 @@
-import React, { useEffect, useState } from "react";
-import { getClientOrders } from "./../api/orderApi";
-import type { Order } from "../api/orderApi";
+import React, { useState } from "react";
+import { getFilteredOrders } from "../../../../api/reportApi";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
+export const ReportesPage: React.FC = () => {
+  const [filters, setFilters] = useState({
+    dateStart: "",
+    dateEnd: "",
+    status: "",
+    minTotal: "",
+    maxTotal: "",
+    productName: "",
+  });
+  const [orders, setOrders] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
-export const MyOrdersPage: React.FC = () => {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFilters({ ...filters, [e.target.name]: e.target.value });
+  };
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        setLoading(true);
-        const data = await getClientOrders();
-        setOrders(data);
-      } catch (err: any) {
-        console.error("Error obteniendo órdenes:", err);
-        setError("No se pudieron cargar tus órdenes.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchReport = async () => {
+    try {
+      setLoading(true);
+      const data = await getFilteredOrders(filters);
+      setOrders(data);
+    } catch (err) {
+      console.error("❌ Error al obtener reporte:", err);
+      alert("Error al cargar el reporte");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchOrders();
-  }, []);
-if (loading)
+  const exportPDF = () => {
+    const doc = new jsPDF();
+    doc.text("📊 Reporte de Órdenes", 14, 15);
+
+    const tableData = orders.map((o) => [
+      o.id,
+      o.usuario?.nombre || "—",
+      o.date,
+      o.status,
+      `Bs ${o.total.toFixed(2)}`,
+    ]);
+
+    autoTable(doc, {
+      startY: 25,
+      head: [["ID", "Cliente", "Fecha", "Estado", "Total"]],
+      body: tableData,
+    });
+
+    doc.save("reporte_ordenes.pdf");
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center py-20 text-gray-600">
-      <svg
-        className="animate-spin h-8 w-8 mb-3 text-blue-600"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <circle
-          className="opacity-25"
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          strokeWidth="4"
-        />
-        <path
-          className="opacity-75"
-          fill="currentColor"
-          d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-        />
-      </svg>
-      Cargando tus órdenes...
-    </div>
-  );
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6 text-gray-800">
+        Reportes Dinámicos de Órdenes 📑
+      </h1>
 
-  if (error)
-    return (
-      <div className="text-center text-red-500 py-20 font-medium">
-        {error}
+      {/* Filtros */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6 bg-white p-4 rounded-xl shadow">
+        <div>
+          <label className="block text-sm text-gray-600">Desde</label>
+          <input
+            type="date"
+            name="dateStart"
+            value={filters.dateStart}
+            onChange={handleChange}
+            className="w-full border rounded-lg p-2"
+          />
+        </div>
+        <div>
+          <label className="block text-sm text-gray-600">Hasta</label>
+          <input
+            type="date"
+            name="dateEnd"
+            value={filters.dateEnd}
+            onChange={handleChange}
+            className="w-full border rounded-lg p-2"
+          />
+        </div>
+        <div>
+          <label className="block text-sm text-gray-600">Estado</label>
+          <select
+            name="status"
+            value={filters.status}
+            onChange={handleChange}
+            className="w-full border rounded-lg p-2"
+          >
+            <option value="">Todos</option>
+            <option value="PAGADO">Pagado</option>
+            <option value="PENDIENTE">Pendiente</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm text-gray-600">Precio mínimo</label>
+          <input
+            type="number"
+            name="minTotal"
+            value={filters.minTotal}
+            onChange={handleChange}
+            placeholder="Ej. 100"
+            className="w-full border rounded-lg p-2"
+          />
+        </div>
+        <div>
+          <label className="block text-sm text-gray-600">Precio máximo</label>
+          <input
+            type="number"
+            name="maxTotal"
+            value={filters.maxTotal}
+            onChange={handleChange}
+            placeholder="Ej. 5000"
+            className="w-full border rounded-lg p-2"
+          />
+        </div>
+        <div>
+          <label className="block text-sm text-gray-600">Producto</label>
+          <input
+            type="text"
+            name="productName"
+            value={filters.productName}
+            onChange={handleChange}
+            placeholder="Ej. Laptop"
+            className="w-full border rounded-lg p-2"
+          />
+        </div>
       </div>
-    );
 
-  return (
-    <div className="container mx-auto p-8">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Mis Órdenes</h1>
+      {/* Botones */}
+      <div className="flex gap-4 mb-6">
+        <button
+          onClick={fetchReport}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+        >
+          Generar Reporte
+        </button>
+        {orders.length > 0 && (
+          <button
+            onClick={exportPDF}
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+          >
+            Descargar PDF
+          </button>
+        )}
+      </div>
 
-      {orders.length === 0 ? (
-        <div className="text-center text-gray-500 py-10">
-          <p>No tienes órdenes previas.</p>
+      {/* Resultados */}
+      {loading ? (
+        <p className="text-gray-500">Cargando resultados...</p>
+      ) : orders.length > 0 ? (
+        <div className="overflow-x-auto rounded-lg border bg-white shadow">
+          <table className="min-w-full text-sm">
+            <thead className="bg-gray-50 text-gray-700 uppercase text-xs">
+              <tr>
+                <th className="px-4 py-3 text-left">#</th>
+                <th className="px-4 py-3 text-left">Cliente</th>
+                <th className="px-4 py-3 text-left">Fecha</th>
+                <th className="px-4 py-3 text-left">Estado</th>
+                <th className="px-4 py-3 text-right">Total</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y">
+              {orders.map((o) => (
+                <tr key={o.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-3">{o.id}</td>
+                  <td className="px-4 py-3">{o.usuario?.nombre || "—"}</td>
+                  <td className="px-4 py-3">{o.date}</td>
+                  <td className="px-4 py-3">{o.status}</td>
+                  <td className="px-4 py-3 text-right">Bs {o.total.toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       ) : (
-        <div className="space-y-6">
-          {orders.map((order) => (
-            <div
-              key={order.id}
-              className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition"
-            >
-              <div className="flex justify-between items-center border-b pb-4 mb-4">
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-700">
-                    Orden #{order.id}
-                  </h2>
-                  <p className="text-sm text-gray-500">Fecha: {order.date}</p>
-                </div>
-            <span
-  className={`px-3 py-1 text-sm font-medium rounded-full ${
-    order.status === "PAGADO"
-      ? "bg-green-100 text-green-700"
-      : order.status === "PENDIENTE"
-      ? "bg-yellow-100 text-yellow-700"
-      : "bg-gray-100 text-gray-700"
-  }`}
->
-  {order.status}
-</span>
-
-              </div>
-
-              <div className="space-y-4">
-                {order.orderProducts.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex items-center gap-4 border-b pb-2"
-                  >
-                    <img
-                      src={item.product.urlImage}
-                      alt={item.product.name}
-                      className="w-16 h-16 object-cover rounded"
-                    />
-                    <div>
-                      <h4 className="font-medium">{item.product.name}</h4>
-                    <p className="text-sm text-gray-600">
-  Bs {Number(item.product.price)} × {item.quantity}
-</p>
-
-                    </div>
-                    <div className="ml-auto font-semibold">
-Bs {(Number(item.product.price) * item.quantity).toFixed(2)}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-4 pt-4 border-t text-right">
-                <span className="text-lg font-bold text-gray-800">
-                  Total: Bs {order.total.toFixed(2)}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
+        <p className="text-gray-500">No hay resultados.</p>
       )}
     </div>
   );

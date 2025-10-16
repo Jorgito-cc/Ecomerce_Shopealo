@@ -8,9 +8,15 @@ export type OrderProduct = {
   product: {
     id: number;
     name: string;
-    price: number;
+    price: string; // el backend te lo envía como string
     urlImage: string;
   };
+};
+
+export type UsuarioInfo = {
+  id: number;
+  nombre: string;
+  email: string;
 };
 
 export type OrderAdmin = {
@@ -18,11 +24,7 @@ export type OrderAdmin = {
   total: number;
   status: string;
   date: string;
-  usuario?: {
-    id: number;
-    nombre?: string;
-    email?: string;
-  };
+  usuario: UsuarioInfo;
   orderProducts: OrderProduct[];
 };
 
@@ -31,9 +33,7 @@ export const getAllOrders = async (): Promise<OrderAdmin[]> => {
   if (!token) throw new Error("Token no encontrado. Usuario no autenticado.");
 
   const { data } = await http.get<OrderAdmin[]>("/api/v1/order", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { Authorization: `Bearer ${token}` },
   });
 
   console.log("📦 Órdenes de todos los usuarios:", data);
