@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { getFilteredOrders } from "../api/reportApi";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { MyOrdersPage } from "../features/admin/pages/MyOrdersPage";
 
 export const ReportesPage: React.FC = () => {
   const [filters, setFilters] = useState({
@@ -59,6 +60,7 @@ const fetchReport = async () => {
 
   return (
     <div className="p-6">
+      <MyOrdersPage/>
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
         Reportes Dinámicos de Órdenes 📑
       </h1>
