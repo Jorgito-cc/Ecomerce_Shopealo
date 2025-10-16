@@ -5,6 +5,7 @@ import type { ProductDTO } from '../types/product';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { RecomendacionesPage } from '../features/admin/pages/RecomendacionesPage';
 
 export const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -83,6 +84,7 @@ export const ProductDetail: React.FC = () => {
           </button>
         </div>
       </div>
+      <RecomendacionesPage/>
     </div>
   );
 };
