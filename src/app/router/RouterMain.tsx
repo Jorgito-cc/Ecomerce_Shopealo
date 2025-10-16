@@ -28,11 +28,11 @@ import { Manual } from "../../features/admin/manual/Manual";
 import ManuaTeorico from "../../features/admin/manual/ManuaTeorico";
 import { ProductDetail } from "../../shared/ProductDetail";
 import { FavoritesPage } from "../../pages/FavoritesPage";
-import { MyOrdersPage } from "../../pages/MyOrdersPage";
-import { MyAccountPage } from "../../pages/MyAccountPage";
 import { Backup } from "../../features/admin/pages/Backup";
 import { OrderSuccessPage } from "../../pages/OrderSuccessPage";
 import OrdersAdminPage from "../../features/admin/pages/OrdersAdminPage";
+import { ReportesPage } from "../../pages/ReportesPage";
+import { MyAccountPage } from "../../pages/MyAccountPage";
 export const Router = () => {
   return (
     <BrowserRouter>
@@ -57,7 +57,7 @@ export const Router = () => {
           <Route path="all-products" element={<ProductGrid />} />
           <Route path="product/:id" element={<ProductDetail />} />
           <Route path="product/:id" element={<ProductDetail />} />
-          <Route path="misordenes" element={<MyOrdersPage />} />
+          <Route path="misordenes" element={<ReportesPage />} />
           <Route path="micuenta" element={<MyAccountPage />} />
 
           <Route path="favorites" element={<FavoritesPage />} />
