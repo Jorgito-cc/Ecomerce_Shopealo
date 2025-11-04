@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"; // 👈 para obtener el id del producto actual
+import { useParams } from "react-router-dom";
 import { http } from "../../../api/http";
 import { toast } from "react-toastify";
 import { ProductCard } from "../../../shared/components/ProductCard";
@@ -7,60 +7,40 @@ import type { ProductDTO } from "../../../types/product";
 
 type ItemRecomendacionResponse = {
   modelo: string;
-  producto_base?: ProductDTO;
+  producto_base: ProductDTO;
   recomendados: ProductDTO[];
 };
 
 type HybridRecomendacionResponse = {
   modelo: string;
-  usuario: number;
-  producto_base?: ProductDTO;
+  usuario?: number;
+  producto_base: ProductDTO;
   recomendados: ProductDTO[];
   alpha?: number;
 };
 
 export const RecomendacionesPage: React.FC = () => {
-  const { id } = useParams<{ id?: string }>(); // ✅ id del producto (si estamos en /product/:id)
+  const { id } = useParams<{ id: string }>(); // ✅ siempre debe venir el id del producto
   const [productos, setProductos] = useState<ProductDTO[]>([]);
   const [modelo, setModelo] = useState<string>("");
   const [productoBase, setProductoBase] = useState<ProductDTO | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // ✅ Selección de API base
+  // URLs base
   const FLASK_BASE = "https://flask-ml-service-production.up.railway.app";
   const BACKEND_BASE = "https://backend-ecommerce-production-0ef1.up.railway.app";
 
-  // 🔁 Función: obtener recomendaciones desde el servicio adecuado
-  const fetchRecomendaciones = async () => {
+  // 🔁 Solo consume el producto actual (híbrido o item-based)
+  const fetchRecomendacionesPorProducto = async () => {
+    if (!id) return;
+
     setLoading(true);
     try {
-      let data: ItemRecomendacionResponse | HybridRecomendacionResponse;
-
-      if (id) {
-        // 🧠 Si hay ID => intentamos con híbrido (prioridad) y fallback a item-based
-        try {
-          const res = await http.get<HybridRecomendacionResponse>(
-            `${BACKEND_BASE}/api/v1/recomendaciones/hibrido/${id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-              },
-            }
-          );
-          data = res.data;
-          toast.success("Recomendaciones híbridas cargadas 🎯");
-        } catch (hybridErr) {
-          console.warn("Fallo híbrido, usando item-based...");
-          const res = await http.get<ItemRecomendacionResponse>(
-            `${FLASK_BASE}/recomendaciones/item/${id}`
-          );
-          data = res.data;
-          toast.info("Recomendaciones basadas en producto 📦");
-        }
-      } else {
-        // 🧍 Si no hay ID, usar recomendación por usuario
+      // Primero intenta con el híbrido
+      let data: HybridRecomendacionResponse | ItemRecomendacionResponse;
+      try {
         const res = await http.get<HybridRecomendacionResponse>(
-          `${BACKEND_BASE}/api/v1/recomendaciones/usuario`,
+          `${BACKEND_BASE}/api/v1/recomendaciones/hibrido/${id}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -68,35 +48,42 @@ export const RecomendacionesPage: React.FC = () => {
           }
         );
         data = res.data;
-        toast.success("Recomendaciones personalizadas cargadas 💡");
+        toast.success("Recomendaciones híbridas cargadas 🎯");
+      } catch (err) {
+        console.warn("⚠️ Híbrido no disponible, usando item-based...");
+        const res = await http.get<ItemRecomendacionResponse>(
+          `${FLASK_BASE}/recomendaciones/item/${id}`
+        );
+        data = res.data;
+        toast.info("Recomendaciones basadas en producto 📦");
       }
 
       setModelo(data.modelo);
+      setProductoBase(data.producto_base);
       setProductos(data.recomendados || []);
-      setProductoBase((data as any).producto_base || null);
-    } catch (err) {
-      console.error("❌ Error al obtener recomendaciones:", err);
+    } catch (error) {
+      console.error("❌ Error al obtener recomendaciones:", error);
       toast.error("Error al obtener recomendaciones ❌");
     } finally {
       setLoading(false);
     }
   };
 
-  // 🚀 Cargar automáticamente
+  // 🚀 Cargar al montar o cambiar de producto
   useEffect(() => {
-    fetchRecomendaciones();
+    fetchRecomendacionesPorProducto();
   }, [id]);
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">
-        Recomendaciones 💡
-      </h1>
+    <div className="mt-10 px-4 sm:px-6 lg:px-8">
+      <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+        Recomendaciones <span className="text-yellow-500">💡</span>
+      </h2>
 
       {loading ? (
         <div className="text-center py-10 text-gray-500">
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p>Generando tus recomendaciones...</p>
+          <p>Generando recomendaciones para este producto...</p>
         </div>
       ) : (
         <>
@@ -108,16 +95,14 @@ export const RecomendacionesPage: React.FC = () => {
           </p>
 
           {productoBase && (
-            <div className="flex items-center gap-4 mb-8 border-b pb-4">
+            <div className="flex items-center gap-4 mb-6 border-b pb-4">
               <img
                 src={productoBase.urlImage}
                 alt={productoBase.name}
-                className="h-24 object-contain rounded"
+                className="h-20 w-20 object-contain rounded"
               />
               <div>
-                <h2 className="text-lg font-semibold text-gray-800">
-                  Producto base:
-                </h2>
+                <h3 className="font-semibold text-gray-800">Producto base:</h3>
                 <p className="text-gray-600">{productoBase.name}</p>
                 <p className="text-red-500 font-semibold">
                   Bs {productoBase.price}
@@ -128,7 +113,7 @@ export const RecomendacionesPage: React.FC = () => {
 
           {productos.length === 0 ? (
             <p className="text-center text-gray-500">
-              No hay recomendaciones disponibles.
+              No hay productos recomendados para este artículo.
             </p>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
