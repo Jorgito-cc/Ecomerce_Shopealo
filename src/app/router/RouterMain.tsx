@@ -34,6 +34,7 @@ import { ReportesPage } from "../../pages/ReportesPage";
 import { MyAccountPage } from "../../pages/MyAccountPage";
 import { RecomendacionesPage } from "../../features/admin/pages/RecomendacionesPage";
 import { RolesPage } from "../../features/admin/pages/RolesPage";
+import { DescuentoPage } from "../../features/admin/pages/DecuentoPage";
 
 export const Router = () => {
   return (
@@ -181,6 +182,8 @@ export const Router = () => {
               </RequireRole>
             }
           />
+          {/* descuentos */}
+          <Route path="descuento" element={<DescuentoPage />} />
 
           {/* 💾 Backup (sin permisos adicionales) */}
           <Route path="backup" element={<Backup />} />

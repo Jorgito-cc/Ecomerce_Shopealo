@@ -35,6 +35,8 @@ export const sections: Section[] = [
 
       { label: "Listar Proveedores", to: "/admin/listarproveedores" },
       { label: "Listar Ordenes", to: "/admin/ordenesAdmin" },
+            { label: "Descuento", to: "/admin/descuento" },
+
 
     ],
   },
