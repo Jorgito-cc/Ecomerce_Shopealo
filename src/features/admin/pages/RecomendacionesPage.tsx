@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios"; // ✅ usamos axios directo, no http (ya no necesitas token)
+import axios from "axios";
 import { toast } from "react-toastify";
 import { ProductCard } from "../../../shared/components/ProductCard";
 import type { ProductDTO } from "../../../types/product";
@@ -21,14 +21,21 @@ export const RecomendacionesPage: React.FC = () => {
   // URL base de tu microservicio Flask
   const FLASK_BASE = "https://flask-ml-service-production.up.railway.app";
 
-  // 🔁 Obtener recomendaciones item-based
+  // 🔁 Obtener recomendaciones item-based (con token)
   const fetchItemBasedRecomendaciones = async () => {
     if (!id) return;
     setLoading(true);
 
     try {
+      const token = localStorage.getItem("access_token");
+
       const res = await axios.get<ItemRecomendacionResponse>(
-        `${FLASK_BASE}/recomendaciones/item/${id}`
+        `${FLASK_BASE}/recomendaciones/item/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       const data = res.data;
@@ -36,9 +43,15 @@ export const RecomendacionesPage: React.FC = () => {
       setProductoBase(data.producto_base);
       setProductos(data.recomendados || []);
       toast.success("Recomendaciones cargadas correctamente 🎯");
-    } catch (error) {
+    } catch (error: any) {
       console.error("❌ Error al obtener recomendaciones:", error);
-      toast.error("Error al obtener recomendaciones ❌");
+      if (error.response?.status === 401) {
+        toast.error("No autorizado. Inicia sesión nuevamente 🔒");
+      } else if (error.response?.status === 403) {
+        toast.error("Acceso denegado a las recomendaciones 🚫");
+      } else {
+        toast.error("Error al obtener recomendaciones ❌");
+      }
     } finally {
       setLoading(false);
     }
