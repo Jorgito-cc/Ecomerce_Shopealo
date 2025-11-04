@@ -15,7 +15,6 @@ export const ProductDetail: React.FC = () => {
   const { addItem } = useCart();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
-
   useEffect(() => {
     const fetchProduct = async () => {
       if (!id) return;
@@ -84,7 +83,8 @@ export const ProductDetail: React.FC = () => {
           </button>
         </div>
       </div>
-      <RecomendacionesPage/>
+       {/* tu bloque de detalle del producto */}
+      <RecomendacionesPage key={id} /> {/* 👈 fuerza remount cuando cambia el producto */}
     </div>
   );
 };
