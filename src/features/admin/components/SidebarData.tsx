@@ -47,6 +47,8 @@ export const sections: Section[] = [
     items: [
       { label: "Backup", to: "/admin/backup" },
      { label: "Privilegio", to: "/admin/privilegio" },
+          { label: "Reportes", to: "/admin/reporte" },
+
 
     ],
   }, 
