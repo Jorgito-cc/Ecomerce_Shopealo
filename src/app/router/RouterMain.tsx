@@ -1,4 +1,3 @@
-// Router.tsx
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MainLayout } from "../layout/MainLayout";
 import { AdminLayout } from "../layout/AdminLayout";
@@ -35,73 +34,157 @@ import { ReportesPage } from "../../pages/ReportesPage";
 import { MyAccountPage } from "../../pages/MyAccountPage";
 import { RecomendacionesPage } from "../../features/admin/pages/RecomendacionesPage";
 import { RolesPage } from "../../features/admin/pages/RolesPage";
+
 export const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* ..................................Publico.............................  */}
+        {/* =================== PÚBLICAS =================== */}
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
           <Route path="contactanos" element={<Contact />} />
           <Route path="sobrenosotros" element={<About />} />
-     
+
           <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RedirectIfAuth> <RegisterPage /> </RedirectIfAuth> }  />
+          <Route
+            path="register"
+            element={
+              <RedirectIfAuth>
+                <RegisterPage />
+              </RedirectIfAuth>
+            }
+          />
 
           <Route path="recuperar" element={<RecuperarPasswordPage />} />
           <Route path="all-products" element={<ProductGrid />} />
           <Route path="product/:id" element={<ProductDetail />} />
-          <Route path="product/:id" element={<ProductDetail />} />
+          <Route path="recomendaciones/:id" element={<RecomendacionesPage />} />
+          <Route path="recomendaciones" element={<RecomendacionesPage />} />
 
-
-          {/* ############################################solo cliente mas autenticado .....................  */}
-          <Route path="checkout" element={<RequireRole allow={["CLIENTE", 2]}><CheckoutPage /></RequireRole> } />
+          {/* CLIENTE AUTENTICADO */}
+          <Route
+            path="checkout"
+            element={
+              <RequireRole allow={["CLIENTE", 2]}>
+                <CheckoutPage />
+              </RequireRole>
+            }
+          />
           <Route path="success" element={<OrderSuccessPage />} />
           <Route path="favorites" element={<FavoritesPage />} />
-          {/* 👇 Aquí agregas las nuevas rutas */}
-          <Route path="recomendaciones" element={<RecomendacionesPage />} />
-          <Route path="recomendaciones/:id" element={<RecomendacionesPage />} />
           <Route path="misordenes" element={<ReportesPage />} />
           <Route path="micuenta" element={<MyAccountPage />} />
           <Route path="cart" element={<CartPage />} />
         </Route>
 
-        {/* --------------------------------rutas de admin aquí  mas autenticado..................................... */}
+        {/* =================== ADMIN =================== */}
         <Route
           path="/admin"
           element={
-            <RequireRole allow={["ADMINISTRADOR", 1]} /* fallback="/403" */>
+            <RequireRole allow={["ADMINISTRADOR", 1]}>
               <AdminLayout />
             </RequireRole>
           }
         >
+          {/* =================== Módulos con control de permisos =================== */}
+
+          {/* 📊 Bitácora */}
           <Route path="bitacora" element={<BitacoraPage />} />
+
+          {/* 🧩 Soporte / Manuales */}
           <Route path="soporte" element={<Soporte />} />
           <Route path="manual" element={<Manual />} />
           <Route path="manualteorico" element={<ManuaTeorico />} />
 
-          <Route path="listausuario" element={<ListaUsuarioPage />} />
-          <Route path="registrar-categoria" element={<CategoriasPage />} />
+          {/* 👥 Usuarios */}
+          <Route
+            path="listausuario"
+            element={
+              <RequireRole allow={["ADMINISTRADOR", 1]} requirePermiso="EDITAR_USUARIO">
+                <ListaUsuarioPage />
+              </RequireRole>
+            }
+          />
 
-          <Route path="listar-producto" element={<ListaProductosPage />} />
-          <Route path="registrar-producto" element={<ProductCreateForm />} />
-          <Route path="listarproveedores" element={<ListaProveedoresPage />} />
-          <Route path="backup" element={<Backup />} />
-          <Route path="ordenesAdmin" element={<OrdersAdminPage />} />
-          <Route path="privilegio" element={<RolesPage />} />
+          {/* 📦 Categorías */}
+          <Route
+            path="registrar-categoria"
+            element={
+              <RequireRole allow={["ADMINISTRADOR", 1]} requirePermiso="CREAR_CATEGORIA">
+                <CategoriasPage />
+              </RequireRole>
+            }
+          />
 
+          {/* 🛒 Productos */}
+          <Route
+            path="listar-producto"
+            element={
+              <RequireRole allow={["ADMINISTRADOR", 1]} requirePermiso="CREAR_PRODUCTO">
+                <ListaProductosPage />
+              </RequireRole>
+            }
+          />
+          <Route
+            path="registrar-producto"
+            element={
+              <RequireRole allow={["ADMINISTRADOR", 1]} requirePermiso="CREAR_PRODUCTO">
+                <ProductCreateForm />
+              </RequireRole>
+            }
+          />
+
+          {/* 🚚 Proveedores */}
+          <Route
+            path="listarproveedores"
+            element={
+              <RequireRole allow={["ADMINISTRADOR", 1]} requirePermiso="EDITAR_PRODUCTO">
+                <ListaProveedoresPage />
+              </RequireRole>
+            }
+          />
           <Route
             path="registrar-proveedores"
-            element={<RegistrarProveedorPage />}
+            element={
+              <RequireRole allow={["ADMINISTRADOR", 1]} requirePermiso="CREAR_DESCUENTO">
+                <RegistrarProveedorPage />
+              </RequireRole>
+            }
           />
 
+          {/* 🧾 Órdenes */}
+          <Route
+            path="ordenesAdmin"
+            element={
+              <RequireRole allow={["ADMINISTRADOR", 1]} requirePermiso="EDITAR_USUARIO">
+                <OrdersAdminPage />
+              </RequireRole>
+            }
+          />
+
+          {/* 🔐 Roles y permisos */}
+          <Route
+            path="privilegio"
+            element={
+              <RequireRole allow={["ADMINISTRADOR", 1]} requirePermiso="EDITAR_ROL">
+                <RolesPage />
+              </RequireRole>
+            }
+          />
+
+          {/* 👨‍💼 Empleados */}
           <Route
             path="registrar-empleado"
-            element={<RegistrarEmpleadoPage />}
+            element={
+              <RequireRole allow={["ADMINISTRADOR", 1]} requirePermiso="CREAR_ROL">
+                <RegistrarEmpleadoPage />
+              </RequireRole>
+            }
           />
-        </Route>
 
-        {/* <Route path="/403" element={<Forbidden />} /> */}
+          {/* 💾 Backup (sin permisos adicionales) */}
+          <Route path="backup" element={<Backup />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
