@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ProductCard } from './components/ProductCard';
 import { getProducts } from '../api/productApi';
 import type { ProductDTO } from '../types/product';
+import { SeccionRecomendaciones } from '../features/admin/pages/SeccionRecomedaciones';
 
 export const ProductSection: React.FC = () => {
   const [products, setProducts] = useState<ProductDTO[]>([]);
@@ -58,7 +59,7 @@ export const ProductSection: React.FC = () => {
         </button>
       </div>
       {/* seccion de recomendaciones por usuario  */}
-
+<SeccionRecomendaciones/>
       {/* Grid de productos */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
         {products.map(product => (
