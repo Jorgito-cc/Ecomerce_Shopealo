@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { ProductCard } from "./components/ProductCard";
 import { getProducts } from "../api/productApi";
 import type { ProductDTO } from "../types/product";
-import { SeccionRecomendaciones } from "../features/admin/pages/SeccionRecomedaciones";
-import { DescuentoProductos } from "../features/admin/pages/DescuentoProductos";
+/* import { SeccionRecomendaciones } from "../features/admin/pages/SeccionRecomedaciones";
+ */import { DescuentoProductos } from "../features/admin/pages/DescuentoProductos";
 
 export const ProductSection: React.FC = () => {
   const [products, setProducts] = useState<ProductDTO[]>([]);
@@ -47,7 +47,7 @@ export const ProductSection: React.FC = () => {
     <section className="px-4 py-8 space-y-10">
       <DescuentoProductos/>
       {/* 🧠 Sección de recomendaciones (antes de productos normales) */}
-      <SeccionRecomendaciones />
+ {/*      <SeccionRecomendaciones /> */}
 
       {/* 🛍️ Sección de productos normales */}
       <div>
