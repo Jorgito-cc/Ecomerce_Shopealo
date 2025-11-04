@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { http } from "../../../api/http";
+import axios from "axios"; // ✅ usamos axios directo, no http (ya no necesitas token)
 import { toast } from "react-toastify";
 import { ProductCard } from "../../../shared/components/ProductCard";
 import type { ProductDTO } from "../../../types/product";
@@ -11,56 +11,31 @@ type ItemRecomendacionResponse = {
   recomendados: ProductDTO[];
 };
 
-type HybridRecomendacionResponse = {
-  modelo: string;
-  usuario?: number;
-  producto_base: ProductDTO;
-  recomendados: ProductDTO[];
-  alpha?: number;
-};
-
 export const RecomendacionesPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>(); // ✅ siempre debe venir el id del producto
+  const { id } = useParams<{ id: string }>(); // ✅ ID del producto actual
   const [productos, setProductos] = useState<ProductDTO[]>([]);
   const [modelo, setModelo] = useState<string>("");
   const [productoBase, setProductoBase] = useState<ProductDTO | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // URLs base
+  // URL base de tu microservicio Flask
   const FLASK_BASE = "https://flask-ml-service-production.up.railway.app";
-  const BACKEND_BASE = "https://backend-ecommerce-production-0ef1.up.railway.app";
 
-  // 🔁 Solo consume el producto actual (híbrido o item-based)
-  const fetchRecomendacionesPorProducto = async () => {
+  // 🔁 Obtener recomendaciones item-based
+  const fetchItemBasedRecomendaciones = async () => {
     if (!id) return;
-
     setLoading(true);
-    try {
-      // Primero intenta con el híbrido
-      let data: HybridRecomendacionResponse | ItemRecomendacionResponse;
-      try {
-        const res = await http.get<HybridRecomendacionResponse>(
-          `${BACKEND_BASE}/api/v1/recomendaciones/hibrido/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            },
-          }
-        );
-        data = res.data;
-        toast.success("Recomendaciones híbridas cargadas 🎯");
-      } catch (err) {
-        console.warn("⚠️ Híbrido no disponible, usando item-based...");
-        const res = await http.get<ItemRecomendacionResponse>(
-          `${FLASK_BASE}/recomendaciones/item/${id}`
-        );
-        data = res.data;
-        toast.info("Recomendaciones basadas en producto 📦");
-      }
 
+    try {
+      const res = await axios.get<ItemRecomendacionResponse>(
+        `${FLASK_BASE}/recomendaciones/item/${id}`
+      );
+
+      const data = res.data;
       setModelo(data.modelo);
       setProductoBase(data.producto_base);
       setProductos(data.recomendados || []);
+      toast.success("Recomendaciones cargadas correctamente 🎯");
     } catch (error) {
       console.error("❌ Error al obtener recomendaciones:", error);
       toast.error("Error al obtener recomendaciones ❌");
@@ -69,9 +44,9 @@ export const RecomendacionesPage: React.FC = () => {
     }
   };
 
-  // 🚀 Cargar al montar o cambiar de producto
+  // 🚀 Ejecutar al cambiar de producto
   useEffect(() => {
-    fetchRecomendacionesPorProducto();
+    fetchItemBasedRecomendaciones();
   }, [id]);
 
   return (
