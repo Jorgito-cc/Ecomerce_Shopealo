@@ -39,48 +39,34 @@ export const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Publico.............................  */}
+        {/* ..................................Publico.............................  */}
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
           <Route path="contactanos" element={<Contact />} />
           <Route path="sobrenosotros" element={<About />} />
-          {/* 👇 Aquí agregas las nuevas rutas */}
-          <Route path="recomendaciones" element={<RecomendacionesPage />} />
-          <Route path="recomendaciones/:id" element={<RecomendacionesPage />} />
-          {/* Evita que usuarios logueados vean login/register */}
+     
           <Route path="login" element={<LoginPage />} />
-          <Route
-            path="register"
-            element={
-              <RedirectIfAuth>
-                <RegisterPage />
-              </RedirectIfAuth>
-            }
-          />
+          <Route path="register" element={<RedirectIfAuth> <RegisterPage /> </RedirectIfAuth> }  />
 
           <Route path="recuperar" element={<RecuperarPasswordPage />} />
           <Route path="all-products" element={<ProductGrid />} />
           <Route path="product/:id" element={<ProductDetail />} />
           <Route path="product/:id" element={<ProductDetail />} />
+
+
+          {/* ############################################solo cliente mas autenticado .....................  */}
+          <Route path="checkout" element={<RequireRole allow={["CLIENTE", 2]}><CheckoutPage /></RequireRole> } />
+          <Route path="success" element={<OrderSuccessPage />} />
+          <Route path="favorites" element={<FavoritesPage />} />
+          {/* 👇 Aquí agregas las nuevas rutas */}
+          <Route path="recomendaciones" element={<RecomendacionesPage />} />
+          <Route path="recomendaciones/:id" element={<RecomendacionesPage />} />
           <Route path="misordenes" element={<ReportesPage />} />
           <Route path="micuenta" element={<MyAccountPage />} />
-
-          <Route path="favorites" element={<FavoritesPage />} />
-
           <Route path="cart" element={<CartPage />} />
-          {/* solo cliente  por nombre o id  */}
-          <Route
-            path="checkout"
-            element={
-              <RequireRole allow={["CLIENTE", 2]}>
-                <CheckoutPage />
-              </RequireRole>
-            }
-          />
-          <Route path="success" element={<OrderSuccessPage />} />
         </Route>
 
-        {/* rutas de admin aquí  mas autenticado..................................... */}
+        {/* --------------------------------rutas de admin aquí  mas autenticado..................................... */}
         <Route
           path="/admin"
           element={
