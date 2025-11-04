@@ -1,6 +1,4 @@
-
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import { http } from "../../../api/http";
 import { FaMicrophone, FaMicrophoneSlash, FaPaperPlane } from "react-icons/fa";
@@ -11,22 +9,28 @@ export const ReportesIA: React.FC = () => {
   const [resultados, setResultados] = useState<any[]>([]);
   const [query, setQuery] = useState<string>("");
 
-  // 🎤 Configuración de reconocimiento de voz
   const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } =
     useSpeechRecognition();
 
-  // 🔄 Cuando el usuario habla, se sincroniza con el campo de texto
-  const handleListenChange = () => {
-    setPrompt(transcript);
-  };
+  // 🔄 Actualiza el input automáticamente cuando se detecta voz
+  useEffect(() => {
+    if (transcript) {
+      setPrompt(transcript);
+    }
+  }, [transcript]);
 
   // 🎙️ Iniciar/detener voz
-  const handleMicToggle = () => {
+  const handleMicToggle = async () => {
     if (listening) {
       SpeechRecognition.stopListening();
+      console.log("🎤 Micrófono detenido");
     } else {
       resetTranscript();
-      SpeechRecognition.startListening({ language: "es-ES", continuous: true });
+      console.log("🎙️ Micrófono iniciado...");
+      await SpeechRecognition.startListening({
+        language: "es-ES",
+        continuous: true,
+      });
     }
   };
 
@@ -60,7 +64,6 @@ export const ReportesIA: React.FC = () => {
         </p>
       )}
 
-      {/* FORMULARIO */}
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-8">
         <div className="flex gap-2 items-center">
           <input
@@ -69,7 +72,6 @@ export const ReportesIA: React.FC = () => {
             placeholder="Ejemplo: quiero los productos con stock mayor a 30"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            onInput={handleListenChange}
           />
           <button
             type="button"
@@ -91,7 +93,6 @@ export const ReportesIA: React.FC = () => {
         </div>
       </form>
 
-      {/* MOSTRAR QUERY */}
       {query && (
         <div className="mb-6 bg-gray-100 p-4 rounded-md">
           <p className="text-sm font-mono text-gray-700">
@@ -100,7 +101,6 @@ export const ReportesIA: React.FC = () => {
         </div>
       )}
 
-      {/* RESULTADOS */}
       {loading ? (
         <p className="text-gray-500 animate-pulse">Generando reporte...</p>
       ) : resultados.length > 0 ? (
