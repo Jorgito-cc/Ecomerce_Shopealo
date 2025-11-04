@@ -34,18 +34,19 @@ import OrdersAdminPage from "../../features/admin/pages/OrdersAdminPage";
 import { ReportesPage } from "../../pages/ReportesPage";
 import { MyAccountPage } from "../../pages/MyAccountPage";
 import { RecomendacionesPage } from "../../features/admin/pages/RecomendacionesPage";
+import { RolesPage } from "../../features/admin/pages/RolesPage";
 export const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Publico  */}
+        {/* Publico.............................  */}
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
           <Route path="contactanos" element={<Contact />} />
           <Route path="sobrenosotros" element={<About />} />
-            {/* 👇 Aquí agregas las nuevas rutas */}
-  <Route path="recomendaciones" element={<RecomendacionesPage />} />
-  <Route path="recomendaciones/:id" element={<RecomendacionesPage />} />
+          {/* 👇 Aquí agregas las nuevas rutas */}
+          <Route path="recomendaciones" element={<RecomendacionesPage />} />
+          <Route path="recomendaciones/:id" element={<RecomendacionesPage />} />
           {/* Evita que usuarios logueados vean login/register */}
           <Route path="login" element={<LoginPage />} />
           <Route
@@ -79,7 +80,7 @@ export const Router = () => {
           <Route path="success" element={<OrderSuccessPage />} />
         </Route>
 
-        {/* rutas de admin aquí  mas autenticado */}
+        {/* rutas de admin aquí  mas autenticado..................................... */}
         <Route
           path="/admin"
           element={
@@ -101,8 +102,12 @@ export const Router = () => {
           <Route path="listarproveedores" element={<ListaProveedoresPage />} />
           <Route path="backup" element={<Backup />} />
           <Route path="ordenesAdmin" element={<OrdersAdminPage />} />
+          <Route path="privilegio" element={<RolesPage />} />
 
-          <Route path="registrar-proveedores" element={<RegistrarProveedorPage />} />
+          <Route
+            path="registrar-proveedores"
+            element={<RegistrarProveedorPage />}
+          />
 
           <Route
             path="registrar-empleado"
