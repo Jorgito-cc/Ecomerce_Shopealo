@@ -36,6 +36,7 @@ import { RecomendacionesPage } from "../../features/admin/pages/RecomendacionesP
 import { RolesPage } from "../../features/admin/pages/RolesPage";
 import { DescuentoPage } from "../../features/admin/pages/DecuentoPage";
 import { ReportesIA } from "../../features/admin/pages/ReportesIA";
+import { Dashboard } from "../../features/admin/pages/Dashboard";
 
 export const Router = () => {
   return (
@@ -90,11 +91,13 @@ export const Router = () => {
         >
           {/* =================== Módulos con control de permisos =================== */}
 
+                    <Route path="admin" element={<Dashboard />} />
           {/* 📊 Bitácora */}
           <Route path="bitacora" element={<BitacoraPage />} />
 
           {/* 🧩 Soporte / Manuales */}
           <Route path="soporte" element={<Soporte />} />
+
           <Route path="manual" element={<Manual />} />
           <Route path="manualteorico" element={<ManuaTeorico />} />
 
