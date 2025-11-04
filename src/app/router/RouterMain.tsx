@@ -35,6 +35,7 @@ import { MyAccountPage } from "../../pages/MyAccountPage";
 import { RecomendacionesPage } from "../../features/admin/pages/RecomendacionesPage";
 import { RolesPage } from "../../features/admin/pages/RolesPage";
 import { DescuentoPage } from "../../features/admin/pages/DecuentoPage";
+import { ReportesIA } from "../../features/admin/pages/ReportesIA";
 
 export const Router = () => {
   return (
@@ -185,7 +186,7 @@ export const Router = () => {
           {/* descuentos */}
           <Route path="descuento" element={<DescuentoPage />} />
 {/* descuentos */}
-          <Route path="reporte" element={<ReportesPage />} />
+          <Route path="reporte" element={<ReportesIA />} />
           {/* 💾 Backup (sin permisos adicionales) */}
           <Route path="backup" element={<Backup />} />
         </Route>
