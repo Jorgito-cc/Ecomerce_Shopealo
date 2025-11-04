@@ -11,13 +11,14 @@ type Permiso = {
 type Role = {
   id: number;
   nombre: string;
-  permisos?: Permiso[];
+  permisos: Permiso[];
 };
 
 export const RolesPage: React.FC = () => {
   const [roles, setRoles] = useState<Role[]>([]);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const BACKEND_BASE = "https://backend-ecommerce-production-0ef1.up.railway.app";
 
@@ -53,19 +54,39 @@ export const RolesPage: React.FC = () => {
     }
   };
 
-  // 🔹 Actualizar permisos del rol
+  // 🔹 Actualizar permisos y nombre del rol
   const updateRolePermissions = async () => {
     if (!selectedRole) return;
+    setSaving(true);
     try {
       const token = localStorage.getItem("access_token");
-      const res = await axios.patch(`${BACKEND_BASE}/api/v1/role/permisosUpdate`, selectedRole, {
-        headers: { Authorization: `Bearer ${token}` },
+
+      // 👇 enviamos solo los datos que el backend espera
+      const payload = {
+        id: selectedRole.id,
+        nombre: selectedRole.nombre,
+        permisos: selectedRole.permisos.map((p) => ({
+          id: p.id,
+          nombre: p.nombre,
+          status: p.status,
+        })),
+      };
+
+      const res = await axios.patch(`${BACKEND_BASE}/api/v1/role/permisosUpdate`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       });
-      toast.success("Permisos actualizados correctamente ✅");
+
+      toast.success("✅ Rol y permisos actualizados correctamente");
       setSelectedRole(res.data);
+      fetchRoles(); // refrescar lista general
     } catch (err) {
       console.error(err);
       toast.error("Error al actualizar permisos ❌");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -75,7 +96,9 @@ export const RolesPage: React.FC = () => {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold mb-4 text-gray-800">Gestión de Roles 🔑</h1>
+      <h1 className="text-3xl font-bold mb-4 text-gray-800">
+        Gestión de Roles 🔑
+      </h1>
 
       {loading ? (
         <p>Cargando roles...</p>
@@ -84,7 +107,9 @@ export const RolesPage: React.FC = () => {
           {roles.map((r) => (
             <div
               key={r.id}
-              className="p-4 border rounded-lg shadow hover:shadow-lg transition cursor-pointer"
+              className={`p-4 border rounded-lg shadow hover:shadow-lg transition cursor-pointer ${
+                selectedRole?.id === r.id ? "border-indigo-600" : ""
+              }`}
               onClick={() => fetchRoleDetail(r.id)}
             >
               <h3 className="text-xl font-semibold text-indigo-600">{r.nombre}</h3>
@@ -94,35 +119,59 @@ export const RolesPage: React.FC = () => {
       )}
 
       {selectedRole && (
-        <div className="mt-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            Permisos de {selectedRole.nombre}
+        <div className="mt-10 bg-white shadow-md rounded-lg p-6 border border-gray-200">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            Editar Rol: {selectedRole.nombre}
           </h2>
+
+          {/* Nombre del rol */}
+          <div className="mb-4">
+            <label className="block font-medium mb-1 text-gray-700">
+              Nombre del rol:
+            </label>
+            <input
+              type="text"
+              value={selectedRole.nombre}
+              onChange={(e) =>
+                setSelectedRole({ ...selectedRole, nombre: e.target.value })
+              }
+              className="border p-2 rounded w-full"
+            />
+          </div>
+
+          {/* Lista de permisos */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {selectedRole.permisos?.map((p) => (
-              <label key={p.id} className="flex items-center gap-2 bg-gray-50 p-2 rounded">
+              <label
+                key={p.id}
+                className="flex items-center gap-2 bg-gray-50 p-2 rounded border border-gray-200"
+              >
                 <input
                   type="checkbox"
                   checked={p.status}
                   onChange={(e) =>
                     setSelectedRole({
                       ...selectedRole,
-                      permisos: selectedRole.permisos?.map((perm) =>
-                        perm.id === p.id ? { ...perm, status: e.target.checked } : perm
+                      permisos: selectedRole.permisos.map((perm) =>
+                        perm.id === p.id
+                          ? { ...perm, status: e.target.checked }
+                          : perm
                       ),
                     })
                   }
                 />
-                {p.nombre}
+                <span>{p.nombre}</span>
               </label>
             ))}
           </div>
 
+          {/* Botón Guardar */}
           <button
             onClick={updateRolePermissions}
-            className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+            disabled={saving}
+            className="mt-6 px-5 py-2 bg-indigo-600 text-white font-medium rounded hover:bg-indigo-700 transition disabled:bg-gray-400"
           >
-            Guardar cambios
+            {saving ? "Guardando..." : "Guardar Cambios"}
           </button>
         </div>
       )}
