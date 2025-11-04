@@ -185,7 +185,7 @@ export const Router = () => {
           {/* descuentos */}
           <Route path="descuento" element={<DescuentoPage />} />
 {/* descuentos */}
-          <Route path="reporte" element={<Report />} />
+          <Route path="reporte" element={<ReportesPage />} />
           {/* 💾 Backup (sin permisos adicionales) */}
           <Route path="backup" element={<Backup />} />
         </Route>
