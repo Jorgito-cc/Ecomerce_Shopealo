@@ -29,10 +29,11 @@ export const DescuentoProductos: React.FC = () => {
       const { data } = await http.get<Descuento[]>("/api/v1/descuento");
       // ✅ Filtramos solo los descuentos activos (por fecha actual y estado)
       const hoy = new Date();
-      const activos = data.filter(
-        (d) =>
-          new Date(d.fechaInicio) <= hoy && new Date(d.fechaFin) >= hoy
-      );
+   const activos = data.filter(
+  (d: Descuento) =>
+    new Date(d.fechaInicio) <= hoy && new Date(d.fechaFin) >= hoy
+);
+
       setDescuentos(activos);
     } catch (error) {
       console.error("Error cargando descuentos:", error);
