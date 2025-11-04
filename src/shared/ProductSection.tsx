@@ -57,6 +57,7 @@ export const ProductSection: React.FC = () => {
           Ver todo
         </button>
       </div>
+      {/* seccion de recomendaciones por usuario  */}
 
       {/* Grid de productos */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
