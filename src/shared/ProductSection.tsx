@@ -48,10 +48,10 @@ export const ProductSection: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         {/* seccion de recomendaciones por usuario  */}
-        <div>
+        
 
         <SeccionRecomendaciones />
-        </div>
+        
         <div>
           <p className="text-sm text-red-500 font-semibold">
             Seccion de Prodcutos
