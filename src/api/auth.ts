@@ -13,6 +13,8 @@ import { http } from "./http";
 const saveSession = (data: AuthResponse) => {
   localStorage.setItem("access_token", data.token);
   localStorage.setItem("auth_user", JSON.stringify(data.user));
+
+
 };
 
 export const getSessionToken = (): string | null => {
