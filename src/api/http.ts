@@ -18,7 +18,8 @@ http.interceptors.request.use((config) => {
     url.includes("/api/v1/auth/login") ||
     url.includes("/api/v1/auth/register") ||
     url.includes("/api/v1/auth/forgotpassword") ||
-    url.includes("/api/v1/auth/resetpassword");
+    url.includes("/api/v1/auth/resetpassword") || 
+     url.includes("/api/v1/reportes/sql"); // 👈 no adjunta token  
 
   if (!isPublicAuth) {
     const token = localStorage.getItem("access_token");

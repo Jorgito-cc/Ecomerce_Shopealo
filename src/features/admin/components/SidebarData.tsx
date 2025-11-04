@@ -38,6 +38,7 @@ export const sections: Section[] = [
             { label: "Descuento", to: "/admin/descuento" },
 
 
+
     ],
   },
   {
