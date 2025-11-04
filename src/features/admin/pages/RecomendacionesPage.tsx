@@ -1,56 +1,79 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom"; // 👈 para obtener el id del producto actual
 import { http } from "../../../api/http";
 import { toast } from "react-toastify";
 import { ProductCard } from "../../../shared/components/ProductCard";
 import type { ProductDTO } from "../../../types/product";
 
-type RecomendacionResponse = {
+type ItemRecomendacionResponse = {
   modelo: string;
-  usuario: number;
+  producto_base?: ProductDTO;
   recomendados: ProductDTO[];
 };
 
+type HybridRecomendacionResponse = {
+  modelo: string;
+  usuario: number;
+  producto_base?: ProductDTO;
+  recomendados: ProductDTO[];
+  alpha?: number;
+};
+
 export const RecomendacionesPage: React.FC = () => {
+  const { id } = useParams<{ id?: string }>(); // ✅ id del producto (si estamos en /product/:id)
   const [productos, setProductos] = useState<ProductDTO[]>([]);
   const [modelo, setModelo] = useState<string>("");
+  const [productoBase, setProductoBase] = useState<ProductDTO | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // 🔁 Función para reentrenar modelos (solo si no se ha hecho en esta sesión)
-  const retrainModel = async (): Promise<boolean> => {
-    const alreadyTrained = sessionStorage.getItem("ml_retrained");
-    if (alreadyTrained) return true; // ya se reentrenó en esta sesión
+  // ✅ Selección de API base
+  const FLASK_BASE = "https://flask-ml-service-production.up.railway.app";
+  const BACKEND_BASE = "https://backend-ecommerce-production-0ef1.up.railway.app";
 
-    try {
-      const { data } = await http.get("/api/v1/recomendaciones/reentrenar", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      });
-
-      toast.info(data.message || "Modelos reentrenados con éxito 🔁");
-      sessionStorage.setItem("ml_retrained", "true"); // ✅ Marcamos como hecho
-      return true;
-    } catch (err) {
-      console.error("❌ Error al reentrenar modelos:", err);
-      toast.error("Error al reentrenar modelos ❌");
-      return false;
-    }
-  };
-
-  // 📦 Obtener recomendaciones personalizadas
+  // 🔁 Función: obtener recomendaciones desde el servicio adecuado
   const fetchRecomendaciones = async () => {
+    setLoading(true);
     try {
-      const { data } = await http.get<RecomendacionResponse>(
-        "/api/v1/recomendaciones/usuario",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
+      let data: ItemRecomendacionResponse | HybridRecomendacionResponse;
+
+      if (id) {
+        // 🧠 Si hay ID => intentamos con híbrido (prioridad) y fallback a item-based
+        try {
+          const res = await http.get<HybridRecomendacionResponse>(
+            `${BACKEND_BASE}/api/v1/recomendaciones/hibrido/${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+              },
+            }
+          );
+          data = res.data;
+          toast.success("Recomendaciones híbridas cargadas 🎯");
+        } catch (hybridErr) {
+          console.warn("Fallo híbrido, usando item-based...");
+          const res = await http.get<ItemRecomendacionResponse>(
+            `${FLASK_BASE}/recomendaciones/item/${id}`
+          );
+          data = res.data;
+          toast.info("Recomendaciones basadas en producto 📦");
         }
-      );
-      setProductos(data.recomendados);
+      } else {
+        // 🧍 Si no hay ID, usar recomendación por usuario
+        const res = await http.get<HybridRecomendacionResponse>(
+          `${BACKEND_BASE}/api/v1/recomendaciones/usuario`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            },
+          }
+        );
+        data = res.data;
+        toast.success("Recomendaciones personalizadas cargadas 💡");
+      }
+
       setModelo(data.modelo);
-      toast.success("Recomendaciones cargadas con éxito 🎯");
+      setProductos(data.recomendados || []);
+      setProductoBase((data as any).producto_base || null);
     } catch (err) {
       console.error("❌ Error al obtener recomendaciones:", err);
       toast.error("Error al obtener recomendaciones ❌");
@@ -59,21 +82,15 @@ export const RecomendacionesPage: React.FC = () => {
     }
   };
 
-  // 🚀 Al montar la página → reentrena si no se hizo aún, luego carga recomendaciones
+  // 🚀 Cargar automáticamente
   useEffect(() => {
-    const init = async () => {
-      setLoading(true);
-      const ok = await retrainModel(); // solo ejecuta la primera vez
-      if (ok) await fetchRecomendaciones();
-      else setLoading(false);
-    };
-    init();
-  }, []);
+    fetchRecomendaciones();
+  }, [id]);
 
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">
-        Recomendaciones personalizadas 💡
+        Recomendaciones 💡
       </h1>
 
       {loading ? (
@@ -84,9 +101,30 @@ export const RecomendacionesPage: React.FC = () => {
       ) : (
         <>
           <p className="mb-4 text-gray-500 italic">
-            Basado en el modelo:{" "}
-            <span className="font-semibold">{modelo || "N/A"}</span>
+            Modelo utilizado:{" "}
+            <span className="font-semibold text-gray-800">
+              {modelo || "N/A"}
+            </span>
           </p>
+
+          {productoBase && (
+            <div className="flex items-center gap-4 mb-8 border-b pb-4">
+              <img
+                src={productoBase.urlImage}
+                alt={productoBase.name}
+                className="h-24 object-contain rounded"
+              />
+              <div>
+                <h2 className="text-lg font-semibold text-gray-800">
+                  Producto base:
+                </h2>
+                <p className="text-gray-600">{productoBase.name}</p>
+                <p className="text-red-500 font-semibold">
+                  Bs {productoBase.price}
+                </p>
+              </div>
+            </div>
+          )}
 
           {productos.length === 0 ? (
             <p className="text-center text-gray-500">

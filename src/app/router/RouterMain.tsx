@@ -33,6 +33,7 @@ import { OrderSuccessPage } from "../../pages/OrderSuccessPage";
 import OrdersAdminPage from "../../features/admin/pages/OrdersAdminPage";
 import { ReportesPage } from "../../pages/ReportesPage";
 import { MyAccountPage } from "../../pages/MyAccountPage";
+import { RecomendacionesPage } from "../../features/admin/pages/RecomendacionesPage";
 export const Router = () => {
   return (
     <BrowserRouter>
@@ -42,6 +43,9 @@ export const Router = () => {
           <Route index element={<HomePage />} />
           <Route path="contactanos" element={<Contact />} />
           <Route path="sobrenosotros" element={<About />} />
+            {/* 👇 Aquí agregas las nuevas rutas */}
+  <Route path="recomendaciones" element={<RecomendacionesPage />} />
+  <Route path="recomendaciones/:id" element={<RecomendacionesPage />} />
           {/* Evita que usuarios logueados vean login/register */}
           <Route path="login" element={<LoginPage />} />
           <Route
