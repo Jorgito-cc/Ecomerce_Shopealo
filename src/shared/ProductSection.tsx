@@ -15,13 +15,10 @@ export const ProductSection: React.FC = () => {
     const fetchProducts = async () => {
       try {
         const data = await getProducts();
-        // You can still slice the array to show a limited number of products
         setProducts(data.slice(0, 8));
       } catch (err) {
         console.error("Error fetching products:", err);
-        setError(
-          "Error al cargar los productos. Por favor, inténtelo de nuevo más tarde."
-        );
+        setError("Error al cargar los productos. Por favor, inténtelo más tarde.");
       } finally {
         setLoading(false);
       }
@@ -39,39 +36,41 @@ export const ProductSection: React.FC = () => {
 
   if (error) {
     return (
-      <section className="px-4 py-8 text-center text-red-500">{error}</section>
+      <section className="px-4 py-8 text-center text-red-500">
+        {error}
+      </section>
     );
   }
 
   return (
-    <section className="px-4 py-8">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        {/* seccion de recomendaciones por usuario  */}
-        
+    <section className="px-4 py-8 space-y-10">
+      {/* 🧠 Sección de recomendaciones (antes de productos normales) */}
+      <SeccionRecomendaciones />
 
-        <SeccionRecomendaciones />
-        
-        <div>
-          <p className="text-sm text-red-500 font-semibold">
-            Seccion de Prodcutos
-          </p>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
-            Productos
-          </h2>
+      {/* 🛍️ Sección de productos normales */}
+      <div>
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <p className="text-sm text-red-500 font-semibold">
+              Sección de Productos
+            </p>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
+              Productos
+            </h2>
+          </div>
+          <button
+            onClick={() => navigate("/all-products")}
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+          >
+            Ver todo
+          </button>
         </div>
-        <button
-          onClick={() => navigate("/all-products")}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
-        >
-          Ver todo
-        </button>
-      </div>
-      {/* Grid de productos */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
       </div>
     </section>
   );
