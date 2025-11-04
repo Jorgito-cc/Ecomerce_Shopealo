@@ -13,6 +13,7 @@ import { http } from "./http";
 const saveSession = (data: AuthResponse) => {
   localStorage.setItem("access_token", data.token);
   localStorage.setItem("auth_user", JSON.stringify(data.user));
+  localStorage.setItem("role_permisos", JSON.stringify(data.permisos || [])); // ✅ sin error
 
 
 };

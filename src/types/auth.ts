@@ -34,6 +34,9 @@ export type UserDTO = {
 export type AuthResponse = {
   user: UserDTO;
   token: string;
+
+
+  permisos?: { nombre: string; status: boolean }[]; // 👈 añade esta línea
 };
 
 // src/types/auth.ts
