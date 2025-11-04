@@ -10,6 +10,17 @@ export type Section = {
 };
 
 export const sections: Section[] = [
+   {
+    key: "admin",
+    icon: <FaUser />,
+    title: "admin",
+    items: [
+
+      { label: "dashboard", to: "/admin/dashboard" },
+
+
+    ],
+  },
   {
     key: "usuario",
     icon: <FaUser />,
@@ -18,7 +29,9 @@ export const sections: Section[] = [
       { label: "Bitácora", to: "/admin/bitacora" },
       { label: "Lista de Usuarios", to: "/admin/listausuario" },
       { label: "Registrar Empleado", to: "/admin/registrar-empleado" },
-            { label: "R", to: "/admin/registrar-empleado" },
+      { label: "dashboard", to: "/admin/dashboard" },
+
+      { label: "Registrar empleados", to: "/admin/registrar-empleado" },
 
     ],
   },

@@ -91,7 +91,7 @@ export const Router = () => {
         >
           {/* =================== Módulos con control de permisos =================== */}
 
-                    <Route path="admin" element={<Dashboard />} />
+                    <Route path="dashboard" element={<Dashboard />} />
           {/* 📊 Bitácora */}
           <Route path="bitacora" element={<BitacoraPage />} />
 
