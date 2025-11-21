@@ -73,6 +73,7 @@ export const ReportesIA: React.FC = () => {
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
           />
+          {/* hola */}
           <button
             type="button"
             onClick={handleMicToggle}
